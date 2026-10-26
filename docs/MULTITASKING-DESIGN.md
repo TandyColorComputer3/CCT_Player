@@ -1,10 +1,10 @@
 # CCT_Player multitasking design
 
-**Status:** recommended architecture; implementation and timing results are not yet verified.
+**Status:** recommended architecture plus an experimental CoCoPSG process prototype. Build and module identity are verified; guest playback, scheduling, and timing remain **NOT RUN**.
 
 ## Current source findings
 
-The original v1.6 source is still unchanged on this branch. The rebuilt module is byte-for-byte identical to the tracked `cctplay` baseline.
+The default build of `cct_os9.asm` remains byte-for-byte identical to the tracked `cctplay` baseline. Conditional `EXPERIMENTAL_PSG` code now builds a separate `cctplaymt` module; the prototype details and current evidence are in [PSG-PROTOTYPE.md](PSG-PROTOTYPE.md).
 
 | Area | Source evidence | Effect |
 | --- | --- | --- |
@@ -17,6 +17,16 @@ The original v1.6 source is still unchanged on this branch. The rebuilt module i
 | OS-9 calls | The player uses `F$Icpt`, `F$AllRAM`, `F$MapBlk`, `F$ClrBlk`, `F$DelRAM`, file `I$` calls, and `F$Exit`. `os9.d` defines `F$Sleep`, `F$VIRQ`, and `F$IRQ`, but the player does not call them. | Existing path, allocation, and playlist cleanup provides a starting point, but the current player has no yield or driver-owned event service. Every new open path, allocation, interrupt registration, and hardware claim needs one cleanup owner. |
 
 The `os9.d`, `rbf.d`, and `scf.d` includes are the local Level II symbol and path-descriptor definitions. No include-file edits are proposed in this design.
+
+## Experimental CoCoPSG process prototype
+
+The first prototype keeps VGM/CCT parsing and file ownership in the existing player process. Its conditional PSG path splits command fetch/decode (`VGM_YM2149_NEXT_COMMAND`, `VGM_YM2149_CMD_CHIP`, and wait-command decoding), delay handling (`VGM_PSG_COARSE_WAIT` plus the sample-count fine loop), and register output (`VGM_PSG_WRITE_REG`). It enables interrupts throughout parsing and waits. Short delays use the CPU-cycle loop; longer delays may sleep in OS-9 ticks and then finish the sub-tick remainder. This is a scheduling experiment, not yet a drift-corrected timestamp scheduler.
+
+For the PSG stream, the prototype maps each allocated file block into the process DAT image with `F$MapBlk`, clears the old mapping with `F$ClrBlk`, and reserves a top guard block so the stream page is mapped below `$E000`. The EOU manual specifies top-down mapping into the highest available process addresses. This removes direct `$FFA9` writes from the reachable experimental PSG stream path; the baseline OPL/GMC paths and original helper remain unchanged in the default build. Guest context-switch behavior has not yet been observed.
+
+The test process uses the existing `F$Icpt` signal intercept and `abortFlag`; the experimental wait path does not scan keyboard PIA registers. The PSG control value, MPI selection, and sound PIA value are saved/restored, and the existing PSG silence sequence uses a short CC save/mask/restore section. The MPI and PIA registers are global hardware state: this prototype has no inter-process device lock, so another program that also changes MPI/audio hardware is outside the first counter-only experiment.
+
+The prototype does not enqueue normalized timestamped events. Every wait is relative to the previous command, so interrupt and scheduler delays can accumulate as music drift. `F$Sleep` saves CPU time on long waits but wake-up scheduling can add lateness; short waits still occupy the player process between clock interrupts. No CPU, jitter, drift, register-write, or audible measurements exist yet. See the evidence matrix and exact guest commands in [PSG-PROTOTYPE.md](PSG-PROTOTYPE.md).
 
 ## Approaches considered
 

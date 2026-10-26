@@ -61,5 +61,6 @@ if command -v lsof >/dev/null 2>&1; then
   done
 fi
 echo "Launching $mode mode: coco3h / HD6309 / 2MB / EOU"
-echo "At the BASIC OK prompt: DOS. In OS-9: load /d1/cctplay"
+echo "At the BASIC OK prompt: DOS. Load /d1/cctplaymt for the experimental PSG process player."
+echo "Load /d1/cctcount and run cctcount in a second Shell window for the counter."
 exec "$mame" "${args[@]}"

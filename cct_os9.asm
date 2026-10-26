@@ -117,6 +117,24 @@ vgmTotalSamples   RMB   4
 vgmSongLengthMins RMB   1
 vgmSongLengthSecs RMB   1
 
+; Experimental PSG-only player state. The baseline build omits these bytes,
+; preserving its original OS-9 module data size and binary.
+        ifdef EXPERIMENTAL_PSG
+psgPrevControl    RMB   1
+psgActiveFlag     RMB   1
+psgGuardBlock     RMB   1
+psgGuardAllocated RMB   1
+psgGuardMapped    RMB   1
+psgGuardBase      RMB   2
+psgPlayMapActive  RMB   1
+psgPlayMapBase    RMB   2
+psgPlayMapPtr     RMB   2
+psgPlayOffset     RMB   2
+psgWaitTicks      RMB   1
+psgWaitSamples    RMB   2
+psgWaitOriginal   RMB   2
+        endc
+
 ; gd3 tag variables 
 gd3TagFlag        RMB   1
 gd3TagSize        RMB   4
@@ -139,7 +157,11 @@ data_size         EQU   .
 
 ; -----------------------------------------------------
 ; Constants
+        ifdef EXPERIMENTAL_PSG
+moduleName              FCS 	"cctplaymt"
+        else
 moduleName              FCS 	"cctplay"
+        endc
 strProgInfo             FCN   "\r\nCoCo ChipTunes Player v1.6\r\nWritten By Todd Wallace (LordDragon)\r\n\n"
 strThanksMsg            FCN   "\r\nSpecial thanks to Ed Snider, L. Curtis Boyle, William Astle, Deek,\r\nand everyone else on Discord for all your help.\r\n"
 
@@ -147,10 +169,18 @@ strThanksMsg            FCN   "\r\nSpecial thanks to Ed Snider, L. Curtis Boyle,
 strErrorFile            FCN 	"Error: File not found. Exiting.\r\n"
 strErrorRam             FCN   "\r\nError: Not enough free RAM for that file. Aborted.\r\n"
 strErrorRead            FCN   "\r\nError accessing the file. Aborted.\r\n"
+        ifdef EXPERIMENTAL_PSG
+strErrorParams          FCN   "Error: Invalid parameter. Type \x22cctplaymt\x22 for usage/syntax information.\r\n"
+        else
 strErrorParams          FCN   "Error: Invalid parameter. Type \x22cctplay\x22 for usage/syntax information.\r\n"
+        endc
 strErrorSuddenEnd       FCN   "\r\nError: Song data ended unexpectedly. Incomplete file? Exiting.\r\n"
 strErrorUnknown         FCN   "\r\nError: Something weird has happened, probably a bug. Sorry about that. Aborting.\r\n"
+        ifdef EXPERIMENTAL_PSG
+strErrorNoFilename      FCN   "Error: No filename specified. Type \x22cctplaymt\x22 for usage/syntax information.\r\n"
+        else
 strErrorNoFilename      FCN   "Error: No filename specified. Type \x22cctplay\x22 for usage/syntax information.\r\n"
+        endc
 strErrorFileInvalid     FCN   "Error: Unrecognized file format. File must be a VGM, CCT, or M3U playlist.\r\n"
 strErrorVGMchips        FCN   "Error: This VGM file requires an unsupported sound chip. Skipped.\r\n"
 strErrorOPLmissing      FCN   "\r\n\nError: OPL sound chip could not be detected. Do you have a MEGA-mini MPI?\r\nAborted.\r\n"
@@ -197,11 +227,23 @@ strCCTdeviceMsg         FCN   "CCT File Info: "
 strCCTauthorMsg         FCN   "\r\nAuthor:        "
 strCCTtitleMsg          FCN   "\r\nTitle:         "
 
+        ifdef EXPERIMENTAL_PSG
+strPlayingFrozen        FCN   "\r\nCoCoPSG experimental process-timed playback. Press BREAK to stop."
+strPsgExperimentOnly    FCN   "\r\nExperimental build supports CoCoPSG/YM2149 only.\r\n"
+        else
 strPlayingFrozen        FCN   "\r\nPlaying... (OS-9 will be frozen during playback. Press BREAK to stop)"
+        endc
 strPlayComplete         FCN   "\x03\rPlayback complete!\r\n"
 strPlayAborted          FCN   "\x03\rPlayback aborted.\r\n"
 
-strUsageMsg            	FCC   "Syntax: cctplay [-i] [-psg <slot>] [-gmc <slot>] [-l <0-9 | 'f'>] <filename>\r\n\n"
+        ifdef EXPERIMENTAL_PSG
+strUsageMsg             FCC   "Syntax: cctplaymt [-i] [-psg <slot>] [-l <0-9 | 'f'>] <filename>\r\n\n"
+                        FCC   "    -i = Display format and supported hardware information.\r\n"
+                        FCC   "    -l = Set the VGM loop count (0 through 9 or 'F'). Default is 1.\r\n"
+                        FCC   "  -psg = Specify the CoCoPSG MPI slot (default is Slot 2).\r\n"
+                        FCC   "This experimental build plays CoCoPSG/YM2149 tracks only.\r\n"
+        else
+strUsageMsg             FCC   "Syntax: cctplay [-i] [-psg <slot>] [-gmc <slot>] [-l <0-9 | 'f'>] <filename>\r\n\n"
             		FCC 	"    -i = Display information about supported formats, soundchips, and hardware.\r\n"
             		FCC   "    -l = Set number of times to play looped section for VGMs that use one.\r\n"
 				FCC 	"         Valid values are 0 through 9, or 'F' to loop forever. (Default is 1)\r\n"
@@ -211,6 +253,7 @@ strUsageMsg            	FCC   "Syntax: cctplay [-i] [-psg <slot>] [-gmc <slot>] 
 				FCC  	"  at the same time and in the slots you choose. This lets you to do things like\r\n"
 				FCC 	"  creating a playlist that mixes music for different supported soundchips. The\r\n"
 				FCC 	"  player will then automatically route each track to the appropriate device!)\r\n"
+        endc
 strUsageMsgSz 		EQU 	*-strUsageMsg
 
 strFileTypeInfo  		FCB 	$0C
@@ -294,6 +337,14 @@ START_EXEC
 **************************************************************************************
 
       stu   <uRegImage        ; save copy of data area pointer in U 
+        ifdef EXPERIMENTAL_PSG
+      clra
+      sta   psgActiveFlag,U
+      sta   psgGuardBlock,U
+      sta   psgGuardAllocated,U
+      sta   psgGuardMapped,U
+      sta   psgPlayMapActive,U
+        endc
       stx  	<cmdlinePtr 
 
       ; save state of PIA (coco sound output)
@@ -334,9 +385,14 @@ START_EXEC
 
       ; try and detect presence of OPL chip (and therefore presence of mega-mini mpi)
       ; NOTE: THIS SEEMS TO BE GLITCHY SOMETIMES
+        ifdef EXPERIMENTAL_PSG
+      ; Avoid touching OPL/MMMPI or GIME speed state in the PSG experiment.
+      ; Only the selected CoCoPSG backend will claim hardware during playback.
+        else
       lbsr  DETECT_OPL_CHIP
       bcs  	INIT_OPL_NOT_FOUND
       inc  	<oplDetectFlag
+        endc
 INIT_OPL_NOT_FOUND
       ; display program info 
       leax  strProgInfo,PCR 
@@ -1202,6 +1258,18 @@ CCT_LOADER_SKIP_DEALLOCATE_RESERVED
 PLAY_VGM_DATA
       ldu   <uRegImage
 
+        ifdef EXPERIMENTAL_PSG
+      ; Keep the experiment CoCoPSG-only. Other backends remain compiled for
+      ; the baseline build but cannot be reached from this module.
+      lda   <vgmChipType
+      cmpa  #'P'
+      lbeq  PLAY_CHIP_YM2149
+      cmpa  #3               ; CCT format's code for YM2149/AY-3-8910
+      lbeq  PLAY_CHIP_YM2149_CCT
+      leax  strPsgExperimentOnly,PCR
+      lbsr  PRINT_STR_OS9
+      lbra  EXIT_DEALLOCATE_RAM
+        else
       ; what type of chip are we playing to?
       lda  	<vgmChipType
       cmpa  #3
@@ -1215,6 +1283,7 @@ PLAY_VGM_DATA
       ;lbeq  PLAY_CHIP_AY8910
       ; catch any weird unexpected value here and throw error 
       lbra  UNKNOWN_ERROR_EXIT
+        endc
 
 PLAY_CHIP_OPL
       ; report coco will be frozen during playback 
@@ -1578,16 +1647,37 @@ VGM_SN76489_CHECK_FOR_LOOP_FOREVER
 * experemtinal 
 PLAY_CHIP_YM2149   
 PLAY_CHIP_YM2149_CCT
-      ; report coco will be frozen during playback 
+      ; Report the active PSG process-timing experiment or baseline behavior.
       leax  strPlayingFrozen,PCR
       lbsr  PRINT_STR_OS9
+        ifdef EXPERIMENTAL_PSG
+      ; Select the PSG before reading its control register. Mark hardware as
+      ; claimed before any allocation call can fail, so every error restores
+      ; the prior MPI/PIA/PSG control state through the common cleanup path.
+      lda   <mpiPSG
+      sta   >mpi_reg
+      lbrn  PLAY_CHIP_YM2149
+      lbrn  PLAY_CHIP_YM2149
+      lbrn  PLAY_CHIP_YM2149
+      lbrn  PLAY_CHIP_YM2149
+      lda   >psg_control_reg
+      sta   psgPrevControl,U
+      lda   #1
+      sta   psgActiveFlag,U
+      lbsr  VGM_PSG_RESERVE_MAP_SLOT
+      lbcs  RAM_ERROR_EXIT
+        else
       ; lock down the coco for playback and initialize hardware stuff 
       orcc  #$50        ; disable all interrupts 
 
       ; force high-speed poke mode (to ensure timing loops work, mainly for the GIME-X)
       clra 
       sta  	>$FFD9
+        endc
 
+        ifdef EXPERIMENTAL_PSG
+      ; The experimental PSG slot is already selected above.
+        else
       ; check if user is using a mega mini MPI with selectable CART audio slot and toggle it if exists
       lda 	<oplDetectFlag
       beq  	PLAY_CHIP_YM2149_NO_MMMPI
@@ -1600,6 +1690,7 @@ PLAY_CHIP_YM2149_CCT
 PLAY_CHIP_YM2149_NO_MMMPI
       lda 	<mpiPSG
       sta  	>mpi_reg
+        endc
       lbrn  PLAY_CHIP_YM2149
       lbrn  PLAY_CHIP_YM2149
       lbrn  PLAY_CHIP_YM2149
@@ -1621,15 +1712,33 @@ PLAY_CHIP_YM2149_NO_MMMPI
 
       ; swap in the first block of the song data 
       leax  vgmBlockMap,U 
+        ifdef EXPERIMENTAL_PSG
+      ldy   #0
+        else
       ldy   #vgm_block_start
+        endc
 VGM_YM2149_CMD_START_DATA_LOOP
+        ifdef EXPERIMENTAL_PSG
+      sty   psgPlayOffset,U
+      stx   psgPlayMapPtr,U
+      lbsr  VGM_PSG_MAP_NEXT
+      lbcs  UNEXPECTED_END_ERROR_EXIT
+        else
       ldb   ,X+
       stb   >$FFA9            ; force MMU block to $2000 like "play" command does
+        endc
 VGM_YM2149_NEXT_COMMAND
+        ifdef EXPERIMENTAL_PSG
+      lbsr  VGM_PSG_ENSURE_BYTE
+      lbcs  UNEXPECTED_END_ERROR_EXIT
+      tst   <abortFlag
+      lbne  VGM_YM2149_WAIT_ABORTED
+        else
       cmpy  #vgm_block_end                ; 5/4 cycles
       blo   VGM_YM2149_NEXT_COMMAND_SKIP         ; 3 cycles 
       lbsr  VGM_GET_RAM_BLOCK             ; 9/7 cycles 
       lbcs  UNEXPECTED_END_ERROR_EXIT  
+        endc
 VGM_YM2149_NEXT_COMMAND_SKIP
       lda   ,Y+                     	; 6/5 cycles 
       cmpa  #$A0   				; 2 cycles
@@ -1648,6 +1757,18 @@ VGM_YM2149_NEXT_COMMAND_SKIP
       lbeq  VGM_YM2149_CHECK_FOR_LOOP                 
       bra   VGM_YM2149_NEXT_COMMAND        ; 3 cycles 
 
+        ifdef EXPERIMENTAL_PSG
+VGM_YM2149_CMD_CHIP
+      ; Decode one YM2149 event, then hand register/value to the PSG backend.
+      lbsr  VGM_PSG_ENSURE_BYTE
+      lbcs  UNEXPECTED_END_ERROR_EXIT
+      lda   ,Y+
+      lbsr  VGM_PSG_ENSURE_BYTE
+      lbcs  UNEXPECTED_END_ERROR_EXIT
+      ldb   ,Y+
+      lbsr  VGM_PSG_WRITE_REG
+      lbra  VGM_YM2149_NEXT_COMMAND
+        else
 VGM_YM2149_CMD_CHIP
       cmpy  #vgm_block_end                ; 5/4 cycles 
       blo   VGM_YM2149_CMD_CHIP_SKIP      ; 3 cycles 
@@ -1670,6 +1791,17 @@ VGM_YM2149_CMD_CHIP_SKIP_AGAIN
       lbra  VGM_YM2149_NEXT_COMMAND       ; 5/4 cycles 
                                           ; ---------
                                           ; total: 27/23 
+        endc
+        ifdef EXPERIMENTAL_PSG
+VGM_YM2149_CMD_WAIT_MANUAL
+      ; Decode the VGM little-endian sample count before entering the timer.
+      lbsr  VGM_PSG_ENSURE_BYTE
+      lbcs  UNEXPECTED_END_ERROR_EXIT
+      ldb   ,Y+
+      lbsr  VGM_PSG_ENSURE_BYTE
+      lbcs  UNEXPECTED_END_ERROR_EXIT
+      lda   ,Y+
+        else
 VGM_YM2149_CMD_WAIT_MANUAL
       cmpy  #vgm_block_end                ; 5/4 cycles
       blo   VGM_YM2149_CMD_WAIT_MANUAL_SKIP_1          ; 3 cycles 
@@ -1684,6 +1816,34 @@ VGM_YM2149_CMD_WAIT_MANUAL_SKIP_1
 VGM_YM2149_CMD_WAIT_MANUAL_SKIP_2
       lda   ,Y+                                 ; 6/5 cycles
 
+        endc
+        ifdef EXPERIMENTAL_PSG
+VGM_YM2149_WAIT_SAMPLES
+      ; Interruptible 44.1 kHz CPU-cycle delay. OS-9 tick IRQs may preempt this
+      ; user process; their runtime appears as experimental event lateness.
+      lbsr  VGM_PSG_COARSE_WAIT
+      lbcs  VGM_YM2149_WAIT_ABORTED
+      lbeq  VGM_YM2149_NEXT_COMMAND ; a fully slept or zero-length wait is done
+      tst   <cpuMode
+      beq   VGM_YM2149_WAIT_SAMPLES_6809
+      lbrn  VGM_YM2149_WAIT_SAMPLES
+      nop
+      nop
+VGM_YM2149_WAIT_SAMPLES_6809
+VGM_YM2149_WAIT_FINE_LOOP
+      sta   <u8Value
+      tst   <abortFlag
+      bne   VGM_YM2149_WAIT_ABORTED
+      lda   <u8Value
+      ; Restore approximately the original per-sample loop cost after removing
+      ; the foreground PIA scan. Static estimates: ~41 cycles on HD6309 native.
+      lbrn  VGM_YM2149_WAIT_SAMPLES
+      nop
+      nop
+      subd  #1
+      bne   VGM_YM2149_WAIT_FINE_LOOP
+      lbra  VGM_YM2149_NEXT_COMMAND
+        else
 VGM_YM2149_WAIT_SAMPLES
       ; coco3 fast mode, 44.1khz vgm sample rate, is 40.58439909297052 cycles per sample 
       ; loop is tuned for a rounded-up 41 cycles 
@@ -1717,6 +1877,7 @@ VGM_YM2149_WAIT_SAMPLES_6809
       bne   VGM_YM2149_WAIT_SAMPLES        ; 3 cycles 
       lbra  VGM_YM2149_NEXT_COMMAND        ; 5/4 cycles 
 
+        endc
 VGM_YM2149_CMD_WAIT_735
       ldd   #735
       bra  VGM_YM2149_WAIT_SAMPLES
@@ -1749,6 +1910,205 @@ VGM_YM2149_CHECK_FOR_LOOP_FOREVER
       ldx   vgmLoopBlockPtr,U 
       ldy   vgmLoopStart,U
       lbra  VGM_YM2149_CMD_START_DATA_LOOP
+
+        ifdef EXPERIMENTAL_PSG
+; ------------------------------------------------------------
+; Process-owned CoCoPSG VGM page mapping and output backend.
+; User-process context, interrupts remain enabled. All F$MapBlk/F$ClrBlk
+; calls update this process DAT image, so OS-9 restores the mapping on a
+; context switch. One guard page reserves the highest free slot; the current
+; 8 KB stream page is mapped immediately below it, never at $E000.
+; VGM_PSG_RESERVE_MAP_SLOT has no input; it returns carry clear on success and
+; records one F$AllRAM/F$MapBlk guard allocation in U-owned state. It clobbers
+; D/X/U and flags. If mapping fails, the allocated block remains marked for
+; the common cleanup path. No interrupt mask or timing-critical section.
+; ------------------------------------------------------------
+VGM_PSG_RESERVE_MAP_SLOT
+      ldu   <uRegImage
+      ldb   #1
+      os9   F$AllRAM
+      bcs   VGM_PSG_RESERVE_MAP_ERROR
+      ldu   <uRegImage
+      stb   psgGuardBlock,U
+      lda   #1
+      sta   psgGuardAllocated,U
+      clra
+      ldb   psgGuardBlock,U
+      tfr   D,X
+      ldb   #1
+      os9   F$MapBlk
+      bcs   VGM_PSG_RESERVE_MAP_ERROR
+      tfr   U,D
+      ldu   <uRegImage
+      std   psgGuardBase,U
+      lda   #1
+      sta   psgGuardMapped,U
+      andcc #$FE
+      rts
+VGM_PSG_RESERVE_MAP_ERROR
+      ldu   <uRegImage
+      orcc  #1
+      rts
+
+; Map the next file block into a process DAT slot and return Y at the saved
+; in-block offset. Input/output: U is the process data base; Y is returned at
+; mapped page + psgPlayOffset. Clobbers X and flags, preserves D. Carry marks
+; exhausted input or an OS-9 mapping error.
+VGM_PSG_MAP_NEXT
+      pshs  D
+      ldu   <uRegImage
+      tst   psgPlayMapActive,U
+      beq   VGM_PSG_MAP_NEXT_READ_ID
+      ldu   psgPlayMapBase,U
+      ldb   #1
+      os9   F$ClrBlk
+      bcs   VGM_PSG_MAP_NEXT_ERROR
+      ldu   <uRegImage
+      clr   psgPlayMapActive,U
+VGM_PSG_MAP_NEXT_READ_ID
+      ldx   psgPlayMapPtr,U
+      ldb   ,X+
+      beq   VGM_PSG_MAP_NEXT_END
+      stx   psgPlayMapPtr,U
+      clra
+      tfr   D,X
+      ldb   #1
+      os9   F$MapBlk
+      bcs   VGM_PSG_MAP_NEXT_ERROR
+      tfr   U,D
+      ldu   <uRegImage
+      std   psgPlayMapBase,U
+      lda   #1
+      sta   psgPlayMapActive,U
+      ldd   psgPlayMapBase,U
+      addd  psgPlayOffset,U
+      tfr   D,Y
+      clr   psgPlayOffset,U
+      puls  D
+      andcc #$FE
+      rts
+VGM_PSG_MAP_NEXT_END
+      ldu   <uRegImage
+      puls  D
+      orcc  #1
+      rts
+VGM_PSG_MAP_NEXT_ERROR
+      ldu   <uRegImage
+      puls  D
+      orcc  #1
+      rts
+
+; Ensure one byte is addressable at Y. On the page boundary, unmap the old
+; page and map the next one. Preserves D and leaves Y unchanged on a valid
+; byte; on a boundary Y becomes the next mapped page base.
+VGM_PSG_ENSURE_BYTE
+      pshs  D
+      tfr   Y,D
+      subd  psgPlayMapBase,U
+      cmpd  #$2000
+      puls  D
+      blo   VGM_PSG_ENSURE_BYTE_READY
+      clr   psgPlayOffset,U
+      lbsr  VGM_PSG_MAP_NEXT
+      rts
+VGM_PSG_ENSURE_BYTE_READY
+      andcc #$FE
+      rts
+
+; Input D=VGM samples. Sleeps only when at least two NTSC clock ticks fit in
+; the wait (735 samples/tick), then returns the sub-tick remainder in D. The
+; tick count and remainder stay in U-owned data. Re-sleep on unrelated signals;
+; BREAK/ABORT sets abortFlag and returns carry set. CPU-sample delay handles the
+; remaining 0-1470 samples, preserving short-event timing and avoiding a busy
+; loop during longer rests. F$Sleep is a coarse aid, never the event clock.
+VGM_PSG_COARSE_WAIT
+      std   psgWaitOriginal,U
+      std   psgWaitSamples,U
+      clr   psgWaitTicks,U
+      ldd   psgWaitSamples,U
+VGM_PSG_COARSE_WAIT_DIVIDE
+      cmpd  #735
+      blo   VGM_PSG_COARSE_WAIT_DIVIDED
+      subd  #735
+      inc   psgWaitTicks,U
+      bra   VGM_PSG_COARSE_WAIT_DIVIDE
+VGM_PSG_COARSE_WAIT_DIVIDED
+      std   psgWaitSamples,U
+      lda   psgWaitTicks,U
+      cmpa  #2
+      blo   VGM_PSG_COARSE_WAIT_BUSY
+      clra
+      ldb   psgWaitTicks,U
+      tfr   D,X
+VGM_PSG_COARSE_WAIT_SLEEP
+      os9   F$Sleep
+      bcs   VGM_PSG_COARSE_WAIT_ERROR
+      tst   <abortFlag
+      bne   VGM_PSG_COARSE_WAIT_ERROR
+      cmpx  #0
+      bne   VGM_PSG_COARSE_WAIT_SLEEP
+VGM_PSG_COARSE_WAIT_RETURN
+      ldd   psgWaitSamples,U
+      andcc #$FE
+      rts
+VGM_PSG_COARSE_WAIT_BUSY
+      ldd   psgWaitOriginal,U
+      andcc #$FE
+      rts
+VGM_PSG_COARSE_WAIT_ERROR
+      orcc  #1
+      rts
+
+; Input A=YM register, B=value. One bounded register-select/data sequence;
+; no OS call and no interrupt masking. Other processes do not share this
+; selected PSG slot during the experiment.
+VGM_PSG_WRITE_REG
+      sta   >psg_ym_reg_select
+      lbrn  VGM_PSG_WRITE_REG
+      stb   >psg_ym_data_port
+      rts
+
+; Release transient DAT mappings and the guard allocation before the normal
+; F$DelRAM loop frees all VGM/CCT file blocks. Best-effort cleanup still runs
+; in user context and never changes $FFA9 directly. No arguments; uses and
+; updates U-owned mapping flags; F$ClrBlk/F$DelRAM errors leave the associated
+; flag set. Clobbers D/X/U and flags. This routine does not mask interrupts.
+VGM_PSG_RELEASE_MAPS
+      ldu   <uRegImage
+      tst   psgPlayMapActive,U
+      beq   VGM_PSG_RELEASE_GUARD
+      ldu   psgPlayMapBase,U
+      ldb   #1
+      os9   F$ClrBlk
+      bcs   VGM_PSG_RELEASE_GUARD
+      ldu   <uRegImage
+      clr   psgPlayMapActive,U
+VGM_PSG_RELEASE_GUARD
+      ldu   <uRegImage
+      tst   psgGuardMapped,U
+      beq   VGM_PSG_RELEASE_BLOCK
+      ldu   psgGuardBase,U
+      ldb   #1
+      os9   F$ClrBlk
+      bcs   VGM_PSG_RELEASE_BLOCK
+      ldu   <uRegImage
+      clr   psgGuardMapped,U
+VGM_PSG_RELEASE_BLOCK
+      ldu   <uRegImage
+      tst   psgGuardAllocated,U
+      beq   VGM_PSG_RELEASE_DONE
+      clra
+      ldb   psgGuardBlock,U
+      tfr   D,X
+      ldb   #1
+      os9   F$DelRAM
+      bcs   VGM_PSG_RELEASE_DONE
+      ldu   <uRegImage
+      clr   psgGuardAllocated,U
+      clr   psgGuardBlock,U
+VGM_PSG_RELEASE_DONE
+      rts
+        endc
 
 ; ---------------------
 ; subroutine to try and swap 1 more block of data in if available
@@ -1783,6 +2143,10 @@ PARAM_ERROR_EXIT
 UNEXPECTED_END_ERROR_EXIT
       leax  strErrorSuddenEnd,PCR
       lbsr  PRINT_STR_OS9
+        ifdef EXPERIMENTAL_PSG
+      tst   psgActiveFlag,U
+      bne   VGM_YM2149_END
+        endc
       lbra  PLAY_DONE_RESET_STATES 
 
 READ_ERROR_EXIT
@@ -1796,6 +2160,10 @@ READ_ERROR_EXIT
 RAM_ERROR_EXIT
       leax  strErrorRam,PCR
       lbsr  PRINT_STR_OS9
+        ifdef EXPERIMENTAL_PSG
+      tst   psgActiveFlag,U
+      bne   VGM_YM2149_END
+        endc
       lbra  EXIT_DEALLOCATE_RAM 
 
 FILE_ERROR_EXIT
@@ -1868,6 +2236,15 @@ VGM_OPL_END
 	lbsr 	OPL_ALL_SOUND_OFF  	; reset OPL chip before we exit 
 
 PLAY_DONE_RESET_STATES
+        ifdef EXPERIMENTAL_PSG
+      ; Restore the previous PSG control state after silencing the chip.
+      lda   psgActiveFlag,U
+      beq   PLAY_DONE_SKIP_PSG_RESTORE
+      lda   psgPrevControl,U
+      sta   >psg_control_reg
+      clr   psgActiveFlag,U
+PLAY_DONE_SKIP_PSG_RESTORE
+        endc
       ; restore original state of MPI 
       lda   <prevMPI
       sta   >mpi_reg
@@ -1877,6 +2254,10 @@ PLAY_DONE_RESET_STATES
 EXIT_DEALLOCATE_RAM
       ; deallocate ram before exiting 
       ldu   <uRegImage
+        ifdef EXPERIMENTAL_PSG
+      lbsr  VGM_PSG_RELEASE_MAPS
+      ldu   <uRegImage
+        endc
       leay  vgmBlockMap,U 
 EXIT_DEALLOCATE_NEXT
       clra
@@ -1929,6 +2310,9 @@ EXIT_CLOSE_ALL_PATHS_SKIP_PLAYLIST
       lbrn  EXIT_CLOSE_ALL_PATHS          ; delay 5 cycles 
 EXIT_CLOSE_ALL_PATHS_SKIP_SONG
 EXIT_TO_OS9
+	ifdef EXPERIMENTAL_PSG
+	; OS-9 signal delivery handles BREAK/ABORT; do not consume queued input.
+	else
 	; check if there are '.' characters in the keyboard buffer from aborting tracks and read/purge them
 	lda  	#STDIN 
 	ldb 	#$01  		; SS.Ready
@@ -1944,6 +2328,7 @@ EXIT_TO_OS9
 	os9  	I$Read 
 
 EXIT_TO_OS9_SKIP_KEY_CLEAR
+	endc
       clrb 
       os9   F$Exit
 
@@ -3079,7 +3464,11 @@ VGM_CALC_BLOCK_FROM_OFFSET_FOUND
       leay  D,Y 
       sty   vgmLoopBlockPtr,U 
       ldd   2,X 
+        ifdef EXPERIMENTAL_PSG
+      ; Keep an offset within the selected page; the mapping base is dynamic.
+        else
       addd  #$2000            ; since we use a static local RAM address of $2000 for start of each data block 
+        endc
       std   vgmLoopStart,U 
 
       puls  D,X,Y,PC 

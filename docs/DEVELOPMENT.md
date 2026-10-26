@@ -25,15 +25,22 @@ Any binary path can be overridden with environment variables: `LWASM_BIN`, `TOOL
 ```bash
 bash scripts/setup-mame.sh
 bash scripts/build.sh
-bash scripts/stage-test-disk.sh /absolute/path/to/sample.vgm
+bash scripts/stage-test-disk.sh
 bash scripts/run-mame.sh psg
 ```
-At DECB's `OK` prompt enter `DOS`. After the 6309 EOU Shell loads, stage/launch the module from the second floppy (usually `/d1`):
+The build produces the byte-identical baseline `build/cctplay`, experimental PSG player `build/cctplaymt`, counter `build/cctcounter`, and a generated YM2149 tone test. The private test floppy contains `cctplay`, `cctplaymt`, `cctcount`, and `synthetic.vgm`.
+
+At DECB's `OK` prompt enter `DOS`. After the 6309 EOU Shell loads, open two Shell windows. Run the counter in one:
 ```text
-load /d1/cctplay
-cctplay -psg 2 /d1/sample.vgm
+load /d1/cctcount
+cctcount
 ```
-Use the actual staged file name in the final command. The original v1.6 intentionally freezes NitrOS-9 during playback; baseline running is **not** a multitasking success.
+Run the experiment in the other:
+```text
+load /d1/cctplaymt
+cctplaymt -psg 2 /d1/synthetic.vgm
+```
+The counter sleeps for 60 OS-9 ticks between updates. The original reference remains available as `load /d1/cctplay` followed by `cctplay -psg 2 /d1/synthetic.vgm`. The PSG experiment has only passed assembly/module checks and floppy staging so far; guest playback, counter rate, audio quality, and concurrent responsiveness are **NOT RUN**. An assembly pass or boot alone is not a multitasking success.
 
 Other modes:
 ```bash
@@ -46,9 +53,12 @@ Set RGB mode once via the MAME configuration screen (usual `screen_config` port 
 On macOS, `run-mame.sh` and `stage-test-disk.sh` use `lsof` to stop when one of their project-local images is already open. The ToolShed override must name the executable file, not its containing directory.
 
 ## Project layout
-- `cct_os9.asm`, `os9.d`, `rbf.d`, `scf.d`: original version 1.6 source/include files
+- `cct_os9.asm`: Todd Wallace's version 1.6 source with conditional experimental PSG code; the default build preserves the original binary. `os9.d`, `rbf.d`, `scf.d` are the original includes.
 - `cctplay`: original prebuilt binary, useful for baseline verification
-- `build/cctplay`: local rebuilt module; `build/cctplay.lst`: assembler listing
+- `build/cctplay`: byte-identical baseline rebuild; `build/cctplay.lst`: assembler listing
+- `build/cctplaymt`: experimental CoCoPSG process-timed module
+- `tools/cctcounter.asm`: independent 60-tick visible counter process
+- `scripts/make-synthetic-psg-vgm.py`: original generated test tone (ignored output under `build/`)
 - `emulator/images/63EMU.DSK`: private boot helper copy
 - `emulator/images/eou-working.vhd`: private EOU hard drive copy
 - `emulator/images/chiptunes-test.dsk`: private RBF stage disk in MAME floppy 2

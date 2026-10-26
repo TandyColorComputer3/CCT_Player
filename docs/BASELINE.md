@@ -97,7 +97,7 @@ load /d1/cctplay
 cctplay -gmc 1 /d1/sample.vgm
 ```
 
-These commands cover a single-track playback check only. This checkout has no counter test utility, so the concurrent-process acceptance test remains **NOT RUN**; add and stage a helper process before claiming that milestone. Capture a screenshot, audible inspection, Shell counter rate, and timing/CPU evidence for that run.
+These commands cover a single-track playback check only. At the original Phase 1 snapshot there was no counter test utility, so the concurrent-process acceptance test remained **NOT RUN**. The later prototype follow-up below adds and stages a helper utility, but its guest execution remains **NOT RUN**. Capture a screenshot, audible inspection, Shell counter rate, and timing/CPU evidence before claiming that milestone.
 
 ## Scaffolding changes and rollback
 
@@ -107,3 +107,26 @@ These commands cover a single-track playback check only. This checkout has no co
 - `docs/DEVELOPMENT.md` now names the executable file rather than its containing directory.
 
 If an environment uses another ToolShed installation, set `TOOLSHED_OS9` to that executable. To roll back these scaffolding-only changes, revert this documentation/script commit; the original assembly and tracked `cctplay` are unchanged.
+
+## Experimental CoCoPSG prototype follow-up
+
+**Run date:** 2026-10-25
+**Branch:** `feature/multitasking-eou`
+**Scope:** conditional PSG-only process-timing prototype, counter utility, generated tone file, and build/staging documentation. The default executable remains the original baseline.
+
+| Check | Result | Evidence |
+| --- | --- | --- |
+| Baseline rebuild | **PASS** | `bash scripts/build.sh` assembled `build/cctplay`; the build script's `cmp -s cctplay build/cctplay` check passed. Tracked `cctplay` remains untouched. |
+| Experimental player build | **PASS** | LWASM `--6309 --format=os9 --define=EXPERIMENTAL_PSG` built `build/cctplaymt`. |
+| Counter build | **PASS** | `tools/cctcounter.asm` built as `build/cctcounter`. |
+| ToolShed module identity | **PASS** | `cctplay`: size `$2234` (8,756 bytes), CRC `$7A98E7` Good, exec `$0ED1`, data `$0798`, edition `$0D`; `cctplaymt`: size `$220A` (8,714 bytes), CRC `$B13E7A` Good, exec `$0D33`, data `$07AB`, edition `$0D`; `cctcount`: size `$5B` (91 bytes), CRC `$4FB5C6` Good, exec `$0016`, data `$0006`, edition `$01`. All identify as Program / 6809 object code / re-entrant / read-only. |
+| Synthetic PSG test file | **PASS (generated)** | `build/synthetic-psg.vgm`, 256 bytes, generated from the repository script; guest parsing and audio remain untested. |
+| Private test floppy | **PASS** | `bash scripts/stage-test-disk.sh` created the 368,640-byte ignored `emulator/images/chiptunes-test.dsk`; ToolShed listed `cctplay`, `cctplaymt`, `cctcount`, and `synthetic.vgm`. Its open-file guard found no MAME handle to this test floppy. |
+| Static PSG control-flow review | **PASS (static only)** | The experimental PSG entry path does not enter the original long `ORCC #$50` playback section; its VGM reader uses process DAT mappings through `F$MapBlk`/`F$ClrBlk`, and signal checks use `abortFlag`. This is source evidence, not guest scheduling/MMU evidence. |
+| Counter execution on EOU | **NOT RUN** | The CoCo3 MCP server reports `running=false, bridge=false`. An unmanaged MAME process still has this project's `eou-working.vhd` and `63EMU.DSK` open. No MAME window, VHD, or mounted disk was changed. |
+| PSG audio / concurrency / responsiveness | **NOT RUN** | No guest run, audible inspection, screenshot, or counter-during-playback evidence was obtained. |
+| Timing, CPU, resource cleanup | **NOT RUN** | No guest event trace, duration measurement, CPU estimate, or repeated-playback cleanup check was available. |
+
+The process prototype uses the existing 44.1 kHz sample countdown for short waits, and coarse `F$Sleep` for waits of at least two NTSC ticks. It does not compensate relative waits for interrupt or scheduler lateness; drift and audio quality are unmeasured. The prototype is not evidence that the OS remains responsive during playback.
+
+To run once the existing unmanaged MAME session releases the project media, see the two-window CoCoPSG commands in [PSG-PROTOTYPE.md](PSG-PROTOTYPE.md). The staging disk is project-local; the canonical EOU images and the working VHD must not be reset or replaced for this test.

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build Todd Wallace's source as an OS-9 module without modifying it.
+# Build the baseline and experimental CoCoPSG player from shared source.
 set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$root"
@@ -11,6 +11,18 @@ if ! command -v "$assembler" >/dev/null 2>&1; then
 fi
 "$assembler" --6309 --format=os9 --list=build/cctplay.lst --symbols -o build/cctplay cct_os9.asm
 echo "Built $root/build/cctplay"
+if [ -f cctplay ] && ! cmp -s cctplay build/cctplay; then
+  echo "Baseline rebuild differs from the original cctplay binary." >&2
+  exit 1
+fi
+"$assembler" --6309 --format=os9 --define=EXPERIMENTAL_PSG \
+  --includedir="$root" --list=build/cctplaymt.lst --symbols \
+  -o build/cctplaymt cct_os9.asm
+echo "Built experimental CoCoPSG player $root/build/cctplaymt"
+"$assembler" --6309 --format=os9 --includedir="$root" \
+  --list=build/cctcounter.lst --symbols -o build/cctcounter tools/cctcounter.asm
+echo "Built OS-9 counter utility $root/build/cctcounter"
+python3 scripts/make-synthetic-psg-vgm.py build/synthetic-psg.vgm
 tool="${TOOLSHED_OS9:-/Users/magneto-optimus/Documents/Coding/toolshed-2.2/build/unix/os9/os9}"
 if [[ "$tool" == */* ]]; then
   if [[ ! -f "$tool" || ! -x "$tool" ]]; then
@@ -22,3 +34,5 @@ elif ! command -v "$tool" >/dev/null 2>&1; then
   exit 1
 fi
 "$tool" ident build/cctplay
+"$tool" ident build/cctplaymt
+"$tool" ident build/cctcounter
