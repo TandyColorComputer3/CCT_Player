@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Reformat ONLY the project-local test floppy; optionally add song files.
+# Never run while MAME is accessing the image.
+set -euo pipefail
+root="$(cd "$(dirname "$0")/.." && pwd)"
+img="$root/emulator/images/chiptunes-test.dsk"
+tool="${TOOLSHED_OS9:-/Users/magneto-optimus/Documents/Coding/toolshed-2.2/build/unix/os9}"
+if ! { [ -x "$tool" ] || command -v "$tool" >/dev/null 2>&1; }; then
+  echo "Missing ToolShed os9: $tool" >&2
+  exit 1
+fi
+binary="$root/build/cctplay"
+if [ ! -f "$binary" ]; then
+  echo "No rebuilt module; using unchanged upstream binary as baseline."
+  binary="$root/cctplay"
+fi
+if [ ! -f "$binary" ]; then
+  echo "Missing player binary. Run bash scripts/build.sh" >&2
+  exit 1
+fi
+mkdir -p "$(dirname "$img")"
+echo "Recreating PRIVATE stage disk (not the EOU boot or VHD): $img"
+rm -f "$img"
+"$tool" format -ds -t40 -e -nCCTTEST "$img"
+"$tool" copy "$binary" "$img,cctplay"
+"$tool" attr -e -pe "$img,cctplay"
+"$tool" ident "$img,cctplay"
+for song in "$@"; do
+  if [ ! -f "$song" ]; then
+    echo "Song file not found: $song" >&2
+    exit 1
+  fi
+  base="$(basename "$song")"
+  if [ "${#base}" -gt 29 ]; then
+    echo "Song filename too long for OS-9 (29 chars max): $base" >&2
+    exit 1
+  fi
+  "$tool" copy "$song" "$img,$base"
+  echo "Staged song: /d1/$base"
+done
+"$tool" dir "$img,"
+echo "Ready. Close/relaunch MAME before mounting the newly generated test floppy."
