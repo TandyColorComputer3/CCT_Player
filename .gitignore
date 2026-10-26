@@ -1,0 +1,24 @@
+# Generated cross-compiler artifacts
+/build/
+*.lst
+*.map
+*.sym
+*.o
+
+# Local emulator state, ROMs and media (NEVER commit)
+/emulator/images/
+/emulator/screenshots/
+/emulator/logs/
+/emulator/config/
+/emulator/states/
+*.vhd
+*.VHD
+*.dsk
+*.DSK
+*.rom
+*.ROM
+
+# macOS/editor noise
+.DS_Store
+._*
+*.swp
