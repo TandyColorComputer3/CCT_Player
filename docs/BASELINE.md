@@ -152,3 +152,26 @@ To run once the existing unmanaged MAME session releases the project media, see 
 The fixed experimental module identifies as size `$221A` (8,730 bytes), CRC `$ABC711` Good, exec `$0D33`, data `$07AB`, Program / 6809 object / re-entrant / read-only. The original `cctplay` still rebuilds with SHA-256 `eabe6b6f3910ebd1af557f64b02c1fb1e1802a3a07a1bf134016b1a4a6792f36` and CRC `$7A98E7`.
 
 CoreAudio enumeration differs by execution context. Sandboxed `system_profiler SPAudioDataType` returned an empty device list, while the visible logged-in MAME process, launched with `-sound coreaudio`, produced the user-audible probe and the non-silent WAV. Installed MAME reports `-sound` backends `coreaudio`, `sdl`, `portaudio`, and `none`, with `-audio_latency`, SDL `-audiodriver`, 48 kHz sampling, and `-wavwrite`. Therefore the sandbox result is not evidence that the Mac lacks an output device.
+
+## Concurrent CoCoPSG milestone
+
+**Run date:** 2026-10-26
+**Environment:** the same visible, isolated MAME 0.289 `coco3h` session, HD6309 native mode, 2 MB, MPI slot 2 `ccpsg`, private EOU VHD/boot floppy, and private generated test floppy. No canonical image or unrelated emulator process was changed.
+
+The first concurrent measurement found two timing defects rather than treating assembly as success. EOU uses a 100 Hz system clock, so `cctcount` now sleeps 100 ticks rather than 60. The player now converts one coarse tick to 441 VGM samples, passes N+1 to this EOU `F$Sleep` path because it counts down to one, and pads the interruptible fine loop using the measured HD6309 cost. The common 735-sample sequence changed from roughly 0.34 seconds per nominal 0.5-second section to 0.500--0.522 seconds.
+
+| Check | Result | Evidence |
+| --- | --- | --- |
+| Counter alone | **PASS** | `/d1/cctcount &` printed increasing four-digit values while the Shell accepted commands. The corrected helper sleeps 100 EOU ticks per update. |
+| Counter during playback | **PASS** | `concurrent-final-mid.png` visibly contains the player banner and counter values `0007` through `0016` during active playback. Counter output continues after the player banner and through completion. SHA-256: `5624f315f311bb1fa2a23fadedb8d789c726c5bda9a8575a0cf63a1235d80a34`. |
+| PSG writes during concurrency | **PASS** | The bounded MAME tap captured 422 writes to `$FF5E/$FF5F`, `invalid=false`, `dropped=0`. The first eight writes at 147.473619--147.473966 s select/write YM registers 7=`$3E`, 8=`$0F`, 0=`$C8`, and 1=`$00`. The next pitch pair begins at 147.995474 s; the next one-second boundary is 148.496119 s. |
+| WAV audio during concurrency | **PASS** | `concurrent-final.wav` is 16-bit, four-channel, 48 kHz PCM. Mean-removed 10 ms window analysis finds one continuous non-DC active run from 147.47 through 177.82 seconds. SHA-256: `2e687a637f4983bd472f238a63c31e80df2047e4196c03e2d586810afc00d478`. |
+| Duration | **PASS with measured drift** | The generated fixture declares exactly 1,323,000 samples (30.000 s). Captured audio is active for 30.35 s: +0.35 s, or +1.17%. Individual nominal 0.5-second transitions measured 0.5006 and 0.5219 s near startup. |
+| Shell responsiveness and exit | **PASS** | After natural completion, `procs -e` ran successfully. `concurrent-final-processes.png` shows `cctcount` plus Shell processes and no `cctplaymt`; counter values `0028` through `0038` continue below the process table. SHA-256: `c1aa07caf3a0ad5c9d6638bbe9933ef5725b66f87229842d7e2b130aeb4d42ea`. |
+| Stuck-note cleanup | **PASS** | The WAV returns to zero AC activity after 177.82 s and remains there for the rest of the capture. The write count is the 420 address/data writes encoded by the fixture plus one final two-write cleanup operation. |
+| Experimental module identity | **PASS** | Final `cctplaymt`: 8,739 bytes, CRC `$AB6512` Good, exec `$0D33`, data `$07AB`; Program / 6809 object / re-entrant / read-only. `cctcount`: 91 bytes, CRC `$45EA1F` Good. |
+| Original executable | **PASS (unchanged)** | `cmp -s cctplay build/cctplay` succeeds; both SHA-256 values remain `eabe6b6f3910ebd1af557f64b02c1fb1e1802a3a07a1bf134016b1a4a6792f36`, and CRC remains `$7A98E7`. |
+| CPU utilization | **NOT RUN** | Scheduling and duration were observed, but no trustworthy guest CPU-share profiler was available. |
+| Real third-party CoCoPSG VGM | **NOT RUN** | No existing legally staged non-synthetic PSG track is present in the repository/private disk. No music was downloaded or added. |
+
+The evidence files live under the ignored `emulator/images/demo/` test area and are intentionally not Git content. The final visible private MAME session was restarted after WAV finalization; its media remain private copies.

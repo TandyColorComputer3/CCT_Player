@@ -1,14 +1,14 @@
 *******************************************************************************
 * CCT_Player multitasking test utility
-* Prints a four-digit counter once per 60 EOU clock ticks.
+* Prints a four-digit counter once per 100 EOU clock ticks.
 *
 * Process context: ordinary re-entrant OS-9 user process; no IRQ handler.
-* F$Sleep releases the process for 60 system ticks, so the Shell and playback
+* F$Sleep releases the process for 100 system ticks, so the Shell and playback
 * process can run. I$Write sends one complete six-byte CR/LF line to STDOUT.
 * `counterText` is the six-byte process-local data record: four decimal digits,
 * CR, LF. The counter wraps from 9999 to 0000.
 * Entry: normal OS-9 module entry with U pointing at this process's data area.
-* I$Write inputs: A=STDOUT, X=counterText, Y=6. F$Sleep input: X=60 ticks.
+* I$Write inputs: A=STDOUT, X=counterText, Y=6. F$Sleep input: X=100 ticks.
 * The loop/helper clobber A, B, X, Y and condition codes; U remains the data base.
 * No critical section is used. Output cadence is nominally one second, not a
 * precision clock. I$Write/F$Sleep error exits through F$Exit; F$Exit does not return.
@@ -45,7 +45,7 @@ CCTCOUNTER_LOOP
         os9   I$Write
         bcs   CCTCOUNTER_EXIT
 
-        ldx   #60             ; EOU clock ticks, nominally one second on NTSC
+        ldx   #100            ; EOU Level II clock ticks, nominally one second
         os9   F$Sleep         ; suspends this process; other tasks keep running
         bcs   CCTCOUNTER_EXIT
         lbsr  CCTCOUNTER_INCREMENT

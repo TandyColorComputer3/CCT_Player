@@ -1954,9 +1954,16 @@ VGM_YM2149_WAIT_FINE_LOOP
       tst   <abortFlag
       bne   VGM_YM2149_WAIT_ABORTED
       lda   <u8Value
-      ; Restore approximately the original per-sample loop cost after removing
-      ; the foreground PIA scan. Static estimates: ~41 cycles on HD6309 native.
+      ; Restore the original per-sample budget after removing the foreground
+      ; PIA scan. Live coco3h/HD6309 timing measured the shorter loop at about
+      ; 28 cycles/sample, so the never-taken branch and NOPs add 13 measured
+      ; cycles. The resulting ~41-cycle remainder loop is still interruptible.
       lbrn  VGM_YM2149_WAIT_SAMPLES
+      lbrn  VGM_YM2149_WAIT_SAMPLES
+      nop
+      nop
+      nop
+      nop
       nop
       nop
       subd  #1
@@ -2134,11 +2141,12 @@ VGM_PSG_ENSURE_BYTE_READY
       andcc #$FE
       rts
 
-; Input D=VGM samples. Sleeps only when at least two NTSC clock ticks fit in
-; the wait (735 samples/tick), then returns the sub-tick remainder in D. The
+; Input D=VGM samples. Sleeps when at least one EOU clock tick fits in
+; the wait (441 samples/tick at EOU's 100 Hz clock), then returns the sub-tick
+; remainder in D. The
 ; tick count and remainder stay in U-owned data. Re-sleep on unrelated signals;
 ; BREAK/ABORT sets abortFlag and returns carry set. CPU-sample delay handles the
-; remaining 0-1470 samples, preserving short-event timing and avoiding a busy
+; remaining 0-440 samples, preserving short-event timing and avoiding a busy
 ; loop during longer rests. F$Sleep is a coarse aid, never the event clock.
 VGM_PSG_COARSE_WAIT
       std   psgWaitOriginal,U
@@ -2146,18 +2154,19 @@ VGM_PSG_COARSE_WAIT
       clr   psgWaitTicks,U
       ldd   psgWaitSamples,U
 VGM_PSG_COARSE_WAIT_DIVIDE
-      cmpd  #735
+      cmpd  #441
       blo   VGM_PSG_COARSE_WAIT_DIVIDED
-      subd  #735
+      subd  #441
       inc   psgWaitTicks,U
       bra   VGM_PSG_COARSE_WAIT_DIVIDE
 VGM_PSG_COARSE_WAIT_DIVIDED
       std   psgWaitSamples,U
       lda   psgWaitTicks,U
-      cmpa  #2
+      cmpa  #1
       blo   VGM_PSG_COARSE_WAIT_BUSY
       clra
       ldb   psgWaitTicks,U
+      incb                         ; F$Sleep counts down to one; N ticks use N+1
       tfr   D,X
 VGM_PSG_COARSE_WAIT_SLEEP
       os9   F$Sleep
