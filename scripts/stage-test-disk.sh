@@ -4,8 +4,18 @@
 set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
 img="$root/emulator/images/chiptunes-test.dsk"
-tool="${TOOLSHED_OS9:-/Users/magneto-optimus/Documents/Coding/toolshed-2.2/build/unix/os9}"
-if ! { [ -x "$tool" ] || command -v "$tool" >/dev/null 2>&1; }; then
+tool="${TOOLSHED_OS9:-/Users/magneto-optimus/Documents/Coding/toolshed-2.2/build/unix/os9/os9}"
+if command -v lsof >/dev/null 2>&1 && lsof -t -- "$img" >/dev/null 2>&1; then
+  echo "Test disk is already open: $img" >&2
+  echo "Close MAME before recreating the staged disk." >&2
+  exit 1
+fi
+if [[ "$tool" == */* ]]; then
+  if [[ ! -f "$tool" || ! -x "$tool" ]]; then
+    echo "Missing or non-executable ToolShed os9: $tool" >&2
+    exit 1
+  fi
+elif ! command -v "$tool" >/dev/null 2>&1; then
   echo "Missing ToolShed os9: $tool" >&2
   exit 1
 fi

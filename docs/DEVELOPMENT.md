@@ -16,7 +16,7 @@ If that directory already contains a Git checkout, do not clone again: use `git 
 - CoCo 3/HD6309 MAME driver: `coco3h`, `-ramsize 2M`
 - EOU canonical test media: `/Volumes/SEDONA/Projects/CoCo3_MCP_Server_NOS9/media/63EMU.DSK` and `63SDC-MCP-DEV.VHD`
 - LWTOOLS `lwasm` (use `lwasm --version`)
-- ToolShed `os9` (default: `/Users/magneto-optimus/Documents/Coding/toolshed-2.2/build/unix/os9`)
+- ToolShed `os9` (default executable: `/Users/magneto-optimus/Documents/Coding/toolshed-2.2/build/unix/os9/os9`)
 - Optional MCP Lua bridge: `/Volumes/SEDONA/Projects/CoCo3_MCP_Server_NOS9/MCP/scripts/bridge.lua`, with the MCP server running separately
 
 Any binary path can be overridden with environment variables: `LWASM_BIN`, `TOOLSHED_OS9`, `MAME_BIN`, `MAME_ROMPATH`, `MCP_MEDIA_DIR`, `MCP_BRIDGE`.
@@ -42,6 +42,8 @@ bash scripts/run-mame.sh gmc            # Game Master Cartridge in MPI slot 1
 bash scripts/run-mame.sh psg --mcp      # CoCoPSG in MPI slot 2 + existing MCP Lua bridge
 ```
 Set RGB mode once via the MAME configuration screen (usual `screen_config` port value 1) and save; this script does not rewrite the user's MAME configuration. Close MAME before reformatting/re-staging test disks or resetting working VHD media.
+
+On macOS, `run-mame.sh` and `stage-test-disk.sh` use `lsof` to stop when one of their project-local images is already open. The ToolShed override must name the executable file, not its containing directory.
 
 ## Project layout
 - `cct_os9.asm`, `os9.d`, `rbf.d`, `scf.d`: original version 1.6 source/include files

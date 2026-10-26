@@ -37,7 +37,7 @@ fi
 case "$mode" in
   base) ;;
   psg) args+=(-ext:multi:slot2 ccpsg) ;;
-  gmc) args+=(-ext:multi:slot1 games_master) ;;
+  gmc) args+=(-ext:multi:slot1 gmc) ;;
   *) echo "Unknown sound mode: $mode (use base, psg, or gmc)" >&2; exit 2 ;;
 esac
 if [ "$with_mcp" -eq 1 ]; then
@@ -46,6 +46,19 @@ if [ "$with_mcp" -eq 1 ]; then
     exit 1
   fi
   args+=(-autoboot_script "$bridge" -autoboot_delay 0)
+fi
+if command -v lsof >/dev/null 2>&1; then
+  media_images=("$img/63EMU.DSK" "$img/eou-working.vhd")
+  if [ -f "$img/chiptunes-test.dsk" ]; then
+    media_images+=("$img/chiptunes-test.dsk")
+  fi
+  for media_image in "${media_images[@]}"; do
+    if lsof -t -- "$media_image" >/dev/null 2>&1; then
+      echo "Media image is already open: $media_image" >&2
+      echo "Close the existing emulator before launching another instance." >&2
+      exit 1
+    fi
+  done
 fi
 echo "Launching $mode mode: coco3h / HD6309 / 2MB / EOU"
 echo "At the BASIC OK prompt: DOS. In OS-9: load /d1/cctplay"

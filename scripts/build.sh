@@ -11,9 +11,14 @@ if ! command -v "$assembler" >/dev/null 2>&1; then
 fi
 "$assembler" --6309 --format=os9 --list=build/cctplay.lst --symbols -o build/cctplay cct_os9.asm
 echo "Built $root/build/cctplay"
-tool="${TOOLSHED_OS9:-/Users/magneto-optimus/Documents/Coding/toolshed-2.2/build/unix/os9}"
-if [ -x "$tool" ] || command -v "$tool" >/dev/null 2>&1; then
-  "$tool" ident build/cctplay
-else
-  echo "ToolShed os9 not found; module ident verification skipped."
+tool="${TOOLSHED_OS9:-/Users/magneto-optimus/Documents/Coding/toolshed-2.2/build/unix/os9/os9}"
+if [[ "$tool" == */* ]]; then
+  if [[ ! -f "$tool" || ! -x "$tool" ]]; then
+    echo "ToolShed os9 not found or not executable: $tool" >&2
+    exit 1
+  fi
+elif ! command -v "$tool" >/dev/null 2>&1; then
+  echo "ToolShed os9 not found: $tool" >&2
+  exit 1
 fi
+"$tool" ident build/cctplay
