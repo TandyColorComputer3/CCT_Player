@@ -7,10 +7,10 @@ import sys
 
 
 def make_vgm() -> bytes:
-    # VGM 1.50 header with AY/YM2149 clock/variant fields and data at $80.
+    # VGM 1.51 header with AY/YM2149 clock/variant fields and data at $80.
     header = bytearray(0x80)
     header[0:4] = b"Vgm "
-    struct.pack_into("<I", header, 0x08, 0x00000150)
+    struct.pack_into("<I", header, 0x08, 0x00000151)
     samples_per_frame = 735
     frames_per_note = 30
     struct.pack_into("<I", header, 0x18, samples_per_frame * frames_per_note * 2)

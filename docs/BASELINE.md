@@ -130,3 +130,25 @@ If an environment uses another ToolShed installation, set `TOOLSHED_OS9` to that
 The process prototype uses the existing 44.1 kHz sample countdown for short waits, and coarse `F$Sleep` for waits of at least two NTSC ticks. It does not compensate relative waits for interrupt or scheduler lateness; drift and audio quality are unmeasured. The prototype is not evidence that the OS remains responsive during playback.
 
 To run once the existing unmanaged MAME session releases the project media, see the two-window CoCoPSG commands in [PSG-PROTOTYPE.md](PSG-PROTOTYPE.md). The staging disk is project-local; the canonical EOU images and the working VHD must not be reset or replaced for this test.
+
+## CoCoPSG hardware and loader diagnosis
+
+**Run date:** 2026-10-26
+**Environment:** isolated private copies of the EOU boot media; visible MAME 0.289 `coco3h`, HD6309, 2 MB, MPI slot 2 `ccpsg`. Canonical media and the unrelated MAME/MCP processes were not changed.
+
+| Check | Result | Evidence |
+| --- | --- | --- |
+| Standalone `psgprobe` | **PASS** | The re-entrant OS-9 module programmed `$FF5E/$FF5F`, slept for 120 ticks, silenced the chip, and restored saved YM, PSG-control, PIA, and MPI state. MCP captured 22 writes over a 1.977-second active interval. The user reported hearing the tone. |
+| `psgprobe` module identity | **PASS** | Current ToolShed `os9 ident`: size `$00C2`, CRC `$E049D3` Good, exec `$0016`, data `$0007`, Program / 6809 object / re-entrant / read-only. The final byte added after the audible run only forces a zero `F$Exit` status; the exercised hardware path is unchanged. |
+| MAME WAV capture | **PASS** | `emulator/images/demo/psgprobe-capture.wav` is RIFF PCM, 16-bit, four channels, 48 kHz. During the tone, channel 1 has AC RMS 8153.68, AC peak 9220, and approximately 250 zero-crossing cycles/second; comparison windows before and after have no comparable AC signal. This is a real square-wave tone, not silence or DC. |
+| Synthetic long VGM guest file | **PASS** | Host and guest size are 2,559 bytes. SHA-256 is `b87c4bd79d2b36fa1654e88ae3454cd9de85de99ab72f0aef43ccf8c1d7e3840`; VGM version is 1.51, data begins at `$80`, total samples are 1,323,000 (30 seconds), AY clock is 2,000,000 Hz, variant is YM2149, and the stream ends in `A0 08 00 66`. |
+| Loader system calls | **PASS** | Conditional `cctplaydbg` trace reached successful `I$Open`, header/data `I$Read`, `SS.Size`, `I$Seek`, `F$AllRAM`, `F$MapBlk`, `F$ClrBlk`, and `I$Close`. The loader was not looping or blocked on file I/O. |
+| Loading failure root cause | **CONFIRMED** | `reservedMMUflag` was allocated with `RMB` but never initialized. A stale nonzero byte caused the loader to run the special `$E000` `F$ClrBlk` cleanup even when `F$MapBlk` had returned `$A000`. An in-context MAME capture showed valid player opcodes in the `$E000` page before cleanup and unrelated system bytes afterward; the next subroutine call therefore faulted before any PSG write. |
+| Loader correction | **PASS** | The experimental VGM and CCT paths now clear `reservedMMUflag` before each mapping sequence. They also retain the exact `F$MapBlk` base across `I$Read` before calling `F$ClrBlk`. These changes are conditional on `EXPERIMENTAL_PSG`; the baseline rebuild remains byte-identical to tracked `cctplay`. |
+| Fixed 30-second player run | **PASS** | `cctplaymt -psg 2 /d1/synthetic-30s.vgm` printed metadata and the 30-second length, emitted repeated expected YM writes, silenced the channel, printed `Playback complete!`, and returned to the Shell prompt. The bounded capture recorded its first 256 register writes and then overflowed while observation continued; overflow limits event-count analysis but does not invalidate the captured writes. |
+| Fixed-player human audio check | **NOT CONFIRMED** | The standalone probe was heard. The fixed long-player run has register-write and completion evidence, but no separate user confirmation of hearing that run is recorded. |
+| Multitasking acceptance test | **NOT RUN in this diagnostic** | This run isolated sound hardware and the loader fault. It did not run `cctcount` concurrently, so it is not evidence that the full multitasking milestone passes. |
+
+The fixed experimental module identifies as size `$221A` (8,730 bytes), CRC `$ABC711` Good, exec `$0D33`, data `$07AB`, Program / 6809 object / re-entrant / read-only. The original `cctplay` still rebuilds with SHA-256 `eabe6b6f3910ebd1af557f64b02c1fb1e1802a3a07a1bf134016b1a4a6792f36` and CRC `$7A98E7`.
+
+CoreAudio enumeration differs by execution context. Sandboxed `system_profiler SPAudioDataType` returned an empty device list, while the visible logged-in MAME process, launched with `-sound coreaudio`, produced the user-audible probe and the non-silent WAV. Installed MAME reports `-sound` backends `coreaudio`, `sdl`, `portaudio`, and `none`, with `-audio_latency`, SDL `-audiodriver`, 48 kHz sampling, and `-wavwrite`. Therefore the sandbox result is not evidence that the Mac lacks an output device.

@@ -19,9 +19,16 @@ fi
   --includedir="$root" --list=build/cctplaymt.lst --symbols \
   -o build/cctplaymt cct_os9.asm
 echo "Built experimental CoCoPSG player $root/build/cctplaymt"
+"$assembler" --6309 --format=os9 --define=EXPERIMENTAL_PSG --define=LOADER_TRACE \
+  --includedir="$root" --list=build/cctplaydbg.lst --symbols \
+  -o build/cctplaydbg cct_os9.asm
+echo "Built loader diagnostic player $root/build/cctplaydbg"
 "$assembler" --6309 --format=os9 --includedir="$root" \
   --list=build/cctcounter.lst --symbols -o build/cctcounter tools/cctcounter.asm
 echo "Built OS-9 counter utility $root/build/cctcounter"
+"$assembler" --6309 --format=os9 --includedir="$root" \
+  --list=build/psgprobe.lst --symbols -o build/psgprobe tools/psgprobe.asm
+echo "Built CoCoPSG hardware probe $root/build/psgprobe"
 python3 scripts/make-synthetic-psg-vgm.py build/synthetic-psg.vgm
 tool="${TOOLSHED_OS9:-/Users/magneto-optimus/Documents/Coding/toolshed-2.2/build/unix/os9/os9}"
 if [[ "$tool" == */* ]]; then
@@ -35,4 +42,6 @@ elif ! command -v "$tool" >/dev/null 2>&1; then
 fi
 "$tool" ident build/cctplay
 "$tool" ident build/cctplaymt
+"$tool" ident build/cctplaydbg
 "$tool" ident build/cctcounter
+"$tool" ident build/psgprobe

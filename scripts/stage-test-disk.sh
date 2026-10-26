@@ -29,9 +29,11 @@ if [ ! -f "$binary" ]; then
   exit 1
 fi
 experimental="$root/build/cctplaymt"
+diagnostic="$root/build/cctplaydbg"
 counter="$root/build/cctcounter"
+probe="$root/build/psgprobe"
 synthetic="$root/build/synthetic-psg.vgm"
-if [ ! -f "$experimental" ] || [ ! -f "$counter" ] || [ ! -f "$synthetic" ]; then
+if [ ! -f "$experimental" ] || [ ! -f "$diagnostic" ] || [ ! -f "$counter" ] || [ ! -f "$probe" ] || [ ! -f "$synthetic" ]; then
   echo "Missing experiment artifacts. Run bash scripts/build.sh" >&2
   exit 1
 fi
@@ -39,7 +41,7 @@ mkdir -p "$(dirname "$img")"
 echo "Recreating PRIVATE stage disk (not the EOU boot or VHD): $img"
 rm -f "$img"
 "$tool" format -ds -t40 -e -nCCTTEST "$img"
-for entry in "cctplay:$binary" "cctplaymt:$experimental" "cctcount:$counter"; do
+for entry in "cctplay:$binary" "cctplaymt:$experimental" "cctplaydbg:$diagnostic" "cctcount:$counter" "psgprobe:$probe"; do
   name="${entry%%:*}"
   module="${entry#*:}"
   "$tool" copy "$module" "$img,$name"

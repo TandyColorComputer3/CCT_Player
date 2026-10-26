@@ -157,10 +157,14 @@ data_size         EQU   .
 
 ; -----------------------------------------------------
 ; Constants
+        ifdef LOADER_TRACE
+moduleName              FCS   "cctplaydbg"
+        else
         ifdef EXPERIMENTAL_PSG
 moduleName              FCS 	"cctplaymt"
         else
 moduleName              FCS 	"cctplay"
+        endc
         endc
 strProgInfo             FCN   "\r\nCoCo ChipTunes Player v1.6\r\nWritten By Todd Wallace (LordDragon)\r\n\n"
 strThanksMsg            FCN   "\r\nSpecial thanks to Ed Snider, L. Curtis Boyle, William Astle, Deek,\r\nand everyone else on Discord for all your help.\r\n"
@@ -235,6 +239,22 @@ strPlayingFrozen        FCN   "\r\nPlaying... (OS-9 will be frozen during playba
         endc
 strPlayComplete         FCN   "\x03\rPlayback complete!\r\n"
 strPlayAborted          FCN   "\x03\rPlayback aborted.\r\n"
+
+        ifdef LOADER_TRACE
+strTraceOpenOK          FCN   "\r\n[T] open"
+strTraceHeaderReadOK    FCN   " header"
+strTraceLengthOK        FCN   " length"
+strTraceSizeOK          FCN   " size"
+strTraceSeekOK          FCN   " seek"
+strTraceAllRAMOK        FCN   " allram="
+strTraceMapOK           FCN   " map"
+strTraceDataReadOK      FCN   " read"
+strTraceClearOK         FCN   " clear"
+strTraceLoaderDone      FCN   " done"
+strTraceClosePath       FCN   " close="
+strTraceCloseOK         FCN   " closed"
+strTraceGD3OK           FCN   " gd3"
+        endc
 
         ifdef EXPERIMENTAL_PSG
 strUsageMsg             FCC   "Syntax: cctplaymt [-i] [-psg <slot>] [-l <0-9 | 'f'>] <filename>\r\n\n"
@@ -511,11 +531,19 @@ PARAMS_NO_MORE
       os9   I$Open 
       lbcs  FILE_ERROR_EXIT
       sta   <tempPath
+        ifdef LOADER_TRACE
+      leax  strTraceOpenOK,PCR
+      lbsr  PRINT_STR_OS9
+        endc
       ; read the first 256 bytes
       leax 	vgmDataBuffer,U 
       ldy 	#256
       os9 	I$Read 
       lbcs 	READ_ERROR_EXIT
+        ifdef LOADER_TRACE
+      leax  strTraceHeaderReadOK,PCR
+      lbsr  PRINT_STR_OS9
+        endc
       ; now try and detect whether this file is a playlist or song file
       ; look for m3u header string "#EXTM3U" in the first 7 bytes + CR at the end (8 total bytes)
       leay 	strPlaylist,PCR
@@ -864,6 +892,10 @@ VGM_LOADER_LOOP_NONE
       ; now calculate song length taking into account possible extra time from loops
       leax  vgmTotalSamples,U 
       lbsr  CALCULATE_SONG_LENGTH
+        ifdef LOADER_TRACE
+      leax  strTraceLengthOK,PCR
+      lbsr  PRINT_STR_OS9
+        endc
 
       ; get GD3 tag offset at $14 in the header 
       leax  vgmDataBuffer+$14,U     
@@ -920,6 +952,10 @@ GD3_TAG_NONE
       stx   <vgmBytesLeft 
       stu   <vgmBytesLeft+2 
       ldu   <uRegImage
+        ifdef LOADER_TRACE
+      leax  strTraceSizeOK,PCR
+      lbsr  PRINT_STR_OS9
+        endc
       leax  vgmBytesLeft,U 
       leay  vgmDataOffset,U
       lbsr  SUBTRACT_32BIT
@@ -932,7 +968,17 @@ VGM_LOADER_GET_BLOCKS
       os9   I$Seek
       lbcs  READ_ERROR_EXIT
       ldu   <uRegImage
+        ifdef LOADER_TRACE
+      leax  strTraceSeekOK,PCR
+      lbsr  PRINT_STR_OS9
+        endc
 
+        ifdef EXPERIMENTAL_PSG
+      ; Process data is not guaranteed to arrive zero-filled. Reset the
+      ; sentinel before each load so only an actual $E000 reservation can
+      ; authorize the matching F$ClrBlk cleanup below.
+      clr   <reservedMMUflag
+        endc
       leax  vgmBlockMap,U
       stx   <vgmBlockMapPtr
 VGM_LOADER_NEXT_BLOCK 
@@ -963,11 +1009,21 @@ VGM_LOADER_NEXT_BLOCK
       os9   F$MapBlk
       lbcs  UNKNOWN_ERROR_EXIT     
 VGM_LOADER_NOT_E000
+      ; I$Read may change U. Preserve the mapped logical base on the user
+      ; stack so F$ClrBlk always receives the address returned by F$MapBlk.
+      ; Restore CC with U so the read error result is retained on every path.
+        ifdef EXPERIMENTAL_PSG
+      pshs  U
+        endc
       tfr   U,X
       ; read an 8k block in to the newly mapped block 
       lda   <songFilePath 
       ldy   #$2000            ; read 8k
       os9   I$Read
+        ifdef EXPERIMENTAL_PSG
+      pshs  CC
+      puls  CC,U
+        endc
       lbcs  READ_ERROR_EXIT
       lbrn  VGM_LOADER_NEXT_BLOCK   ; wait 5 cycles 
       ; now unmap the block from user space 
@@ -982,7 +1038,11 @@ VGM_LOADER_NOT_E000
       ldb   #$06        ; EOF test function code 
       os9   I$GetStt
       bcc   VGM_LOADER_NEXT_BLOCK
+        ifdef LOADER_TRACE
+      lbra  VGM_LOADER_DONE
+        else
       bra   VGM_LOADER_DONE
+        endc
 
 VGM_LOADER_LAST_BLOCK
       lbsr  ADD_32BIT         ; since we rolled over, add to get back remainder 
@@ -994,22 +1054,59 @@ VGM_LOADER_LAST_BLOCK
       lbcs  RAM_ERROR_EXIT
       stb   ,X+         ; store the block number in the list 
       stx   <vgmBlockMapPtr   ; update pointer 
+        ifdef LOADER_TRACE
+      stb   <u8Value
+      leax  strTraceAllRAMOK,PCR
+      lbsr  PRINT_STR_OS9
+      lbsr  PRINT_BYTE_HEX
+        endc
       ldy   vgmBytesLeft+2,U        ; get last word of remainder since <= 8k 
       clra 
       tfr   D,X 
       ldb   #1
       os9   F$MapBlk
       lbcs  UNKNOWN_ERROR_EXIT
+        ifdef LOADER_TRACE
+      pshs  U
+      ldu   <uRegImage
+      leax  strTraceMapOK,PCR
+      lbsr  PRINT_STR_OS9
+      puls  U
+        endc
+      ; As above, keep the exact mapped base across I$Read. U is an output/
+      ; scratch register for OS-9 calls and cannot safely identify the map
+      ; afterward. This runs in user process context with interrupts enabled.
+        ifdef EXPERIMENTAL_PSG
+      pshs  U
+        endc
       tfr   U,X 
       lda   <songFilePath 
       os9   I$Read
+        ifdef EXPERIMENTAL_PSG
+      pshs  CC
+      puls  CC,U
+        endc
       lbcs  READ_ERROR_EXIT
+        ifdef LOADER_TRACE
+      pshs  U
+      ldu   <uRegImage
+      leax  strTraceDataReadOK,PCR
+      lbsr  PRINT_STR_OS9
+      puls  U
+        endc
       lbrn  VGM_LOADER_NEXT_BLOCK   ; wait 5 cycles 
 
       ; U should already be still pointing to MMU mapped space from F$MapBlk
       ldb   #1
       os9   F$ClrBlk  
       lbcs  UNKNOWN_ERROR_EXIT
+        ifdef LOADER_TRACE
+      pshs  U
+      ldu   <uRegImage
+      leax  strTraceClearOK,PCR
+      lbsr  PRINT_STR_OS9
+      puls  U
+        endc
 
       ; check if we had to reserve the $E000-$FFFF area of ram so F$MapBlk wouldnt give it to us, and
       ; deallocate it now if we did 
@@ -1023,16 +1120,35 @@ VGM_LOADER_LAST_BLOCK
 
 VGM_LOADER_DONE
       ldu   <uRegImage
+        ifdef LOADER_TRACE
+      leax  strTraceLoaderDone,PCR
+      lbsr  PRINT_STR_OS9
+        endc
       ; mark the end of map with a NULL 
       ldx   <vgmBlockMapPtr
       clr   ,X
 
       ; close the song file path since we are done with it now
       lda  	<songFilePath
+        ifdef LOADER_TRACE
+      sta   <u8Value
+      leax  strTraceClosePath,PCR
+      lbsr  PRINT_STR_OS9
+      lbsr  PRINT_BYTE_HEX
+      lda   <songFilePath
+        endc
       os9  	I$Close 
+        ifdef LOADER_TRACE
+      leax  strTraceCloseOK,PCR
+      lbsr  PRINT_STR_OS9
+        endc
       lbrn  VGM_LOADER_DONE
 
       lbsr  GD3_PRINT_TAG           ; print out the tag info to screen 
+        ifdef LOADER_TRACE
+      leax  strTraceGD3OK,PCR
+      lbsr  PRINT_STR_OS9
+        endc
 
       leax  strSongLengthMsg,PCR 
       lbsr  PRINT_STR_OS9
@@ -1171,6 +1287,9 @@ CCT_LOADER_AUTHOR_NAME_DONE
       ldu   <uRegImage              ; restore original value 
 
       ; initialize pointers and counters for read loop 
+        ifdef EXPERIMENTAL_PSG
+      clr   <reservedMMUflag
+        endc
       ldb   <vgmBlockCount
       stb   <blockCounter
       leax  vgmBlockMap,U
