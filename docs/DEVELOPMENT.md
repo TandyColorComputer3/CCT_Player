@@ -28,7 +28,7 @@ bash scripts/build.sh
 bash scripts/stage-test-disk.sh
 bash scripts/run-mame.sh psg
 ```
-The build produces the byte-identical baseline `build/cctplay`, experimental PSG player `build/cctplaymt`, verbose loader diagnostic `build/cctplaydbg`, counter `build/cctcounter`, graceful-stop helper `build/cctstop`, hardware probe `build/psgprobe`, read-only clock-rate probe `build/tpsprobe`, and a generated YM2149 tone test. The private test floppy contains those modules and `synthetic.vgm`; extra music paths passed to `stage-test-disk.sh` are copied only to the ignored private disk.
+The build produces the byte-identical baseline `build/cctplay`, experimental PSG player `build/cctplaymt`, end-marker diagnostic `build/ccttiming`, verbose loader diagnostic `build/cctplaydbg`, counter `build/cctcounter`, stop helper `build/cctstop`, and hardware and clock probes. The private test floppy contains those modules and `synthetic.vgm`; extra music paths passed to `stage-test-disk.sh` are copied only to the ignored private disk. Set `CCT_TEST_DISK` to an absolute path inside `emulator/images/` to stage a separate unmounted disk.
 
 At DECB's `OK` prompt enter `DOS`. After the 6309 EOU Shell loads, select the private test disk and preload the background commands:
 ```text
@@ -59,7 +59,9 @@ On macOS, `run-mame.sh` and `stage-test-disk.sh` use `lsof` to stop when one of 
 - `build/cctplay`: byte-identical baseline rebuild; `build/cctplay.lst`: assembler listing
 - `build/cctplaymt`: experimental CoCoPSG process-timed module
 - `tools/cctcounter.asm`: independent counter process (requests 61 ticks to sleep 60 ticks, about one second at 60 Hz NTSC)
-- `tools/tpsprobe.asm`: prints the read-only `F$TPS` result for clock-rate diagnostics
+- `tools/tpsprobe.asm`: prints the read-only `F$TPS` result and marks errors with `TPS!`
+- `tools/sleepprobe.asm`, `tools/signal-sleepprobe.asm`: select-port markers for normal and signal-interrupted `F$Sleep` measurements
+- `scripts/make-timing-fixtures.py`: generates controlled PSG wait/write streams under `build/timing-fixtures/`
 - `tools/cctstop.asm`: sends `S$Intrpt` to a background player PID
 - `scripts/make-synthetic-psg-vgm.py`: original generated test tone (ignored output under `build/`)
 - `emulator/images/63EMU.DSK`: private boot helper copy

@@ -125,8 +125,10 @@ vgmSongLengthSecs RMB   1
 ; target. Define EOU_PAL for a PAL build (882 samples/tick).
         ifdef EOU_PAL
 PSG_SAMPLES_PER_TICK EQU   882
+PSG_SLEEP_PHASE_SAMPLES EQU 258
         else
 PSG_SAMPLES_PER_TICK EQU   735
+PSG_SLEEP_PHASE_SAMPLES EQU 215
         endc
 psgPrevControl    RMB   1
 psgActiveFlag     RMB   1
@@ -142,6 +144,8 @@ psgWaitTicks      RMB   1
 psgWaitSamples    RMB   2
 psgWaitOriginal   RMB   2
 psgWaitRetries    RMB   1
+psgCommandDebt    RMB   2
+psgWaitFraction   RMB   1
         endc
 
 ; gd3 tag variables 
@@ -166,6 +170,9 @@ data_size         EQU   .
 
 ; -----------------------------------------------------
 ; Constants
+        ifdef TIMING_TRACE
+moduleName              FCS   "ccttiming"
+        else
         ifdef LOADER_TRACE
 moduleName              FCS   "cctplaydbg"
         else
@@ -173,6 +180,7 @@ moduleName              FCS   "cctplaydbg"
 moduleName              FCS 	"cctplaymt"
         else
 moduleName              FCS 	"cctplay"
+        endc
         endc
         endc
 strProgInfo             FCN   "\r\nCoCo ChipTunes Player v1.6\r\nWritten By Todd Wallace (LordDragon)\r\n\n"
@@ -373,6 +381,9 @@ START_EXEC
       sta   psgGuardAllocated,U
       sta   psgGuardMapped,U
       sta   psgPlayMapActive,U
+      sta   psgCommandDebt,U
+      sta   psgCommandDebt+1,U
+      sta   psgWaitFraction,U
         endc
       stx  	<cmdlinePtr 
 
@@ -1805,6 +1816,9 @@ PLAY_CHIP_YM2149_CCT
       sta   psgPrevControl,U
       lda   #1
       sta   psgActiveFlag,U
+      clr   psgCommandDebt,U
+      clr   psgCommandDebt+1,U
+      clr   psgWaitFraction,U
       lbsr  VGM_PSG_RESERVE_MAP_SLOT
       lbcs  RAM_ERROR_EXIT
         else
@@ -1908,6 +1922,17 @@ VGM_YM2149_CMD_CHIP
       lbcs  UNEXPECTED_END_ERROR_EXIT
       ldb   ,Y+
       lbsr  VGM_PSG_WRITE_REG
+      ; Charge six 44.1 kHz samples for decoding and output. Captures of
+      ; consecutive writes measured about 114 microseconds per command;
+      ; six samples also cover the bounded accounting work here. Saturate the
+      ; deferred debt at one nominal tick; OS-9 preemption remains enabled.
+      ldd   psgCommandDebt,U
+      addd  #6
+      cmpd  #PSG_SAMPLES_PER_TICK
+      bls   VGM_PSG_STORE_DEBT
+      ldd   #PSG_SAMPLES_PER_TICK
+VGM_PSG_STORE_DEBT
+      std   psgCommandDebt,U
       lbra  VGM_YM2149_NEXT_COMMAND
         else
 VGM_YM2149_CMD_CHIP
@@ -1962,6 +1987,7 @@ VGM_YM2149_CMD_WAIT_MANUAL_SKIP_2
 VGM_YM2149_WAIT_SAMPLES
       ; Interruptible 44.1 kHz CPU-cycle delay. OS-9 tick IRQs may preempt this
       ; user process; their runtime appears as experimental event lateness.
+      lbsr  VGM_PSG_APPLY_DEBT
       lbsr  VGM_PSG_COARSE_WAIT
       lbcs  VGM_YM2149_WAIT_ABORTED
       lbeq  VGM_YM2149_NEXT_COMMAND ; a fully slept or zero-length wait is done
@@ -1976,13 +2002,12 @@ VGM_YM2149_WAIT_FINE_LOOP
       tst   <abortFlag
       bne   VGM_YM2149_WAIT_ABORTED
       lda   <u8Value
-      ; Calibrate against MAME emulated timestamps, not just the instruction
-      ; table. After 735-sample waits were routed through the fine loop, 1,800
-      ; waits measured 27.565 s; two extra NOPs improved that to 29.126 s against
-      ; 30.000 s. A remaining ~2.9% early bias is recorded in
-      ; docs/TIMING-ANALYSIS.md; keep this loop interruptible while tuning.
+      ; One additional HD6309 cycle per sample, paired with the measured
+      ; register-command and sleep-phase accounting above and below, matches
+      ; the controlled MAME streams. This loop remains interruptible.
       lbrn  VGM_YM2149_WAIT_SAMPLES
       lbrn  VGM_YM2149_WAIT_SAMPLES
+      nop
       nop
       nop
       nop
@@ -2049,6 +2074,16 @@ VGM_YM2149_WAIT_ABORTED_END
       lbra  VGM_YM2149_END
 
 VGM_YM2149_CHECK_FOR_LOOP
+        ifdef TIMING_TRACE
+      ; Diagnostic build only: mark the decoded $66 command in MAME's
+      ; write trace. Register selection alone changes no PSG register value;
+      ; the normal loop or cleanup selects a register before its next write.
+      ; Preserve A and leave interrupts enabled; no OS call or shared data.
+      pshs  a
+      lda   #$FE
+      sta   >psg_ym_reg_select
+      puls  a
+        endc
       lda   vgmLoopCount,U 
       bmi   VGM_YM2149_CHECK_FOR_LOOP_FOREVER
       beq   VGM_YM2149_WAIT_ABORTED_END
@@ -2166,14 +2201,56 @@ VGM_PSG_ENSURE_BYTE_READY
       andcc #$FE
       rts
 
+; Subtract accumulated command-processing time from this wait. Input D is
+; the VGM sample count; output D is the residual count. A 16-sample-wait
+; fixture measured about 150 microseconds per decoded wait before accounting;
+; charge 8 3/8 samples to include the accounting work itself. The low three
+; bits of psgWaitFraction distribute that fractional sample over eight waits.
+; Unused debt is carried in psgCommandDebt, capped at one tick. Clobbers D/CC,
+; preserves U; no OS call, interrupt mask or hardware access. Register writes
+; remain in stream order even when the residual wait reaches zero.
+VGM_PSG_APPLY_DEBT
+      std   psgWaitOriginal,U
+      inc   psgWaitFraction,U
+      lda   psgWaitFraction,U
+      anda  #7
+      cmpa  #3
+      bhs   VGM_PSG_WAIT_DEBT_EIGHT
+      ldd   psgCommandDebt,U
+      addd  #9
+      bra   VGM_PSG_WAIT_DEBT_CAP
+VGM_PSG_WAIT_DEBT_EIGHT
+      ldd   psgCommandDebt,U
+      addd  #8
+VGM_PSG_WAIT_DEBT_CAP
+      cmpd  #PSG_SAMPLES_PER_TICK
+      bls   VGM_PSG_WAIT_DEBT_READY
+      ldd   #PSG_SAMPLES_PER_TICK
+VGM_PSG_WAIT_DEBT_READY
+      std   psgCommandDebt,U
+      ldd   psgWaitOriginal,U
+      subd  psgCommandDebt,U
+      bcs   VGM_PSG_DEBT_EXCEEDS_WAIT
+      clr   psgCommandDebt,U
+      clr   psgCommandDebt+1,U
+      rts
+VGM_PSG_DEBT_EXCEEDS_WAIT
+      ldd   psgCommandDebt,U
+      subd  psgWaitOriginal,U
+      std   psgCommandDebt,U
+      clra
+      clrb
+      rts
+
 ; Input D=VGM samples; output D=0 or residual samples, C=0 on success/C=1 on
 ; error. Clobbers A,B,X,CC; preserves U. psgWaitOriginal is a 2-byte input
 ; copy, psgWaitSamples is its 2-byte modulo-tick remainder, psgWaitTicks and
 ; psgWaitRetries are 1-byte counts in process-local U data. Convert with the
-; EOU clock rate: 735 samples/tick for 60 Hz NTSC (882 for 50 Hz PAL), so no
-; fractional sample is lost. EOU F$Sleep with X=N sleeps N-1 ticks and returns
-; X=1, so request N+1 and convert X-1 back to unelapsed ticks. Treating X=1
-; as a completed N-tick sleep previously dropped one tick on coarse waits.
+; EOU clock rate: 735 samples/tick for nominal 60 Hz NTSC (882 for PAL), so no
+; fractional sample is lost. On the tested EOU build F$Sleep X=N normally
+; returns X=0 after approximately N-1 ticks; request N+1 for N ticks. Wakeup
+; phase can shorten an individual sleep, so successful sleeps add a measured
+; fine-delay allowance. PAL uses a scaled allowance and remains untested.
 ; Use F$Sleep only with at least two ticks remaining; one tick only yields the
 ; slice. Retry at most four times after unrelated wakeups, then finish the
 ; residual in the interruptible fine loop. BREAK/ABORT sets abortFlag and
@@ -2206,11 +2283,19 @@ VGM_PSG_COARSE_WAIT_SLEEP
       bne   VGM_PSG_COARSE_WAIT_ERROR
       ; X output is ticks remaining. Preserve that count so any early queue
       ; wake is completed as sample-accurate fine delay rather than lost.
-      cmpx  #1                  ; counter reaches one after the sleep interval
+      cmpx  #1                  ; normal return was X=0; account for N+1 request
       bls   VGM_PSG_COARSE_WAIT_SLEEP_COMPLETE
       bne   VGM_PSG_COARSE_WAIT_SAVE_REMAINING
 VGM_PSG_COARSE_WAIT_SLEEP_COMPLETE
       clr   psgWaitTicks,U
+      ; The OS tick can arrive partway through the first requested interval.
+      ; Irregular real-track sleeps were 3.7--4.4 ms early on average; 215
+      ; VGM samples are 4.875 ms including the fine-delay/accounting cost.
+      ; Preserve the original sample remainder and
+      ; add the allowance only once after a completed coarse sleep.
+      ldd   psgWaitSamples,U
+      addd  #PSG_SLEEP_PHASE_SAMPLES
+      std   psgWaitSamples,U
       bra   VGM_PSG_COARSE_WAIT_FINE_REMAINDER
 VGM_PSG_COARSE_WAIT_SAVE_REMAINING
       stx   u16Value,U

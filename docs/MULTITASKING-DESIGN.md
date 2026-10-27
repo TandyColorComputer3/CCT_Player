@@ -1,6 +1,6 @@
 # CCT_Player multitasking design
 
-**Status:** recommended architecture plus an experimental CoCoPSG process prototype. Build and module identity are verified; guest playback, scheduling, and timing remain **NOT RUN**.
+**Status:** this is the original architecture investigation. Background CoCoPSG playback and process-timing measurements have since run in isolated EOU MAME; see [PSG-PROTOTYPE.md](PSG-PROTOTYPE.md) and [TIMING-ANALYSIS.md](TIMING-ANALYSIS.md). The current scope is a standalone player, and no driver or general audio service is being implemented.
 
 ## Current source findings
 
@@ -68,7 +68,7 @@ VGM timing is expressed as 44,100 samples per second. At the source's fast-mode 
 
 The producer should run ahead far enough to hide RBF latency without holding the full track in a large MMU allocation. The queue should remain small relative to the 64 KB process address space. The service should use CPU only at register-write deadlines, rather than generating a 44.1 kHz software sample stream.
 
-No timing or CPU result has been measured yet. Record at least: register-write deadline error distribution, worst lateness, duration drift versus the original baseline, missed/overrun events, queue high-water mark, player CPU share, and concurrent counter rate. Compare the same track and loop settings with the original player. A 60 Hz-only service has 735-sample granularity and is not acceptable for individual VGM events.
+The later timing investigation records VGM sample counts, MAME register timestamps, event order, duration drift, and concurrent counter behavior. CPU share and worst-case jitter under varied workloads remain unmeasured. A nominal 60 Hz tick has 735-sample granularity and is not sufficient on its own for individual VGM events.
 
 ## Incremental implementation and rollback
 

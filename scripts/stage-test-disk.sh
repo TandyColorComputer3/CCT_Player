@@ -3,7 +3,19 @@
 # Never run while MAME is accessing the image.
 set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
-img="$root/emulator/images/chiptunes-test.dsk"
+images_root="$(python3 -c 'import os,sys; print(os.path.realpath(sys.argv[1]))' "$root/emulator/images")"
+img="$(python3 -c 'import os,sys; print(os.path.realpath(sys.argv[1]))' "${CCT_TEST_DISK:-$images_root/chiptunes-test.dsk}")"
+case "$img" in
+  "$images_root"/*) ;;
+  *) echo "Test disk must be inside $images_root: $img" >&2; exit 1 ;;
+esac
+case "$img" in
+  *.[dD][sS][kK]) ;;
+  *) echo "Test disk must have a .dsk extension: $img" >&2; exit 1 ;;
+esac
+case "$(basename "$img" | tr '[:upper:]' '[:lower:]')" in
+  63emu.dsk) echo "Refusing to reformat the EOU boot helper: $img" >&2; exit 1 ;;
+esac
 tool="${TOOLSHED_OS9:-/Users/magneto-optimus/Documents/Coding/toolshed-2.2/build/unix/os9/os9}"
 if command -v lsof >/dev/null 2>&1 && lsof -t -- "$img" >/dev/null 2>&1; then
   echo "Test disk is already open: $img" >&2
@@ -29,13 +41,16 @@ if [ ! -f "$binary" ]; then
   exit 1
 fi
 experimental="$root/build/cctplaymt"
+timing="$root/build/ccttiming"
 diagnostic="$root/build/cctplaydbg"
 counter="$root/build/cctcounter"
 probe="$root/build/psgprobe"
 clockprobe="$root/build/tpsprobe"
+sleep_probe="$root/build/sleepprb"
+signal_probe="$root/build/sigprb"
 stopper="$root/build/cctstop"
 synthetic="$root/build/synthetic-psg.vgm"
-if [ ! -f "$experimental" ] || [ ! -f "$diagnostic" ] || [ ! -f "$counter" ] || [ ! -f "$probe" ] || [ ! -f "$clockprobe" ] || [ ! -f "$stopper" ] || [ ! -f "$synthetic" ]; then
+if [ ! -f "$experimental" ] || [ ! -f "$timing" ] || [ ! -f "$diagnostic" ] || [ ! -f "$counter" ] || [ ! -f "$probe" ] || [ ! -f "$clockprobe" ] || [ ! -f "$sleep_probe" ] || [ ! -f "$signal_probe" ] || [ ! -f "$stopper" ] || [ ! -f "$synthetic" ]; then
   echo "Missing experiment artifacts. Run bash scripts/build.sh" >&2
   exit 1
 fi
@@ -43,7 +58,7 @@ mkdir -p "$(dirname "$img")"
 echo "Recreating PRIVATE stage disk (not the EOU boot or VHD): $img"
 rm -f "$img"
 "$tool" format -ds -t40 -e -nCCTTEST "$img"
-for entry in "cctplay:$binary" "cctplaymt:$experimental" "cctplaydbg:$diagnostic" "cctcount:$counter" "psgprobe:$probe" "tpsprobe:$clockprobe" "cctstop:$stopper"; do
+for entry in "cctplay:$binary" "cctplaymt:$experimental" "ccttiming:$timing" "cctplaydbg:$diagnostic" "cctcount:$counter" "psgprobe:$probe" "tpsprobe:$clockprobe" "sleepprb:$sleep_probe" "sigprb:$signal_probe" "cctstop:$stopper"; do
   name="${entry%%:*}"
   module="${entry#*:}"
   "$tool" copy "$module" "$img,$name"

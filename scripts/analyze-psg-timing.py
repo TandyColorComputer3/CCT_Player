@@ -129,6 +129,7 @@ def schedule_summary(waits: list[dict], samples_per_tick: int, tick_hz: int) -> 
             fine += remainder
             coarse_events += 1
     return {
+        "model": "raw wait counts; excludes player debt and sleep-phase compensation",
         "samples_per_tick": samples_per_tick,
         "coarse_sleep_events": coarse_events,
         "coarse_sleep_ticks": ticks,
@@ -141,7 +142,8 @@ def schedule_summary(waits: list[dict], samples_per_tick: int, tick_hz: int) -> 
     }
 
 
-def analyze_capture(path: Path, writes: list[dict], total_samples: int) -> dict:
+def analyze_capture(path: Path, writes: list[dict], total_samples: int,
+                    trace_end_marker: bool = False) -> dict:
     raw = json.loads(path.read_text())
     events = raw.get("entries", raw.get("events", raw)) if isinstance(raw, dict) else raw
     if not isinstance(events, list):
@@ -157,7 +159,7 @@ def analyze_capture(path: Path, writes: list[dict], total_samples: int) -> dict:
             i += 2
         else:
             i += 1
-    aligned = 0
+    aligned = None
     for candidate in range(len(pairs)):
         if candidate + len(writes) > len(pairs):
             break
@@ -165,7 +167,7 @@ def analyze_capture(path: Path, writes: list[dict], total_samples: int) -> dict:
                pairs[candidate + j]["value"] == w["value"] for j, w in enumerate(writes)):
             aligned = candidate
             break
-    if not writes or len(pairs) < aligned + len(writes):
+    if not writes or aligned is None:
         return {"psg_port_writes": len(psg), "paired_register_writes": len(pairs),
                 "expected_register_writes": len(writes), "sequence_match": False}
     actual = pairs[aligned:aligned + len(writes)]
@@ -213,6 +215,23 @@ def analyze_capture(path: Path, writes: list[dict], total_samples: int) -> dict:
                        "end_marker_register_value": "07=3F",
                        "end_to_end_error_percent": 100 * (estimated_full / expected - 1)
                        if expected else None})
+    if trace_end_marker:
+        # ccttiming alone selects $FE when it decodes $66. It does not write
+        # PSG data for that marker. Require it after the last stream write and
+        # before the mute when one is observed; absence of either is reported.
+        marker = next((event for event in psg
+                       if event.get("offset") == 0xFF5E and event.get("data") == 0xFE
+                       and event.get("seconds") is not None
+                       and event["seconds"] >= actual[-1]["seconds"]
+                       and (not mute or event["seconds"] <= mute["seconds"])), None)
+        result["instrumented_end_command_seconds"] = marker["seconds"] if marker else None
+        if marker:
+            elapsed = marker["seconds"] - first_s
+            estimated_full = elapsed + first_sample / SAMPLE_RATE
+            expected = total_samples / SAMPLE_RATE
+            result["first_write_to_end_command_seconds"] = elapsed
+            result["estimated_start_to_end_command_seconds"] = estimated_full
+            result["end_command_error_percent"] = 100 * (estimated_full / expected - 1) if expected else None
     return result
 
 
@@ -224,6 +243,8 @@ def main() -> int:
                         help="extra passes through VGM loop section (default matches cctplaymt)")
     parser.add_argument("--capture", type=Path,
                         help="MAME capture_results JSON for one track")
+    parser.add_argument("--trace-end-marker", action="store_true",
+                        help="recognize ccttiming's $FE register-select marker for VGM $66")
     args = parser.parse_args()
     if args.loop_count < 0:
         parser.error("--loop-count must be nonnegative")
@@ -244,7 +265,7 @@ def main() -> int:
             expected_writes = result.pop("writes")
             if args.capture and len(args.tracks) == 1:
                 result["mame_capture"] = analyze_capture(args.capture, expected_writes,
-                                                          result["samples"])
+                                                          result["samples"], args.trace_end_marker)
             out.append(result)
     except (OSError, ValueError, struct.error) as exc:
         print(f"timing analysis: {exc}", file=sys.stderr)

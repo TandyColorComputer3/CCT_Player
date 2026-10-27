@@ -2,9 +2,11 @@
 * Read-only NitrOS-9 clock-rate probe used by the PSG timing experiment.
 *
 * Calls F$TPS in ordinary user process context and prints its returned A/B
-* bytes in hexadecimal. No clock, scheduler, interrupt, or hardware state is
+* bytes in hexadecimal. A `TPS!` prefix means carry was set and B is the OS-9
+* error code; a failed service call is not a clock-rate measurement. No clock,
+* scheduler, interrupt, or hardware state is
 * changed. Entry: X is the OS-9 command tail; U is process-local data.
-* Data layout: returned A/B bytes then a 15-byte message (17 bytes total).
+* Data layout: returned A/B, one error flag and a 15-byte message (18 bytes).
 * F$TPS output is captured before conversion. I$Write uses A=STDOUT, X=message,
 * Y=15. F$Exit releases the process normally. User process context; F$TPS,
 * I$Write, and F$Exit are the only system calls; no critical section.
@@ -22,6 +24,7 @@ START_MODULE
         org   0
 tpsA            RMB   1
 tpsB            RMB   1
+tpsError        RMB   1
 message         RMB   15
 data_size       EQU   .
 
@@ -32,9 +35,13 @@ messageTemplate FCC   "TPS A=00 B=00"
                 FCB   $0D,$0A
 
 START_EXEC
+        clr   tpsError,U
         os9   F$TPS
         sta   tpsA,U
         stb   tpsB,U
+        bcc   TPSPROBE_COPY_START
+        inc   tpsError,U
+TPSPROBE_COPY_START
         leax  messageTemplate,PCR
         leay  message,U
         ldb   #15
@@ -43,6 +50,12 @@ TPSPROBE_COPY
         sta   ,Y+
         decb
         bne   TPSPROBE_COPY
+
+        tst   tpsError,U
+        beq   TPSPROBE_CONVERT
+        lda   #'!'
+        sta   message+3,U
+TPSPROBE_CONVERT
 
         lda   tpsA,U
         lsra

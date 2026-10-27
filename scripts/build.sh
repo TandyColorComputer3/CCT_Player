@@ -19,6 +19,10 @@ fi
   --includedir="$root" --list=build/cctplaymt.lst --symbols \
   -o build/cctplaymt cct_os9.asm
 echo "Built experimental CoCoPSG player $root/build/cctplaymt"
+"$assembler" --6309 --format=os9 --define=EXPERIMENTAL_PSG --define=TIMING_TRACE \
+  --includedir="$root" --list=build/ccttiming.lst --symbols \
+  -o build/ccttiming cct_os9.asm
+echo "Built PSG end-marker diagnostic $root/build/ccttiming"
 "$assembler" --6309 --format=os9 --define=EXPERIMENTAL_PSG --define=LOADER_TRACE \
   --includedir="$root" --list=build/cctplaydbg.lst --symbols \
   -o build/cctplaydbg cct_os9.asm
@@ -35,6 +39,11 @@ echo "Built graceful background stop utility $root/build/cctstop"
 "$assembler" --6309 --format=os9 --includedir="$root" \
   --list=build/tpsprobe.lst --symbols -o build/tpsprobe tools/tpsprobe.asm
 echo "Built OS-9 clock-rate probe $root/build/tpsprobe"
+"$assembler" --6309 --format=os9 --includedir="$root" \
+  --list=build/sleepprb.lst --symbols -o build/sleepprb tools/sleepprobe.asm
+"$assembler" --6309 --format=os9 --includedir="$root" \
+  --list=build/sigprb.lst --symbols -o build/sigprb tools/signal-sleepprobe.asm
+echo "Built OS-9 sleep timing probes"
 python3 scripts/make-synthetic-psg-vgm.py build/synthetic-psg.vgm
 tool="${TOOLSHED_OS9:-/Users/magneto-optimus/Documents/Coding/toolshed-2.2/build/unix/os9/os9}"
 if [[ "$tool" == */* ]]; then
@@ -48,8 +57,11 @@ elif ! command -v "$tool" >/dev/null 2>&1; then
 fi
 "$tool" ident build/cctplay
 "$tool" ident build/cctplaymt
+"$tool" ident build/ccttiming
 "$tool" ident build/cctplaydbg
 "$tool" ident build/cctcounter
 "$tool" ident build/psgprobe
 "$tool" ident build/cctstop
 "$tool" ident build/tpsprobe
+"$tool" ident build/sleepprb
+"$tool" ident build/sigprb
