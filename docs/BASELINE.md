@@ -175,3 +175,31 @@ The first concurrent measurement found two timing defects rather than treating a
 | Real third-party CoCoPSG VGM | **NOT RUN** | No existing legally staged non-synthetic PSG track is present in the repository/private disk. No music was downloaded or added. |
 
 The evidence files live under the ignored `emulator/images/demo/` test area and are intentionally not Git content. The final visible private MAME session was restarted after WAV finalization; its media remain private copies.
+
+## Background real-music and playlist milestone
+
+**Run date:** 2026-10-26--27
+**Environment:** repeated cold boots of the isolated visible MAME 0.289 `coco3h` instance, HD6309 native mode, 2 MB, private EOU media, MPI slot 2 `ccpsg`, and `-wavwrite`. No canonical image or unrelated MAME process was changed.
+
+The music used for runtime testing came from the original author's publicly distributed ChipTunes archive and was kept outside Git. `ARKNOID1/TRACK01.CCT` (195,372 samples, 4.4302 seconds) and `FLICKY/TRACK01.CCT` (885,968 samples, 20.0900 seconds) were copied only to the ignored test disk. A private standards-compliant VGM 1.51 wrapper around the Arkanoid YM2149 command stream tested the VGM loader without importing music into the repository. The private M3U contained those two CCT paths in order.
+
+| Check | Result | Evidence / limitation |
+| --- | --- | --- |
+| Exact background launch | **PASS** | `cctplaymt -psg 2 /d1/arkanoid-real.vgm &` returned `&003` and the Shell prompt immediately. An intact concurrent `echo CC-CLEAR-TEST` completed while the player was active. |
+| Real VGM decoding and audio | **PASS with timing limitation** | The cold-boot run produced 534 non-dropped writes to `$FF5E/$FF5F`, exited naturally, and disappeared from `procs`. `real-vgm-background.wav` is 48 kHz, four-channel PCM; after DC rejection its PSG channel contains a non-silent varying signal during the track. The approximately six-second captured activity is longer than the declared 4.4302 seconds, so dense-track timing is not yet acceptable as final-quality playback. |
+| Original CCT files | **PASS with timing limitation** | Both private original CCT files decoded and wrote their real YM2149 register streams. The Arkanoid track generated 534 port writes; FLICKY generated 1,642. No format conversion was needed for the CCT runs. |
+| Two-entry M3U | **PASS** | On the final exact build, `cctplaymt -psg 2 /d1/real-two.m3u &` generated 2,176 non-dropped writes (534 + 1,642), advanced to the second file, exited naturally, and left no `cctplaymt` entry in `procs`. Each loader close now invalidates its stored OS-9 path, and the already-read playlist path is not closed again during final cleanup. |
+| Background terminal output | **PASS for player output** | Production `cctplaymt` suppresses banners, metadata, filenames, and completion text after the Shell prompt returns. `cctplaydbg` retains them for foreground diagnosis. Quiet-return paths explicitly return carry clear, matching a successful `I$Write`; preserving a stale carry reproduced a fatal VGM control-flow/MMU failure and was corrected. |
+| Shell keyboard behavior | **PASS with automation caveat** | The player no longer scans PIA keyboard registers and did not consume character-paced input. MAME `post_coded` can overrun the guest when a whole command is injected during floppy activity; screenshots show truncated `echo` commands and the resulting Shell `Error #216`. Character-paced `echo SLOW-OK` arrived intact. This is not a player-generated error. |
+| Graceful stop | **PASS** | `load cctstop` followed by a background FLICKY run and `cctstop 3` stopped register activity at 768 writes. `procs` showed no player, `echo POST-STOP` succeeded, and the guest remained healthy. `cctstop` uses `F$Send`/`S$Intrpt`; the player follows its normal silence, mapping, RAM, path, MPI, PIA, and PSG-control cleanup. |
+| Signal handler safety | **PASS** | The first stop attempt exposed that direct-page state is not safe on signal entry. The experimental handler now stores `abortFlag` through the `F$Icpt` U context. Repeating the stop no longer corrupted the guest. |
+| Natural completion and silence | **PASS** | Both VGM and M3U runs exited naturally. The cleanup writes silence before restoring hardware state; post-run `procs` and Shell commands succeeded. Captured PSG activity ends rather than continuing as a stuck note. |
+| Final module identity | **PASS** | `cctplaymt`: 8,767 bytes, CRC `$9BDED9` Good, exec `$0D33`, data `$07AB`, Program / 6809 object / re-entrant / read-only. `cctstop`: 143 bytes, CRC `$077B9E` Good, re-entrant / read-only. |
+| Original executable | **PASS (unchanged)** | `build/cctplay` and tracked `cctplay` remain byte-identical, SHA-256 `eabe6b6f3910ebd1af557f64b02c1fb1e1802a3a07a1bf134016b1a4a6792f36`, CRC `$7A98E7`. |
+| Loop-option runtime | **NOT RUN** | Parsing remains in the shared source, but no real loop-bearing PSG file was exercised in this run. |
+| GMC under MAME | **NOT RUN in this milestone** | Installed `-listslots` still proves `gmc` is the valid slot-1 device. The multitasking executable remains PSG-only; no GMC audio run was performed here. |
+| OPL2/OPL3 | **NOT RUN** | The unchanged baseline retains OPL support; standard MAME does not provide the project MMMPI OPL target, so this remains a later real-hardware test. |
+
+Ignored evidence from these runs includes `emulator/logs/evidence/real-vgm-background.wav` (SHA-256 `5676c1758787bc283ef52440219d9337c8356a2644b27a6984af8778dde5f8b2`) and `emulator/logs/evidence/final-real-playlist.wav` (SHA-256 `4306138e186b9b645e1093ffd0fc4853a08464e3913fd4c49dceaca8a260f5fa`). The final post-path-bookkeeping M3U run separately reproduced the exact 2,176-write count with `invalid=false`, `dropped=0` and no remaining player process.
+
+The remaining blocker to calling real music playback fully correct is timing, not scheduling or file compatibility. Sparse synthetic waits measured close to nominal, while these dense real streams ran audibly longer than their declared sample totals. The next change should measure wait-command classes and compensate decoder/output/coarse-sleep overhead without reintroducing interrupt masking. GMC and loop coverage remain separate pending tests; they were not inferred from the PSG result.

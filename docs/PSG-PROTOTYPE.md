@@ -1,6 +1,6 @@
 # Experimental CoCoPSG process prototype
 
-**Status:** synthetic CoCoPSG concurrency milestone demonstrated in isolated EOU MAME; broader format, abort, repeated-load, and hardware coverage remains pending.
+**Status:** background CoCoPSG VGM/CCT/M3U playback, natural completion, and graceful signal stop are demonstrated in isolated EOU MAME. Dense real-track timing is still slow enough to block a final-quality claim; GMC, OPL, and loop-bearing-file coverage remain pending.
 
 ## What changed
 
@@ -18,13 +18,15 @@ The player no longer holds IRQ/FIRQ masked for the experimental playback loop. O
 
 The experimental stream reader no longer changes `$FFA9`. It maps one allocated physical song block into an unallocated process DAT slot with `F$MapBlk`, uses its returned logical address, and removes it with `F$ClrBlk` before mapping the next page. A one-block guard allocation is mapped first; because EOU `F$MapBlk` maps from the top down, the stream page is placed below that guard. The guard and stream state live in the process data area. See the [EOU Technical Reference Manual, F$MapBlk](https://www.lcurtisboyle.com/nitros9/EOUDOCS/NitrOS-9_EOU_Level_2_Technical_Reference_Manual.pdf).
 
-The process continues to own its file paths, allocated song blocks, and signal intercept. The signal handler sets the existing `abortFlag`; experimental waits check it without scanning `$FF02/$FF00`. The player selects the requested PSG slot before saving its control register. The existing startup snapshot of MPI selection and `$FF23` PIA state is restored during cleanup; PSG output is silenced, mappings are cleared, and the guard block is released before song RAM is returned. Normal-completion cleanup has now run successfully on EOU: the player exited, disappeared from `procs -e`, and left no audible stuck note. Signal-abort and repeated-load cleanup still require runtime tests.
+The process continues to own its file paths, allocated song blocks, and signal intercept. The signal handler sets the existing `abortFlag` through the U local-storage pointer supplied to `F$Icpt`; it does not assume DP is valid on asynchronous signal entry. Experimental waits check the flag without scanning `$FF02/$FF00`. The player selects the requested PSG slot before saving its control register. The startup snapshot of MPI selection and `$FF23` PIA state is restored during cleanup; PSG output is silenced, mappings are cleared, and the guard block is released before song RAM is returned. Loader-owned paths are marked invalid immediately after `I$Close`, including between playlist entries.
+
+Normal completion and `cctstop` signal cleanup have both run successfully on EOU. The player exits, disappears from `procs`, stops PSG writes, and leaves the Shell usable. Production `cctplaymt` is quiet after background launch so asynchronous metadata cannot overwrite the returned prompt; `cctplaydbg` remains the foreground diagnostic build.
 
 MPI selection, `$FF23`, and the PSG are global hardware resources. This prototype has no OS-9 device lock or IPC ownership protocol. The controlled concurrency run used only the counter as the second process; simultaneous use by another audio or MPI program remains untested and unsupported by this prototype.
 
 ## Timing and expected load
 
-The original delay loop approximates 40.58 CPU cycles per VGM sample at the target fast CPU mode. Live timing showed that the first experimental fine loop was only about 28 cycles/sample. The current HD6309 path adds a measured 13-cycle pad and keeps interrupts enabled; interrupt handling and competing processes can still add lateness. It does not maintain absolute deadlines or compensate later events for earlier overrun. The final 30-second concurrent fixture measured 30.35 seconds (+1.17%).
+The original delay loop approximates 40.58 CPU cycles per VGM sample at the target fast CPU mode. Live timing showed that the first experimental fine loop was only about 28 cycles/sample. The current HD6309 path adds a measured 13-cycle pad and keeps interrupts enabled; interrupt handling and competing processes can still add lateness. It does not maintain absolute deadlines or compensate later events for earlier overrun. The sparse 30-second concurrent fixture measured 30.35 seconds (+1.17%), but dense original tracks are substantially slower: the 4.4302-second Arkanoid stream produced roughly six seconds of captured PSG activity, and the 20.0900-second FLICKY stream also exceeded its declared duration. Format and scheduling success therefore do not yet establish acceptable music timing.
 
 `F$Sleep` avoids spinning throughout long rests, but it is tick-granular and the time to resume the process depends on OS-9 scheduling. It is used only for coarse waits, never as an individual-event timer. The short-wait path still consumes player CPU between scheduler interrupts. Startup event intervals and total duration were measured, but CPU share and worst-case jitter across varied workloads remain unmeasured. No broad music-quality claim is made from the synthetic tone.
 
@@ -43,8 +45,9 @@ The current successful build produced:
 | Module | Size | CRC | Header result |
 | --- | ---: | --- | --- |
 | Original `cctplay` | 8,756 bytes | `$7A98E7` | Program, 6809 object code, re-entrant, read-only |
-| Experimental `cctplaymt` | 8,739 bytes | `$AB6512` | Program, 6809 object code, re-entrant, read-only |
+| Experimental `cctplaymt` | 8,767 bytes | `$9BDED9` | Program, 6809 object code, re-entrant, read-only |
 | Counter `cctcount` | 91 bytes | `$45EA1F` | Program, 6809 object code, re-entrant, read-only |
+| Graceful stop `cctstop` | 143 bytes | `$077B9E` | Program, 6809 object code, re-entrant, read-only |
 
 ToolShed reported each CRC as Good. The generated test VGM is 256 bytes, contains a YM2149 clock/variant header, tone writes, two 30-frame note sections made from 735-sample waits, a silence write, and an end command. The generated file contains no imported music.
 
@@ -54,7 +57,7 @@ To recreate only the private stage floppy, after confirming it is not mounted:
 bash scripts/stage-test-disk.sh
 ```
 
-This stages `cctplay`, `cctplaymt`, `cctcount`, and `synthetic.vgm` on `emulator/images/chiptunes-test.dsk`. It refuses to rewrite that disk while a process has it open. Do not reset or overwrite the project EOU VHD for this test.
+This stages `cctplay`, `cctplaymt`, `cctplaydbg`, `cctcount`, `psgprobe`, `cctstop`, and `synthetic.vgm` on `emulator/images/chiptunes-test.dsk`. It refuses to rewrite that disk while a process has it open. Do not reset or overwrite the project EOU VHD for this test.
 
 ## Runtime verification commands
 
@@ -66,21 +69,20 @@ bash scripts/stage-test-disk.sh
 bash scripts/run-mame.sh psg
 ```
 
-At Disk BASIC's `OK` prompt, enter `DOS`. In one EOU Shell window, test the counter alone:
+At Disk BASIC's `OK` prompt, enter `DOS`. In the EOU Shell select the private command directory and preload the commands:
 
 ```text
-load /d1/cctcount
-cctcount &
+chx /d1
+load cctplaymt cctstop
 ```
 
-It prints a four-digit value and sleeps for 100 EOU clock ticks between updates. Leave it in the background with `&`; from the available Shell, run the PSG tone test:
+Run a file or playlist in the background:
 
 ```text
-load /d1/cctplaymt
-cctplaymt -psg 2 /d1/synthetic.vgm
+cctplaymt -psg 2 /d1/track.vgm &
 ```
 
-Check that the counter continues to change, Shell input still works, and the tone starts/stops without a stuck note. Record guest logs/screenshots and an audible inspection. Then compare the default reference with:
+Shell prints a PID such as `&003`. The prompt must return immediately. To stop through normal cleanup, run `cctstop 3`; do not use a fatal kill. Check that Shell input still works and the track starts/stops without a stuck note. Record guest logs/screenshots and an audible inspection. Then compare the default reference with:
 
 ```text
 load /d1/cctplay
@@ -104,13 +106,13 @@ The ordinary MAME run script selects `coco3h`, HD6309, 2 MB, MPI slot 2 `ccpsg`,
 | Counter + playback concurrency / Shell responsiveness | **PASS** | Counter values advance on the same screen as the playback banner; post-run `procs -e` succeeds and shows no player process. |
 | Timing drift | **PASS with measured drift** | 30.000-second fixture produced 30.35 seconds of active audio (+1.17%); startup half-second events measured 0.5006--0.5219 seconds. |
 | CPU utilization | **NOT RUN** | No reliable guest CPU-share profiler was available. |
-| Cleanup | **PASS for normal completion** | Player exits, disappears from `procs -e`, and WAV AC activity returns to zero; abort/repeated-load cleanup remains untested. |
+| Cleanup | **PASS for normal and signal stop** | Player exits, disappears from `procs`, register activity stops, and the Shell remains healthy after `cctstop`. |
 
 ## Known limits and next steps
 
-- Synthetic PSG scheduling is proven for one normal-completion run; broader workloads and repeated runs remain to be tested.
+- Real VGM, two original CCT files, and a two-entry M3U now load and play in the background; dense-track timing remains too slow for a final-quality claim.
 - Relative delay loops do not compensate for interrupts, scheduler delay, or disk latency. Measure counter rate and track duration before deciding whether this process-timed path is useful.
-- The current POC is PSG-only. GMC and OPL playback continue to use the original interrupt-masked routines in the default build and are excluded from `cctplaymt` dispatch.
-- Signal abort, loop transitions, cross-page reads, map cleanup, path cleanup, and device-state restoration need runtime tests, including bad files and repeated tracks.
+- The current POC is PSG-only. GMC and OPL playback continue to use the original interrupt-masked routines in the byte-identical default build and are excluded from `cctplaymt` dispatch.
+- Loop-bearing files, bad files, GMC, OPL hardware, 6809, and 512 KB remain untested. Cross-page playback, normal cleanup, two-entry path cleanup, and signal stop have runtime coverage.
 - If timing fails, keep the decoder/backend interface and replace only the timing/event sink with an EOU-compliant queued driver. Do not add an interrupt handler or kernel patch before the process measurements justify it.
 - Rollback this experiment by reverting the prototype commit. The tracked original `cctplay` and baseline build remain intact.

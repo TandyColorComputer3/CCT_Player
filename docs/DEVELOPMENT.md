@@ -28,19 +28,20 @@ bash scripts/build.sh
 bash scripts/stage-test-disk.sh
 bash scripts/run-mame.sh psg
 ```
-The build produces the byte-identical baseline `build/cctplay`, experimental PSG player `build/cctplaymt`, counter `build/cctcounter`, and a generated YM2149 tone test. The private test floppy contains `cctplay`, `cctplaymt`, `cctcount`, and `synthetic.vgm`.
+The build produces the byte-identical baseline `build/cctplay`, experimental PSG player `build/cctplaymt`, verbose loader diagnostic `build/cctplaydbg`, counter `build/cctcounter`, graceful-stop helper `build/cctstop`, hardware probe `build/psgprobe`, and a generated YM2149 tone test. The private test floppy contains those modules and `synthetic.vgm`; extra music paths passed to `stage-test-disk.sh` are copied only to the ignored private disk.
 
-At DECB's `OK` prompt enter `DOS`. After the 6309 EOU Shell loads, open two Shell windows. Run the counter in one:
+At DECB's `OK` prompt enter `DOS`. After the 6309 EOU Shell loads, select the private test disk and preload the background commands:
 ```text
-load /d1/cctcount
-cctcount
+chx /d1
+load cctplaymt cctstop
 ```
-Run the experiment in the other:
+Start a supported PSG file with Shell's normal background operator:
 ```text
-load /d1/cctplaymt
-cctplaymt -psg 2 /d1/synthetic.vgm
+cctplaymt -psg 2 /d1/synthetic.vgm &
 ```
-The counter sleeps for 60 OS-9 ticks between updates. The original reference remains available as `load /d1/cctplay` followed by `cctplay -psg 2 /d1/synthetic.vgm`. The PSG experiment has only passed assembly/module checks and floppy staging so far; guest playback, counter rate, audio quality, and concurrent responsiveness are **NOT RUN**. An assembly pass or boot alone is not a multitasking success.
+Shell prints the background PID as (for example) `&003`. To request the player's normal signal-driven cleanup rather than killing it fatally, run `cctstop 3`. Preloading avoids removable-disk command lookup while the player is loading from that same disk. The production `cctplaymt` is intentionally quiet after launch so its output cannot overwrite the returned Shell prompt; use `cctplaydbg` in the foreground for loader diagnostics.
+
+The original reference remains available as `load /d1/cctplay` followed by `cctplay -psg 2 /d1/synthetic.vgm`. The original remains foreground/frozen behavior and is not the multitasking command.
 
 Other modes:
 ```bash
@@ -57,7 +58,8 @@ On macOS, `run-mame.sh` and `stage-test-disk.sh` use `lsof` to stop when one of 
 - `cctplay`: original prebuilt binary, useful for baseline verification
 - `build/cctplay`: byte-identical baseline rebuild; `build/cctplay.lst`: assembler listing
 - `build/cctplaymt`: experimental CoCoPSG process-timed module
-- `tools/cctcounter.asm`: independent 60-tick visible counter process
+- `tools/cctcounter.asm`: independent 100-tick visible counter process
+- `tools/cctstop.asm`: sends `S$Intrpt` to a background player PID
 - `scripts/make-synthetic-psg-vgm.py`: original generated test tone (ignored output under `build/`)
 - `emulator/images/63EMU.DSK`: private boot helper copy
 - `emulator/images/eou-working.vhd`: private EOU hard drive copy
@@ -70,5 +72,7 @@ On macOS, `run-mame.sh` and `stage-test-disk.sh` use `lsof` to stop when one of 
 3. Scheduling: second Shell counter increments during play; window/menu/mouse still responds; file I/O works.
 4. Resources: no permanent IRQ mask; MMU mapping survives task switching; paths/files/RAM/hardware restored at exit.
 5. CPU: MAME HD6309 2MB primary, 6809 and 512KB conditional follow-up.
+
+MAME natural-keyboard automation posts a complete string much faster than a person types. During private floppy I/O, the guest can miss injected characters even though it accepts character-paced input. Treat a mangled automated command as an automation limitation and retain the screenshot; do not attribute Shell `Error #216` to the player unless the full command is visible and intact.
 
 **Do not confuse an assembly that succeeds or an emulator that boots with a proven multitasking player.**

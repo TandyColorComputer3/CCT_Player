@@ -1142,6 +1142,13 @@ VGM_LOADER_DONE
       leax  strTraceCloseOK,PCR
       lbsr  PRINT_STR_OS9
         endc
+        ifdef EXPERIMENTAL_PSG
+      ; The complete VGM stream is now in allocated RAM. Mark the consumed
+      ; path invalid so playlist transitions and final cleanup cannot close a
+      ; reused process path number.
+      lda   #$FF
+      sta   <songFilePath
+        endc
       lbrn  VGM_LOADER_DONE
 
       lbsr  GD3_PRINT_TAG           ; print out the tag info to screen 
@@ -1352,6 +1359,12 @@ CCT_LOADER_SKIP_DEALLOCATE_RESERVED
       ; close the song file path since we are done with it now
       lda  	<songFilePath
       os9  	I$Close 
+        ifdef EXPERIMENTAL_PSG
+      ; CCT playback also runs entirely from allocated RAM after this close.
+      ; Keep ownership state exact across every playlist transition.
+      lda   #$FF
+      sta   <songFilePath
+        endc
       lbrn  VGM_LOADER_DONE
 
       lbsr  PRINT_NEWLINE_OS9
@@ -2473,7 +2486,15 @@ SIGNAL_HANDLER
 
 SIGNAL_HANDLER_ABORT
       lda   #1
+        ifdef EXPERIMENTAL_PSG
+      ; F$Icpt restores the registered local-storage pointer in U, but OS-9
+      ; does not guarantee that DP matches the process data page on signal
+      ; entry. Direct-page storage here corrupted unrelated memory when a
+      ; background process received F$Send. Use the documented U context.
+      sta   abortFlag,U
+        else
       sta   <abortFlag 
+        endc
       rti 
 
 ; ----------------------------------------
@@ -2501,6 +2522,18 @@ CONVERT_COCO_ASCII_SKIP
 ; ------------------------------------------------------
 PRINT_STR_OS9
       pshs  Y,X,D 
+
+        ifdef EXPERIMENTAL_PSG
+        ifndef LOADER_TRACE
+      ; cctplaymt is intended to be launched with Shell's background `&`.
+      ; A background child shares the Shell's output path, so asynchronous
+      ; banners corrupt commands being typed at the returned prompt. Keep the
+      ; production multitasking module quiet; cctplaydbg remains verbose and
+      ; the no-argument/file-type help paths below use direct I$Write calls.
+      andcc #$FE
+      puls  D,X,Y,PC
+        endc
+        endc
 
       ; first find length 
       clrb
@@ -2530,6 +2563,12 @@ PRINT_STR_OS9_SKIP_LENGTH
 ; --------------------------------
 PRINT_NEWLINE_OS9
       pshs  Y,X,D 
+        ifdef EXPERIMENTAL_PSG
+        ifndef LOADER_TRACE
+      andcc #$FE
+      puls  D,X,Y,PC
+        endc
+        endc
       lda   #STDOUT
       ldy   #2
       leax  strNewLine,PCR 
@@ -2543,8 +2582,23 @@ PRINT_NEWLINE_OS9
 PRINT_LOADING_MSG
       pshs  Y,X,D 
 
+        ifdef EXPERIMENTAL_PSG
+        ifndef LOADER_TRACE
+      ; The production multitasking player can share a terminal with its
+      ; parent Shell.  Do not write playlist filenames after the Shell has
+      ; already returned its prompt; cctplaydbg retains the diagnostics.
+      andcc #$FE
+      puls  D,X,Y,PC
+        endc
+        endc
+
+        ifdef EXPERIMENTAL_PSG
+      ldb   <playlistFlag
+      beq   PRINT_LOADING_MSG_SINGLE_FILE
+        else
       ldb   <playlistFilePath
       bmi   PRINT_LOADING_MSG_SINGLE_FILE
+        endc
       ; if here, playlist mode. display "loading track x of x ..." msg 
       leax  strLoadingPLS,PCR 
       lbsr  PRINT_STR_OS9
@@ -3105,6 +3159,13 @@ CONVERT_BINARY32_DECIMAL_FOUND
 PRINT_BYTE_HEX
       pshs  U,Y,X,D
 
+        ifdef EXPERIMENTAL_PSG
+        ifndef LOADER_TRACE
+      andcc #$FE
+      puls  D,X,Y,U,PC
+        endc
+        endc
+
       ldu   <uRegImage
 
       leay  asciiHexList,PCR
@@ -3201,6 +3262,12 @@ LOAD_PLAYLIST_ENTRIES_DONE
 	lda  	<playlistFilePath
 	os9  	I$Close 
 	lbrn  PAUSE_5_CYCLES
+        ifdef EXPERIMENTAL_PSG
+      ; The entries now live in process memory; retain playlist mode in
+      ; playlistFlag, but do not leave a stale closed path for final cleanup.
+      lda   #$FF
+      sta   <playlistFilePath
+        endc
 
       leay 	playlistBuffer,U 
       sty 	<playlistPtr
