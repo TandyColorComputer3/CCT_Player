@@ -1,6 +1,6 @@
 # Experimental CoCoPSG process prototype
 
-**Status:** background CoCoPSG VGM/CCT/M3U playback, natural completion, and graceful signal stop are demonstrated in isolated EOU MAME. Dense real-track timing is still slow enough to block a final-quality claim; GMC, OPL, and loop-bearing-file coverage remain pending.
+**Status:** background CoCoPSG VGM/CCT/M3U playback and natural completion are demonstrated in isolated EOU MAME. The timing captures in [TIMING-ANALYSIS.md](TIMING-ANALYSIS.md) show representative tracks running 2.9–4.1% early. A dense real PSG VGM was not available, and the latest post-measurement live retest could not launch MAME. GMC, OPL, and loop-bearing-file coverage remain pending.
 
 ## What changed
 
@@ -12,7 +12,7 @@ The experimental PSG playback path has three responsibilities:
 2. `VGM_PSG_COARSE_WAIT` handles long waits using OS-9 `F$Sleep`, then `VGM_YM2149_WAIT_FINE_LOOP` burns the remaining VGM sample count. The decoder retains the VGM 44.1 kHz sample unit and the existing 735/882 sample frame waits.
 3. `VGM_PSG_WRITE_REG` performs the bounded PSG register-select/data-port sequence.
 
-The player no longer holds IRQ/FIRQ masked for the experimental playback loop. OS-9 clock interrupts can preempt the user process. On the tested EOU system, coarse waits use the 100 Hz clock (441 VGM samples per tick); the call passes N+1 because this `F$Sleep` path counts down to one. The remaining 0--440 samples use the measured/padded interruptible HD6309 loop. The fine loop enters its coarse-wait conversion once per wait, not once per sample.
+The player no longer holds IRQ/FIRQ masked for the experimental playback loop. OS-9 clock interrupts can preempt the user process. The EOU manual specifies 60 Hz NTSC / 50 Hz PAL, so each tick is exactly 735 / 882 VGM samples. The call passes N+1 because EOU `F$Sleep` places a process into the active queue after N ticks when given N+1. Waits shorter than two ticks use the interruptible HD6309 fine loop. This converts each relative wait independently; it does not compare commands against an absolute monotonic deadline.
 
 ## MMU and resource handling
 
@@ -26,9 +26,9 @@ MPI selection, `$FF23`, and the PSG are global hardware resources. This prototyp
 
 ## Timing and expected load
 
-The original delay loop approximates 40.58 CPU cycles per VGM sample at the target fast CPU mode. Live timing showed that the first experimental fine loop was only about 28 cycles/sample. The current HD6309 path adds a measured 13-cycle pad and keeps interrupts enabled; interrupt handling and competing processes can still add lateness. It does not maintain absolute deadlines or compensate later events for earlier overrun. The sparse 30-second concurrent fixture measured 30.35 seconds (+1.17%), but dense original tracks are substantially slower: the 4.4302-second Arkanoid stream produced roughly six seconds of captured PSG activity, and the 20.0900-second FLICKY stream also exceeded its declared duration. Format and scheduling success therefore do not yet establish acceptable music timing.
+Timing measurements, including event and port-write counts, MAME emulated timestamps, expected VGM sample totals, and wait-class estimates, are maintained in [TIMING-ANALYSIS.md](TIMING-ANALYSIS.md). The current code keeps VGM waits in integer 44,100 Hz sample units; 60 Hz and 50 Hz tick divisors are exact, and the residual samples are not rounded away. The 30-second synthetic file measured 29.126 seconds to the final mute write (−2.91%), a normal PSG VGM measured 4.248 seconds from its first event to mute versus 4.424 seconds expected (−3.99%), and the dense Flicky CCT measured 19.352 seconds versus 20.090 seconds (−3.67%). Register sequences were complete. A single PSG VGM does not exercise dense real-world command load, and the current MAME clock-rate probe has not run.
 
-`F$Sleep` avoids spinning throughout long rests, but it is tick-granular and the time to resume the process depends on OS-9 scheduling. It is used only for coarse waits, never as an individual-event timer. The short-wait path still consumes player CPU between scheduler interrupts. Startup event intervals and total duration were measured, but CPU share and worst-case jitter across varied workloads remain unmeasured. No broad music-quality claim is made from the synthetic tone.
+The measurements isolate the pure fine-wait case and show a consistent early bias. Comparing dense CCT/VGM waits with the synthetic fine-loop result leaves an additional coarse-wait deficit, but that split is derived from command samples rather than a runtime `F$Sleep` counter. Decode CPU time, total CPU share, and scheduler wait time were not separately measured. We therefore cannot yet attribute the remainder to clock rate, sleep-queue phase, or per-event work. `F$Sleep` is tick-granular and does not expose a sub-tick monotonic clock to the process; `F$TPS` supplies the rate but not the current phase. A true absolute-deadline scheduler would need a sub-tick monotonic source. The current evidence does not prove that ordinary process scheduling is incapable of the target accuracy, so it does not justify a driver or kernel change.
 
 ## Build and static validation
 
@@ -45,9 +45,10 @@ The current successful build produced:
 | Module | Size | CRC | Header result |
 | --- | ---: | --- | --- |
 | Original `cctplay` | 8,756 bytes | `$7A98E7` | Program, 6809 object code, re-entrant, read-only |
-| Experimental `cctplaymt` | 8,767 bytes | `$9BDED9` | Program, 6809 object code, re-entrant, read-only |
-| Counter `cctcount` | 91 bytes | `$45EA1F` | Program, 6809 object code, re-entrant, read-only |
+| Experimental `cctplaymt` | 8,848 bytes | `$D2549B` | Program, 6809 object code, re-entrant, read-only |
+| Counter `cctcount` | 91 bytes | `$86E3C1` | Program, 6809 object code, re-entrant, read-only |
 | Graceful stop `cctstop` | 143 bytes | `$077B9E` | Program, 6809 object code, re-entrant, read-only |
+| Clock probe `tpsprobe` | 126 bytes | `$15C2B0` | Program, 6809 object code, re-entrant, read-only |
 
 ToolShed reported each CRC as Good. The generated test VGM is 256 bytes, contains a YM2149 clock/variant header, tone writes, two 30-frame note sections made from 735-sample waits, a silence write, and an end command. The generated file contains no imported music.
 
@@ -57,7 +58,7 @@ To recreate only the private stage floppy, after confirming it is not mounted:
 bash scripts/stage-test-disk.sh
 ```
 
-This stages `cctplay`, `cctplaymt`, `cctplaydbg`, `cctcount`, `psgprobe`, `cctstop`, and `synthetic.vgm` on `emulator/images/chiptunes-test.dsk`. It refuses to rewrite that disk while a process has it open. Do not reset or overwrite the project EOU VHD for this test.
+This stages `cctplay`, `cctplaymt`, `cctplaydbg`, `cctcount`, `psgprobe`, `tpsprobe`, `cctstop`, and `synthetic.vgm` on `emulator/images/chiptunes-test.dsk`. It refuses to rewrite that disk while a process has it open. Do not reset or overwrite the project EOU VHD for this test.
 
 ## Runtime verification commands
 
@@ -101,7 +102,7 @@ The ordinary MAME run script selects `coco3h`, HD6309, 2 MB, MPI slot 2 `ccpsg`,
 | Module headers/CRCs | **PASS** | `os9 ident` reports valid CRCs and re-entrant Program modules for all three. |
 | Synthetic VGM generation | **PASS** | 256-byte generated YM2149 tone/silence test. Guest parsing is not demonstrated. |
 | Private floppy staging | **PASS** | `bash scripts/stage-test-disk.sh` created the 368,640-byte project-local test floppy and listed `cctplay`, `cctplaymt`, `cctcount`, and `synthetic.vgm`. The script's `lsof` guard found no open handle to this floppy. |
-| Counter running on EOU | **PASS** | The counter advances while sleeping 100 ticks between updates and while Shell commands run. |
+| Counter running on EOU | **PASS (historical 100-tick helper)** | The counter advanced while sleeping 100 ticks between updates and while Shell commands ran; at 60 Hz NTSC that interval was about 1.67 seconds. Current source requests 61 ticks to sleep 60 ticks (~1 second). |
 | Audio and PSG hardware behavior | **PASS** | 422 non-dropped `$FF5E/$FF5F` writes and a 30.35-second non-DC WAV signal. |
 | Counter + playback concurrency / Shell responsiveness | **PASS** | Counter values advance on the same screen as the playback banner; post-run `procs -e` succeeds and shows no player process. |
 | Timing drift | **PASS with measured drift** | 30.000-second fixture produced 30.35 seconds of active audio (+1.17%); startup half-second events measured 0.5006--0.5219 seconds. |

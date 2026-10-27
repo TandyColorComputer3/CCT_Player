@@ -32,6 +32,9 @@ echo "Built CoCoPSG hardware probe $root/build/psgprobe"
 "$assembler" --6309 --format=os9 --includedir="$root" \
   --list=build/cctstop.lst --symbols -o build/cctstop tools/cctstop.asm
 echo "Built graceful background stop utility $root/build/cctstop"
+"$assembler" --6309 --format=os9 --includedir="$root" \
+  --list=build/tpsprobe.lst --symbols -o build/tpsprobe tools/tpsprobe.asm
+echo "Built OS-9 clock-rate probe $root/build/tpsprobe"
 python3 scripts/make-synthetic-psg-vgm.py build/synthetic-psg.vgm
 tool="${TOOLSHED_OS9:-/Users/magneto-optimus/Documents/Coding/toolshed-2.2/build/unix/os9/os9}"
 if [[ "$tool" == */* ]]; then
@@ -49,3 +52,4 @@ fi
 "$tool" ident build/cctcounter
 "$tool" ident build/psgprobe
 "$tool" ident build/cctstop
+"$tool" ident build/tpsprobe

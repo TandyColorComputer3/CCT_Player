@@ -28,7 +28,7 @@ bash scripts/build.sh
 bash scripts/stage-test-disk.sh
 bash scripts/run-mame.sh psg
 ```
-The build produces the byte-identical baseline `build/cctplay`, experimental PSG player `build/cctplaymt`, verbose loader diagnostic `build/cctplaydbg`, counter `build/cctcounter`, graceful-stop helper `build/cctstop`, hardware probe `build/psgprobe`, and a generated YM2149 tone test. The private test floppy contains those modules and `synthetic.vgm`; extra music paths passed to `stage-test-disk.sh` are copied only to the ignored private disk.
+The build produces the byte-identical baseline `build/cctplay`, experimental PSG player `build/cctplaymt`, verbose loader diagnostic `build/cctplaydbg`, counter `build/cctcounter`, graceful-stop helper `build/cctstop`, hardware probe `build/psgprobe`, read-only clock-rate probe `build/tpsprobe`, and a generated YM2149 tone test. The private test floppy contains those modules and `synthetic.vgm`; extra music paths passed to `stage-test-disk.sh` are copied only to the ignored private disk.
 
 At DECB's `OK` prompt enter `DOS`. After the 6309 EOU Shell loads, select the private test disk and preload the background commands:
 ```text
@@ -58,7 +58,8 @@ On macOS, `run-mame.sh` and `stage-test-disk.sh` use `lsof` to stop when one of 
 - `cctplay`: original prebuilt binary, useful for baseline verification
 - `build/cctplay`: byte-identical baseline rebuild; `build/cctplay.lst`: assembler listing
 - `build/cctplaymt`: experimental CoCoPSG process-timed module
-- `tools/cctcounter.asm`: independent 100-tick visible counter process
+- `tools/cctcounter.asm`: independent counter process (requests 61 ticks to sleep 60 ticks, about one second at 60 Hz NTSC)
+- `tools/tpsprobe.asm`: prints the read-only `F$TPS` result for clock-rate diagnostics
 - `tools/cctstop.asm`: sends `S$Intrpt` to a background player PID
 - `scripts/make-synthetic-psg-vgm.py`: original generated test tone (ignored output under `build/`)
 - `emulator/images/63EMU.DSK`: private boot helper copy

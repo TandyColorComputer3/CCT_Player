@@ -32,9 +32,10 @@ experimental="$root/build/cctplaymt"
 diagnostic="$root/build/cctplaydbg"
 counter="$root/build/cctcounter"
 probe="$root/build/psgprobe"
+clockprobe="$root/build/tpsprobe"
 stopper="$root/build/cctstop"
 synthetic="$root/build/synthetic-psg.vgm"
-if [ ! -f "$experimental" ] || [ ! -f "$diagnostic" ] || [ ! -f "$counter" ] || [ ! -f "$probe" ] || [ ! -f "$stopper" ] || [ ! -f "$synthetic" ]; then
+if [ ! -f "$experimental" ] || [ ! -f "$diagnostic" ] || [ ! -f "$counter" ] || [ ! -f "$probe" ] || [ ! -f "$clockprobe" ] || [ ! -f "$stopper" ] || [ ! -f "$synthetic" ]; then
   echo "Missing experiment artifacts. Run bash scripts/build.sh" >&2
   exit 1
 fi
@@ -42,7 +43,7 @@ mkdir -p "$(dirname "$img")"
 echo "Recreating PRIVATE stage disk (not the EOU boot or VHD): $img"
 rm -f "$img"
 "$tool" format -ds -t40 -e -nCCTTEST "$img"
-for entry in "cctplay:$binary" "cctplaymt:$experimental" "cctplaydbg:$diagnostic" "cctcount:$counter" "psgprobe:$probe" "cctstop:$stopper"; do
+for entry in "cctplay:$binary" "cctplaymt:$experimental" "cctplaydbg:$diagnostic" "cctcount:$counter" "psgprobe:$probe" "tpsprobe:$clockprobe" "cctstop:$stopper"; do
   name="${entry%%:*}"
   module="${entry#*:}"
   "$tool" copy "$module" "$img,$name"

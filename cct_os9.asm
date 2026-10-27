@@ -120,6 +120,14 @@ vgmSongLengthSecs RMB   1
 ; Experimental PSG-only player state. The baseline build omits these bytes,
 ; preserving its original OS-9 module data size and binary.
         ifdef EXPERIMENTAL_PSG
+; EOU Level II uses 60 Hz on NTSC and 50 Hz on PAL. VGM's 44,100 samples/sec
+; divide evenly at both rates; this build defaults to the tested coco3h/NTSC
+; target. Define EOU_PAL for a PAL build (882 samples/tick).
+        ifdef EOU_PAL
+PSG_SAMPLES_PER_TICK EQU   882
+        else
+PSG_SAMPLES_PER_TICK EQU   735
+        endc
 psgPrevControl    RMB   1
 psgActiveFlag     RMB   1
 psgGuardBlock     RMB   1
@@ -133,6 +141,7 @@ psgPlayOffset     RMB   2
 psgWaitTicks      RMB   1
 psgWaitSamples    RMB   2
 psgWaitOriginal   RMB   2
+psgWaitRetries    RMB   1
         endc
 
 ; gd3 tag variables 
@@ -1967,12 +1976,15 @@ VGM_YM2149_WAIT_FINE_LOOP
       tst   <abortFlag
       bne   VGM_YM2149_WAIT_ABORTED
       lda   <u8Value
-      ; Restore the original per-sample budget after removing the foreground
-      ; PIA scan. Live coco3h/HD6309 timing measured the shorter loop at about
-      ; 28 cycles/sample, so the never-taken branch and NOPs add 13 measured
-      ; cycles. The resulting ~41-cycle remainder loop is still interruptible.
+      ; Calibrate against MAME emulated timestamps, not just the instruction
+      ; table. After 735-sample waits were routed through the fine loop, 1,800
+      ; waits measured 27.565 s; two extra NOPs improved that to 29.126 s against
+      ; 30.000 s. A remaining ~2.9% early bias is recorded in
+      ; docs/TIMING-ANALYSIS.md; keep this loop interruptible while tuning.
       lbrn  VGM_YM2149_WAIT_SAMPLES
       lbrn  VGM_YM2149_WAIT_SAMPLES
+      nop
+      nop
       nop
       nop
       nop
@@ -2154,40 +2166,82 @@ VGM_PSG_ENSURE_BYTE_READY
       andcc #$FE
       rts
 
-; Input D=VGM samples. Sleeps when at least one EOU clock tick fits in
-; the wait (441 samples/tick at EOU's 100 Hz clock), then returns the sub-tick
-; remainder in D. The
-; tick count and remainder stay in U-owned data. Re-sleep on unrelated signals;
-; BREAK/ABORT sets abortFlag and returns carry set. CPU-sample delay handles the
-; remaining 0-440 samples, preserving short-event timing and avoiding a busy
-; loop during longer rests. F$Sleep is a coarse aid, never the event clock.
+; Input D=VGM samples; output D=0 or residual samples, C=0 on success/C=1 on
+; error. Clobbers A,B,X,CC; preserves U. psgWaitOriginal is a 2-byte input
+; copy, psgWaitSamples is its 2-byte modulo-tick remainder, psgWaitTicks and
+; psgWaitRetries are 1-byte counts in process-local U data. Convert with the
+; EOU clock rate: 735 samples/tick for 60 Hz NTSC (882 for 50 Hz PAL), so no
+; fractional sample is lost. EOU F$Sleep with X=N sleeps N-1 ticks and returns
+; X=1, so request N+1 and convert X-1 back to unelapsed ticks. Treating X=1
+; as a completed N-tick sleep previously dropped one tick on coarse waits.
+; Use F$Sleep only with at least two ticks remaining; one tick only yields the
+; slice. Retry at most four times after unrelated wakeups, then finish the
+; residual in the interruptible fine loop. BREAK/ABORT sets abortFlag and
+; returns carry set. User process context; F$Sleep is the only OS-9 call here;
+; no interrupt mask. PSG_SAMPLES_PER_TICK selects NTSC default or EOU_PAL.
 VGM_PSG_COARSE_WAIT
       std   psgWaitOriginal,U
-      std   psgWaitSamples,U
+      clr   psgWaitRetries,U
       clr   psgWaitTicks,U
-      ldd   psgWaitSamples,U
+      ldd   psgWaitOriginal,U
 VGM_PSG_COARSE_WAIT_DIVIDE
-      cmpd  #441
+      cmpd  #PSG_SAMPLES_PER_TICK
       blo   VGM_PSG_COARSE_WAIT_DIVIDED
-      subd  #441
+      subd  #PSG_SAMPLES_PER_TICK
       inc   psgWaitTicks,U
       bra   VGM_PSG_COARSE_WAIT_DIVIDE
 VGM_PSG_COARSE_WAIT_DIVIDED
       std   psgWaitSamples,U
       lda   psgWaitTicks,U
-      cmpa  #1
+      cmpa  #2
       blo   VGM_PSG_COARSE_WAIT_BUSY
-      clra
-      ldb   psgWaitTicks,U
-      incb                         ; F$Sleep counts down to one; N ticks use N+1
-      tfr   D,X
 VGM_PSG_COARSE_WAIT_SLEEP
+      clra
+      ldb   psgWaitTicks,U        ; X input: whole ticks still before event
+      incb                         ; EOU F$Sleep sleeps N-1; request N+1 for N
+      tfr   D,X
       os9   F$Sleep
       bcs   VGM_PSG_COARSE_WAIT_ERROR
       tst   <abortFlag
       bne   VGM_PSG_COARSE_WAIT_ERROR
-      cmpx  #0
-      bne   VGM_PSG_COARSE_WAIT_SLEEP
+      ; X output is ticks remaining. Preserve that count so any early queue
+      ; wake is completed as sample-accurate fine delay rather than lost.
+      cmpx  #1                  ; counter reaches one after the sleep interval
+      bls   VGM_PSG_COARSE_WAIT_SLEEP_COMPLETE
+      bne   VGM_PSG_COARSE_WAIT_SAVE_REMAINING
+VGM_PSG_COARSE_WAIT_SLEEP_COMPLETE
+      clr   psgWaitTicks,U
+      bra   VGM_PSG_COARSE_WAIT_FINE_REMAINDER
+VGM_PSG_COARSE_WAIT_SAVE_REMAINING
+      stx   u16Value,U
+      ldb   u16Value+1,U
+      decb                         ; convert remaining sleep count to VGM ticks
+      cmpb  psgWaitTicks,U
+      beq   VGM_PSG_COARSE_WAIT_NO_PROGRESS
+      stb   psgWaitTicks,U
+      bra   VGM_PSG_COARSE_WAIT_SLEEP_PROGRESS
+VGM_PSG_COARSE_WAIT_NO_PROGRESS
+      inc   psgWaitRetries,U
+      lda   psgWaitRetries,U
+      cmpa  #4
+      bhs   VGM_PSG_COARSE_WAIT_FINE_REMAINDER
+      bra   VGM_PSG_COARSE_WAIT_SLEEP
+VGM_PSG_COARSE_WAIT_SLEEP_PROGRESS
+      clr   psgWaitRetries,U
+      cmpb  #1
+      bhi   VGM_PSG_COARSE_WAIT_SLEEP
+VGM_PSG_COARSE_WAIT_FINE_REMAINDER
+      lda   psgWaitTicks,U
+      sta   psgWaitRetries,U
+      ldd   psgWaitSamples,U
+      tst   psgWaitRetries,U
+      beq   VGM_PSG_COARSE_WAIT_RETURN
+VGM_PSG_COARSE_WAIT_ADD_TICK
+      addd  #PSG_SAMPLES_PER_TICK
+      dec   psgWaitRetries,U
+      bne   VGM_PSG_COARSE_WAIT_ADD_TICK
+      andcc #$FE
+      rts
 VGM_PSG_COARSE_WAIT_RETURN
       ldd   psgWaitSamples,U
       andcc #$FE
