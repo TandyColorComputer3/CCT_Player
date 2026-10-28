@@ -1,6 +1,6 @@
 # Experimental CoCoPSG process prototype
 
-**Status:** background CoCoPSG VGM/CCT/M3U playback, natural completion, and on-demand single-track stops have been exercised in isolated EOU MAME. The measured timing correction and its limitations are in [TIMING-ANALYSIS.md](TIMING-ANALYSIS.md); later storage and timing-control results are in [STABILITY-ANALYSIS.md](STABILITY-ANALYSIS.md). Earlier reported reboots remain unresolved and were not reproduced. Playlist-transition stop, GMC, OPL, and loop-bearing-file coverage remain pending.
+**Status:** background CoCoPSG VGM/CCT/M3U playback, natural completion, and on-demand single-track stops have been exercised in isolated EOU MAME. The measured timing correction and its limitations are in [TIMING-ANALYSIS.md](TIMING-ANALYSIS.md); later storage and timing-control results are in [STABILITY-ANALYSIS.md](STABILITY-ANALYSIS.md). Earlier reported reboots remain unresolved and were not reproduced. Controlled stops across playlist transitions now pass; see [PLAYLIST-STOP-TIMING.md](PLAYLIST-STOP-TIMING.md). GMC, OPL, and loop-bearing-file coverage remain pending.
 
 ## What changed
 
@@ -18,7 +18,7 @@ The player no longer holds IRQ/FIRQ masked for the experimental playback loop. O
 
 The experimental stream reader no longer changes `$FFA9`. It maps one allocated physical song block into an unallocated process DAT slot with `F$MapBlk`, uses its returned logical address, and removes it with `F$ClrBlk` before mapping the next page. A one-block guard allocation is mapped first; because EOU `F$MapBlk` maps from the top down, the stream page is placed below that guard. The guard and stream state live in the process data area. See the [EOU Technical Reference Manual, F$MapBlk](https://www.lcurtisboyle.com/nitros9/EOUDOCS/NitrOS-9_EOU_Level_2_Technical_Reference_Manual.pdf).
 
-The process continues to own its file paths, allocated song blocks, and signal intercept. The signal handler sets the existing `abortFlag` through the U local-storage pointer supplied to `F$Icpt`; it does not assume DP is valid on asynchronous signal entry. Experimental waits check the flag without scanning `$FF02/$FF00`. The player briefly selects the requested PSG slot to save and configure its control register, then restores the current MPI selection. Each PSG register transaction similarly saves, selects and restores the live MPI slot in a short IRQ/FIRQ-masked section. Cleanup silences the PSG and restores its control register under the same protection; the startup MPI and `$FF23` PIA state are also restored, mappings are cleared, and the guard block is released before song RAM is returned. Loader-owned paths are marked invalid immediately after `I$Close`, including between playlist entries.
+The process continues to own its file paths, allocated song blocks, and signal intercept. The signal handler sets the existing `abortFlag` through the U local-storage pointer supplied to `F$Icpt`; it does not assume DP is valid on asynchronous signal entry. Experimental waits check the flag without scanning `$FF02/$FF00`. The player briefly selects the requested PSG slot to save and configure its control register, then restores the current MPI selection. Each PSG register transaction similarly saves, selects and restores the live MPI slot in a short IRQ/FIRQ-masked section. Cleanup silences the PSG and restores its control register under the same protection; the live MPI selection is restored and the `$FF23` PIA state is restored, mappings are cleared, and the guard block is released before song RAM is returned. Loader-owned paths are marked invalid immediately after `I$Close`, including between playlist entries.
 
 Normal completion and on-demand `cctstop` signal cleanup have run successfully on EOU, including twenty floppy-loaded stops across three private boots. The player stops PSG writes and leaves the Shell usable in those cases. Earlier on-demand helper loads coincided with reported guest reboots; those incidents remain unresolved. Production `cctplaymt` is quiet after background launch so asynchronous metadata cannot overwrite the returned prompt; `cctplaydbg` remains the foreground diagnostic build.
 
@@ -45,9 +45,11 @@ The current successful build produced:
 | Module | Size | CRC | Header result |
 | --- | ---: | --- | --- |
 | Original `cctplay` | 8,756 bytes | `$7A98E7` | Program, 6809 object code, re-entrant, read-only |
-| Experimental `cctplaymt` | 9,053 bytes | `$7AE209` | Program, 6809 object code, re-entrant, read-only |
-| End-marker diagnostic `ccttiming` | 9,079 bytes | `$3C0A9B` | Program, 6809 object code, re-entrant, read-only |
+| Experimental `cctplaymt` | 9,377 bytes | `$BF0B8C` | Program, 6809 object code, re-entrant, read-only |
+| End-marker diagnostic `ccttiming` | 9,411 bytes | `$D1C30D` | Program, 6809 object code, re-entrant, read-only |
 | Counter `cctcount` | 91 bytes | `$86E3C1` | Program, 6809 object code, re-entrant, read-only |
+| Test supervisor `psgsuper` | 459 bytes | `$9B130F` | Program, 6809 object code, re-entrant, read-only |
+| Bounded workload `timeload` | 102 bytes | `$12274D` | Program, 6809 object code, re-entrant, read-only |
 | Graceful stop `cctstop` | 143 bytes | `$077B9E` | Program, 6809 object code, re-entrant, read-only |
 | Clock probe `tpsprobe` | 140 bytes | `$2C9AF5` | Program, 6809 object code, re-entrant, read-only |
 
@@ -59,7 +61,7 @@ To recreate only the private stage floppy, after confirming it is not mounted:
 bash scripts/stage-test-disk.sh
 ```
 
-This stages the players, timing and hardware probes, counter, `cctstop`, and `synthetic.vgm` on `emulator/images/chiptunes-test.dsk`. Set `CCT_TEST_DISK` to an absolute path inside `emulator/images/` to select a different private disk. The script refuses to rewrite a disk it detects as open. Do not reset or overwrite the project EOU VHD for this test.
+This stages the players, timing and hardware probes, counter, bounded workload, supervisor, `cctstop`, and `synthetic.vgm` on `emulator/images/chiptunes-test.dsk`. Set `CCT_TEST_DISK` to an absolute path inside `emulator/images/` to select a different private disk. The script refuses to rewrite a disk it detects as open. Do not reset or overwrite the project EOU VHD for this test.
 
 ## Runtime verification commands
 
@@ -117,5 +119,5 @@ These entries describe the earlier concurrent milestone and its builds. The late
 - Relative delay loops compensate for estimated command and sleep costs, but not observed interrupt, scheduler, or disk delays. Counter progress and total duration passed in the measured runs; the synthetic trace still showed substantial local lateness.
 - The current POC is PSG-only. GMC and OPL playback continue to use the original interrupt-masked routines in the byte-identical default build and are excluded from `cctplaymt` dispatch.
 - Loop-bearing files, bad files, GMC, OPL hardware, 6809, and 512 KB remain untested. Cross-page playback, normal cleanup, two-entry path cleanup, and signal stop have runtime coverage.
-- Further work should characterize event jitter, investigate the earlier reported reboots, and verify stops during playlist transitions before considering a different timing mechanism.
+- Further work should characterize event jitter, investigate the earlier reported reboots, and investigate the intermittent playlist gap before considering a different timing mechanism.
 - Rollback this experiment by reverting the prototype commit. The tracked original `cctplay` and baseline build remain intact.

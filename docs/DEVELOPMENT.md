@@ -62,6 +62,9 @@ On macOS, `run-mame.sh` and `stage-test-disk.sh` use `lsof` to stop when one of 
 - `tools/sleepprobe.asm`, `tools/signal-sleepprobe.asm`: select-port markers for normal and signal-interrupted `F$Sleep` measurements
 - `scripts/make-timing-fixtures.py`: generates controlled PSG wait/write streams under `build/timing-fixtures/`
 - `tools/cctstop.asm`: sends `S$Intrpt` to a background player PID
+- `tools/psgsuper.asm`: forks a player, signals only its returned child PID, and collects its exit status for transition tests
+- `tools/timeload.asm`: bounded 60-line counter workload for repeatable timing tests
+- `docs/PLAYLIST-STOP-TIMING.md`: stop-phase evidence, MPI audit, matched timing measurements and unresolved limitations
 - `scripts/make-synthetic-psg-vgm.py`: original generated test tone (ignored output under `build/`)
 - `emulator/images/63EMU.DSK`: private boot helper copy
 - `emulator/images/eou-working.vhd`: private EOU hard drive copy

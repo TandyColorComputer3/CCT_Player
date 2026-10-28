@@ -29,12 +29,16 @@ echo "Built PSG end-marker diagnostic $root/build/ccttiming"
 echo "Built loader diagnostic player $root/build/cctplaydbg"
 "$assembler" --6309 --format=os9 --includedir="$root" \
   --list=build/cctcounter.lst --symbols -o build/cctcounter tools/cctcounter.asm
+"$assembler" --6309 --format=os9 --includedir="$root" \
+  --list=build/timeload.lst --symbols -o build/timeload tools/timeload.asm
 echo "Built OS-9 counter utility $root/build/cctcounter"
 "$assembler" --6309 --format=os9 --includedir="$root" \
   --list=build/psgprobe.lst --symbols -o build/psgprobe tools/psgprobe.asm
 echo "Built CoCoPSG hardware probe $root/build/psgprobe"
 "$assembler" --6309 --format=os9 --includedir="$root" \
   --list=build/cctstop.lst --symbols -o build/cctstop tools/cctstop.asm
+"$assembler" --6309 --format=os9 --includedir="$root" \
+  --list=build/psgsuper.lst --symbols -o build/psgsuper tools/psgsuper.asm
 echo "Built graceful background stop utility $root/build/cctstop"
 "$assembler" --6309 --format=os9 --includedir="$root" \
   --list=build/tpsprobe.lst --symbols -o build/tpsprobe tools/tpsprobe.asm
@@ -60,8 +64,10 @@ fi
 "$tool" ident build/ccttiming
 "$tool" ident build/cctplaydbg
 "$tool" ident build/cctcounter
+"$tool" ident build/timeload
 "$tool" ident build/psgprobe
 "$tool" ident build/cctstop
+"$tool" ident build/psgsuper
 "$tool" ident build/tpsprobe
 "$tool" ident build/sleepprb
 "$tool" ident build/sigprb

@@ -136,6 +136,8 @@ psgGuardBlock     RMB   1
 psgGuardAllocated RMB   1
 psgGuardMapped    RMB   1
 psgGuardBase      RMB   2
+psgLoadMapActive  RMB   1  ; outstanding file-read map
+psgLoadMapBase    RMB   2
 psgPlayMapActive  RMB   1
 psgPlayMapBase    RMB   2
 psgPlayMapPtr     RMB   2
@@ -381,9 +383,14 @@ START_EXEC
       sta   psgGuardAllocated,U
       sta   psgGuardMapped,U
       sta   psgPlayMapActive,U
+      sta   psgLoadMapActive,U
       sta   psgCommandDebt,U
       sta   psgCommandDebt+1,U
       sta   psgWaitFraction,U
+      clr   <reservedMMUflag
+      clr   vgmBlockMap,U
+      leay  vgmBlockMap,U
+      sty   <vgmBlockMapPtr
         endc
       stx  	<cmdlinePtr 
 
@@ -551,6 +558,12 @@ PARAMS_NO_MORE
       os9   I$Open 
       lbcs  FILE_ERROR_EXIT
       sta   <tempPath
+        ifdef EXPERIMENTAL_PSG
+      ; Own the first open path before observing an asynchronous stop.
+      sta   <songFilePath
+      tst   <abortFlag
+      lbne  EXIT_DEALLOCATE_RAM
+        endc
         ifdef LOADER_TRACE
       leax  strTraceOpenOK,PCR
       lbsr  PRINT_STR_OS9
@@ -560,6 +573,10 @@ PARAMS_NO_MORE
       ldy 	#256
       os9 	I$Read 
       lbcs 	READ_ERROR_EXIT
+        ifdef EXPERIMENTAL_PSG
+      tst   <abortFlag
+      lbne  EXIT_DEALLOCATE_RAM
+        endc
         ifdef LOADER_TRACE
       leax  strTraceHeaderReadOK,PCR
       lbsr  PRINT_STR_OS9
@@ -577,9 +594,16 @@ PLAYLIST_HEADER_NEXT
       ; if here, the specified file IS a playlist
       lda  	<tempPath
       sta  	<playlistFilePath
-
+        ifdef EXPERIMENTAL_PSG
+      lda   #$FF
+      sta   <songFilePath       ; transfer ownership to playlist path
+        endc
       lbsr  LOAD_PLAYLIST_ENTRIES
       lbcs  UNKNOWN_ERROR_EXIT
+        ifdef EXPERIMENTAL_PSG
+      tst   <abortFlag
+      lbne  EXIT_DEALLOCATE_RAM
+        endc
       inc  	<playlistFlag
 
       ; display number of entries  
@@ -603,22 +627,44 @@ PLAYLIST_HEADER_NOT_MATCH
  	bra  	VGM_HEADER_ALREADY_LOADED
 
 VGM_OPEN_FILE
+        ifdef EXPERIMENTAL_PSG
+      ; Never start another open after an observed stop. Any earlier open has
+      ; already completed, and common cleanup owns its path and blocks.
+      tst   <abortFlag
+      lbne  EXIT_CLOSE_ALL_PATHS
+        endc
       stx   <filenamePtr            ; save the filename pointer for later use 
       ; init the map with 0 to show NO blocks are allocated in the beginning 
       clr   vgmBlockMap,U 
+        ifdef EXPERIMENTAL_PSG
+      leay  vgmBlockMap,U
+      sty   <vgmBlockMapPtr
+        endc
 
 	; open a song file pointed to by X and grab the first 256 bytes to get the header 					*****
       lda   #READ.
       os9   I$Open 
       lbcs  FILE_ERROR_EXIT
       sta   <songFilePath
+        ifdef EXPERIMENTAL_PSG
+      tst   <abortFlag
+      lbne  EXIT_DEALLOCATE_RAM
+        endc
       ; grab header data 
       leax  vgmDataBuffer,U
       ldy   #256
       os9   I$Read
       lbcs  READ_ERROR_EXIT
+        ifdef EXPERIMENTAL_PSG
+      tst   <abortFlag
+      lbne  EXIT_DEALLOCATE_RAM
+        endc
 
 VGM_HEADER_ALREADY_LOADED
+        ifdef EXPERIMENTAL_PSG
+      tst   <abortFlag
+      lbne  EXIT_DEALLOCATE_RAM
+        endc
 	lbsr 	PRINT_LOADING_MSG
 	; next try and detect what kind of file it is. VGM or CCT (or is it a playlist?)     
       ldd   ,X 
@@ -981,6 +1027,10 @@ GD3_TAG_NONE
       lbsr  SUBTRACT_32BIT
 
 VGM_LOADER_GET_BLOCKS
+        ifdef EXPERIMENTAL_PSG
+      tst   <abortFlag
+      lbne  EXIT_DEALLOCATE_RAM
+        endc
       ; first seek file pointer to start of VGM raw command data
       lda   <songFilePath
       ldx   <vgmDataOffset 
@@ -1002,6 +1052,10 @@ VGM_LOADER_GET_BLOCKS
       leax  vgmBlockMap,U
       stx   <vgmBlockMapPtr
 VGM_LOADER_NEXT_BLOCK 
+        ifdef EXPERIMENTAL_PSG
+      tst   <abortFlag
+      lbne  PSG_ABORT_LOAD_SAFE
+        endc
       ldu   <uRegImage
       leax  vgmBytesLeft,U 
       leay  vgmBlockSizeConst,PCR 
@@ -1015,6 +1069,10 @@ VGM_LOADER_NEXT_BLOCK
       lbcs  RAM_ERROR_EXIT
       stb   ,X+         ; store the block number in the list 
       stx   <vgmBlockMapPtr   ; update pointer 
+        ifdef EXPERIMENTAL_PSG
+      tst   <abortFlag         ; allocation is recorded; no map is live yet
+      lbne  PSG_ABORT_LOAD_SAFE
+        endc
       clra 
       tfr   D,X 
       ldb   #1
@@ -1029,6 +1087,11 @@ VGM_LOADER_NEXT_BLOCK
       os9   F$MapBlk
       lbcs  UNKNOWN_ERROR_EXIT     
 VGM_LOADER_NOT_E000
+        ifdef EXPERIMENTAL_PSG
+      lbsr  PSG_RECORD_LOAD_MAP
+      tst   <abortFlag         ; cleanup now owns the successful mapping
+      lbne  PSG_ABORT_LOAD_SAFE
+        endc
       ; I$Read may change U. Preserve the mapped logical base on the user
       ; stack so F$ClrBlk always receives the address returned by F$MapBlk.
       ; Restore CC with U so the read error result is retained on every path.
@@ -1051,13 +1114,22 @@ VGM_LOADER_NOT_E000
       ldb   #1
       os9   F$ClrBlk  
       lbcs  UNKNOWN_ERROR_EXIT
+        ifdef EXPERIMENTAL_PSG
+      lbsr  PSG_CLEAR_LOAD_MAP_FLAG
+      tst   <abortFlag
+      lbne  PSG_ABORT_LOAD_SAFE
+        endc
 
       ; (eventually put an EOF check here )
       ; check for EOF 
       lda   <songFilePath
       ldb   #$06        ; EOF test function code 
       os9   I$GetStt
+        ifdef EXPERIMENTAL_PSG
+      lbcc  VGM_LOADER_NEXT_BLOCK
+        else
       bcc   VGM_LOADER_NEXT_BLOCK
+        endc
         ifdef LOADER_TRACE
       lbra  VGM_LOADER_DONE
         else
@@ -1074,6 +1146,10 @@ VGM_LOADER_LAST_BLOCK
       lbcs  RAM_ERROR_EXIT
       stb   ,X+         ; store the block number in the list 
       stx   <vgmBlockMapPtr   ; update pointer 
+        ifdef EXPERIMENTAL_PSG
+      tst   <abortFlag         ; allocation is recorded; no map is live yet
+      lbne  PSG_ABORT_LOAD_SAFE
+        endc
         ifdef LOADER_TRACE
       stb   <u8Value
       leax  strTraceAllRAMOK,PCR
@@ -1086,6 +1162,11 @@ VGM_LOADER_LAST_BLOCK
       ldb   #1
       os9   F$MapBlk
       lbcs  UNKNOWN_ERROR_EXIT
+        ifdef EXPERIMENTAL_PSG
+      lbsr  PSG_RECORD_LOAD_MAP
+      tst   <abortFlag         ; cleanup now owns the successful mapping
+      lbne  PSG_ABORT_LOAD_SAFE
+        endc
         ifdef LOADER_TRACE
       pshs  U
       ldu   <uRegImage
@@ -1120,6 +1201,11 @@ VGM_LOADER_LAST_BLOCK
       ldb   #1
       os9   F$ClrBlk  
       lbcs  UNKNOWN_ERROR_EXIT
+        ifdef EXPERIMENTAL_PSG
+      lbsr  PSG_CLEAR_LOAD_MAP_FLAG
+      tst   <abortFlag
+      lbne  PSG_ABORT_LOAD_SAFE
+        endc
         ifdef LOADER_TRACE
       pshs  U
       ldu   <uRegImage
@@ -1312,6 +1398,10 @@ CCT_LOADER_AUTHOR_NAME_DONE
       os9   I$Seek 
       lbcs  READ_ERROR_EXIT
       ldu   <uRegImage              ; restore original value 
+        ifdef EXPERIMENTAL_PSG
+      tst   <abortFlag
+      lbne  EXIT_DEALLOCATE_RAM
+        endc
 
       ; initialize pointers and counters for read loop 
         ifdef EXPERIMENTAL_PSG
@@ -1323,12 +1413,20 @@ CCT_LOADER_AUTHOR_NAME_DONE
       stx   <vgmBlockMapPtr
 
 CCT_LOADER_REQUEST_NEXT_BLOCK    
+        ifdef EXPERIMENTAL_PSG
+      tst   <abortFlag
+      lbne  PSG_ABORT_LOAD_SAFE
+        endc
       ldx   <vgmBlockMapPtr
       ldb   #1          ; request 1 8k block 
       os9   F$AllRAM
       lbcs  RAM_ERROR_EXIT
       stb   ,X+         ; store the block number in the list 
       stx   <vgmBlockMapPtr   ; update pointer 
+        ifdef EXPERIMENTAL_PSG
+      tst   <abortFlag         ; allocation is recorded; no map is live yet
+      lbne  PSG_ABORT_LOAD_SAFE
+        endc
       clra 
       tfr   D,X 
       ldb   #1
@@ -1343,17 +1441,32 @@ CCT_LOADER_REQUEST_NEXT_BLOCK
       os9   F$MapBlk
       lbcs  UNKNOWN_ERROR_EXIT     
 CCT_LOADER_NOT_E000
+        ifdef EXPERIMENTAL_PSG
+      lbsr  PSG_RECORD_LOAD_MAP
+      tst   <abortFlag
+      lbne  PSG_ABORT_LOAD_SAFE
+      pshs  U                 ; retain F$MapBlk result across I$Read
+        endc
 	tfr   U,X 
       ; read an 8k block in to the newly mapped block 
       lda   <songFilePath 
       ldy   #$2000            ; read 8k
       os9   I$Read
+        ifdef EXPERIMENTAL_PSG
+      pshs  CC
+      puls  CC,U              ; restore map base and preserve read status
+        endc
       lbcs  READ_ERROR_EXIT
       ; now unmap the block from user space 
       ; U should already be still pointing to MMU mapped space from F$MapBlk
       ldb   #1
       os9   F$ClrBlk  
       lbcs  UNKNOWN_ERROR_EXIT
+        ifdef EXPERIMENTAL_PSG
+      lbsr  PSG_CLEAR_LOAD_MAP_FLAG
+      tst   <abortFlag
+      lbne  PSG_ABORT_LOAD_SAFE
+        endc
       cmpy  #$2000            ; check if we read a full block or if we are at end
       bne   CCT_LOADER_READ_FILE_EOF
       ; decrement block counter and loop back if there are more to do 
@@ -1411,6 +1524,10 @@ PLAY_VGM_DATA
       ldu   <uRegImage
 
         ifdef EXPERIMENTAL_PSG
+      ; A stop delivered during file loading must not start a stream.
+      tst   <abortFlag
+      lbne  EXIT_DEALLOCATE_RAM
+
       ; Keep the experiment CoCoPSG-only. Other backends remain compiled for
       ; the baseline build but cannot be reached from this module.
       lda   <vgmChipType
@@ -1808,11 +1925,17 @@ PLAY_CHIP_YM2149_CCT
       ; across the bounded hardware transaction (under 100 HD6309 cycles);
       ; no OS call occurs until the original selection and CC are restored.
       ; Mark the PSG active before allocation so errors take normal cleanup.
-      pshs  CC
+      pshs  CC,B              ; B is scratch for the live MPI merge
       orcc  #$50
+      tst   <abortFlag        ; do not begin PSG setup after an observed stop
+      bne   PSG_INIT_ABORT_BEFORE
       lda   >mpi_reg
-      pshs  A
-      lda   <mpiPSG
+      pshs  A                 ; preserve the live selection for restoration
+      anda  #$FC              ; preserve every bit outside the SCS slot field
+      ldb   <mpiPSG
+      andb  #$03              ; change only the SCS slot field
+      pshs  B
+      ora   ,S+
       sta   >mpi_reg
       lbrn  PLAY_CHIP_YM2149
       lbrn  PLAY_CHIP_YM2149
@@ -1824,14 +1947,23 @@ PLAY_CHIP_YM2149_CCT
       sta   >psg_control_reg
       puls  A
       sta   >mpi_reg
-      puls  CC
-      lda   #1
+      lda   #1                 ; cleanup owns the PSG before IRQs resume
       sta   psgActiveFlag,U
+      puls  CC,B
+      tst   <abortFlag         ; handle a signal delivered at IRQ restoration
+      lbne  VGM_YM2149_END
+      bra   PSG_INIT_CONTINUE
+PSG_INIT_ABORT_BEFORE
+      puls  CC,B               ; no hardware was touched; restore incoming CC
+      lbra  EXIT_DEALLOCATE_RAM
+PSG_INIT_CONTINUE
       clr   psgCommandDebt,U
       clr   psgCommandDebt+1,U
       clr   psgWaitFraction,U
       lbsr  VGM_PSG_RESERVE_MAP_SLOT
       lbcs  RAM_ERROR_EXIT
+      tst   <abortFlag         ; honor a stop delivered during allocation/mapping
+      lbne  VGM_YM2149_END     ; active PSG and guard use the common cleanup
         else
       ; lock down the coco for playback and initialize hardware stuff 
       orcc  #$50        ; disable all interrupts 
@@ -2091,17 +2223,21 @@ VGM_YM2149_CHECK_FOR_LOOP
       ; Diagnostic build only: select the PSG and mark decoded $66 without
       ; changing a PSG value. Preserve A, CC and the live MPI slot; this is a
       ; bounded user-context hardware transaction and makes no OS calls.
-      pshs  CC,A
+      pshs  CC,A,B
       orcc  #$50
       lda   >mpi_reg
-      pshs  A
-      lda   <mpiPSG
+      pshs  A                 ; preserve the live selection for restoration
+      anda  #$FC              ; preserve every bit outside the SCS slot field
+      ldb   <mpiPSG
+      andb  #$03              ; change only the SCS slot field
+      pshs  B
+      ora   ,S+
       sta   >mpi_reg
       lda   #$FE
       sta   >psg_ym_reg_select
       puls  A
       sta   >mpi_reg
-      puls  CC,A
+      puls  CC,A,B
         endc
       lda   vgmLoopCount,U 
       bmi   VGM_YM2149_CHECK_FOR_LOOP_FOREVER
@@ -2367,8 +2503,12 @@ VGM_PSG_WRITE_REG
       pshs  CC,A,B
       orcc  #$50
       lda   >mpi_reg
-      pshs  A
-      lda   <mpiPSG
+      pshs  A                 ; preserve the live selection for restoration
+      anda  #$FC              ; preserve every bit outside the SCS slot field
+      ldb   <mpiPSG
+      andb  #$03              ; change only the SCS slot field
+      pshs  B
+      ora   ,S+
       sta   >mpi_reg
       lda   2,S
       ldb   3,S
@@ -2378,6 +2518,56 @@ VGM_PSG_WRITE_REG
       puls  A
       sta   >mpi_reg
       puls  CC,A,B,PC
+
+; User context: record the I$Read map returned in U. Preserves D/X/U;
+; clobbers CC. No OS calls, signal masking, or blocking operation.
+PSG_RECORD_LOAD_MAP
+      pshs  D,X,U
+      tfr   U,X
+      ldu   <uRegImage
+      stx   psgLoadMapBase,U
+      lda   #1
+      sta   psgLoadMapActive,U
+      puls  D,X,U,PC
+
+; User context: F$ClrBlk succeeded. Preserve U, clobber CC, no OS calls.
+PSG_CLEAR_LOAD_MAP_FLAG
+      pshs  U
+      ldu   <uRegImage
+      clr   psgLoadMapActive,U
+      puls  U,PC
+
+; I$Read has completed and its mapping has been cleared before this branch.
+PSG_ABORT_LOAD_SAFE
+      lbra  EXIT_DEALLOCATE_RAM
+
+; User context, IRQ/FIRQ enabled: clear any tracked read map and $E000
+; reservation before freeing song blocks. Clobbers D/U/CC; carry set if
+; F$ClrBlk fails, so the caller does not manually free a still-mapped block.
+PSG_RELEASE_LOAD_MAPS
+      ldu   <uRegImage
+      tst   psgLoadMapActive,U
+      beq   PSG_RELEASE_LOAD_GUARD
+      ldu   psgLoadMapBase,U
+      ldb   #1
+      os9   F$ClrBlk
+      bcs   PSG_RELEASE_LOAD_ERROR
+      ldu   <uRegImage
+      clr   psgLoadMapActive,U
+PSG_RELEASE_LOAD_GUARD
+      tst   <reservedMMUflag
+      beq   PSG_RELEASE_LOAD_DONE
+      ldu   #$E000
+      ldb   #1
+      os9   F$ClrBlk
+      bcs   PSG_RELEASE_LOAD_ERROR
+      clr   <reservedMMUflag
+PSG_RELEASE_LOAD_DONE
+      andcc #$FE
+      rts
+PSG_RELEASE_LOAD_ERROR
+      orcc  #1
+      rts
 
 ; Release transient DAT mappings and the guard allocation before the normal
 ; F$DelRAM loop frees all VGM/CCT file blocks. Best-effort cleanup still runs
@@ -2523,12 +2713,20 @@ VGM_YM2149_END
       ; reset the hardware 
       ldu   <uRegImage
 
-      pshs 	CC   		; save current state of interrupts
+        ifdef EXPERIMENTAL_PSG
+      pshs  CC,B              ; preserve caller B and incoming interrupt state
+        else
+      pshs  CC
+        endc
       orcc  #$50               ; bounded shared hardware transaction
         ifdef EXPERIMENTAL_PSG
       lda   >mpi_reg
-      pshs  A
-      lda   <mpiPSG
+      pshs  A                 ; preserve the live selection for restoration
+      anda  #$FC              ; preserve every bit outside the SCS slot field
+      ldb   <mpiPSG
+      andb  #$03              ; change only the SCS slot field
+      pshs  B
+      ora   ,S+
       sta   >mpi_reg
         endc
       ; turn off tone and noise output in the mixer
@@ -2546,8 +2744,13 @@ VGM_YM2149_END
       puls  A
       sta   >mpi_reg
         endc
-      puls  CC                 ; restore original interrupt state
-      bra  	PLAY_DONE_RESET_STATES
+        ifdef EXPERIMENTAL_PSG
+      puls  CC,B               ; restore B and incoming interrupt state
+      bra   PLAY_DONE_RESTORE_PIA ; do not overwrite the live MPI selection
+        else
+      puls  CC
+      bra   PLAY_DONE_RESET_STATES
+        endc
 
 VGM_SN76489_END
       ; reset the hardware 
@@ -2561,17 +2764,17 @@ VGM_OPL_END
 
 PLAY_DONE_RESET_STATES
         ifdef EXPERIMENTAL_PSG
-      ; Restore the previous PSG control state after silencing the chip.
-      lda   psgActiveFlag,U
-      beq   PLAY_DONE_SKIP_PSG_RESTORE
-      lda   psgPrevControl,U
-      sta   >psg_control_reg
-      clr   psgActiveFlag,U
-PLAY_DONE_SKIP_PSG_RESTORE
-        endc
-      ; restore original state of MPI 
+      ; All active PSG cleanup must use the bounded live-slot transaction.
+      ; If nothing was claimed, leave the current MPI selection untouched.
+      ldu   <uRegImage
+      tst   psgActiveFlag,U
+      lbne  VGM_YM2149_END
+        else
+      ; The unchanged reference player owns the MPI for all of playback.
       lda   <prevMPI
       sta   >mpi_reg
+        endc
+PLAY_DONE_RESTORE_PIA
    	; restore original PIA state which SHOULD disable cart audio
       lda   <prevPIA
       sta   >$FF23
@@ -2579,6 +2782,9 @@ EXIT_DEALLOCATE_RAM
       ; deallocate ram before exiting 
       ldu   <uRegImage
         ifdef EXPERIMENTAL_PSG
+      lbsr  PSG_RELEASE_LOAD_MAPS
+      lbcs  EXIT_CLOSE_ALL_PATHS ; do not free a possibly mapped block
+      ldu   <uRegImage
       lbsr  VGM_PSG_RELEASE_MAPS
       ldu   <uRegImage
         endc
@@ -2593,6 +2799,11 @@ EXIT_DEALLOCATE_NEXT
       cmpy  <vgmBlockMapPtr
       blo   EXIT_DEALLOCATE_NEXT
 EXIT_CHECK_PLAYLIST
+        ifdef EXPERIMENTAL_PSG
+      ; The stop belongs to the whole playlist and remains latched.
+      tst   <abortFlag
+      lbne  EXIT_CLOSE_ALL_PATHS
+        endc
       lda   <playlistFlag
       beq  	EXIT_PRINT_COMPLETE_MSG  	; we werent playing from a playlist so we are done 
       ; ok we are using a playlist. search for another entry
@@ -3393,6 +3604,11 @@ LOAD_PLAYLIST_ENTRIES
       ldu   #8
       os9   I$Seek
       ldu 	<uRegImage
+        ifdef EXPERIMENTAL_PSG
+      lbcs  LOAD_PLAYLIST_ENTRIES_ERROR
+      tst   <abortFlag
+      lbne  LOAD_PLAYLIST_ENTRIES_ERROR
+        endc
 
       ; init some vars
       leay 	playlistBuffer,U 
@@ -3406,6 +3622,10 @@ LOAD_PLAYLIST_ENTRIES_NEXT
       ldy   #255 
       os9   I$ReadLn
       bcs   LOAD_PLAYLIST_ENTRIES_CHECK_FOR_ERROR
+        ifdef EXPERIMENTAL_PSG
+      tst   <abortFlag
+      bne   LOAD_PLAYLIST_ENTRIES_ERROR
+        endc
       cmpy  #1
       beq   LOAD_PLAYLIST_ENTRIES_NEXT   ; skip counter if line is empty (a single CR by itself)
       ; for now, ignore any .M3U info tags which are always prefixed with a '#'
