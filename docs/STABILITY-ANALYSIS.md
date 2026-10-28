@@ -57,42 +57,76 @@ the cause of the old reported reboots. Virtual hard disk access remains working
 in this MAME configuration. Restoring the prior slot only at playback exit is
 not sufficient for concurrent floppy access.
 
-## Uncommitted MPI transaction experiment
+## Experimental MPI transaction change
 
 A separate private build selects the PSG only for each register transaction,
 then restores the selection present on entry. Its save/select/write/restore
 sequence masks IRQ/FIRQ briefly; the measured `$F1`-to-`$FF` interval was
 17.879 microseconds in this MAME trace, excluding the mask instructions around
-it. This is an experiment, not an accepted patch: floppy transfer interrupt
-latency, competing MPI users, and all cleanup/error paths still require testing.
-It did not change any wait or delay constant. The experiment source and binary
-remain ignored under `emulator/images/stability-run/build/mpi-candidate*`;
-the binary SHA-256 is
+it. Floppy transfer interrupt latency, competing MPI users, and all
+cleanup/error paths still require more testing. No wait or delay constant was
+changed. The tested candidate was promoted into the experimental build;
+`build/cctplaymt` is byte-identical to the tested candidate. Its SHA-256 is
 `15de837a7b6ce900ebb75a9c7a641ffce98cfb2794970e69ea878370beb30b2f`.
 
 In one fresh boot, `/d1/stbutil` succeeded during playback, with 33 FDC
-commands and continued PSG writes observed. One genuinely nonresident
-`/d1/cctstop 3` then loaded, sent signal 3 to the verified player, and produced
-mixer silence (`07=3F`); the Shell returned and no reset notification occurred.
-This is **one** successful on-demand floppy stop, not the requested 20 cycles.
+commands and continued PSG writes observed. **Twenty on-demand floppy stops
+passed across three fresh boots**: one initial stop, ten in the second boot,
+and nine in the third. Each used a nonresident `cctstop`, verified the player
+PID and descriptor, captured its signal 3, FDC activity and final mixer silence
+(`07=3F`), and returned to Shell without a reset notification. The player was
+resident during the repeat series to avoid repeatedly loading its large module;
+`cctstop` was not. The 30-second and 120-second synthetic fixtures were stopped
+at various points. One additional short-fixture attempt was excluded because
+playback ended before the command arrived and the utility returned error 224;
+no signal was delivered. After another run, `/dd/cmds/dir /d1` listed the test
+floppy while PSG writes continued and a subsequent on-demand stop succeeded.
+
+In the third boot `mfree` reported 1,832 KiB after loading the player, both
+before and after the nine-stop series. This is an aggregate memory check, not a
+proof that every mapping and error path is leak-free. These counts are bounded
+tests, not universal proof, and do not explain the earlier reboot.
 
 A separate natural-completion test decoded 1,323,000 samples (30.000 seconds)
 from `synthetic30.vgm`. All 210 expected register/value pairs appeared in order,
 followed by `07=3F`, and the player exited. First register data to final mute
 was **29.372720 emulated seconds**, **2.091% fast**, compared with the prior
-checkpoint's 29.958991 seconds for the same fixture. The cause of this
-regression is not established; the runs have different instrumentation and
-conditions. The private MAME WAV contained a variable PSG-channel waveform
-during the fixture (roughly 8,148 PCM counts standard deviation in a one-second
-window after removing its DC mean), and was effectively constant after
-completion. The WAV header remains unfinished while MAME is running. Thus the
-candidate addresses the observed floppy symptom in one case, but its timing and
-stability are not validated and it was not promoted into the player.
+checkpoint's 29.958991 seconds for the same fixture. A fresh control
+boot with the checkpoint executable and the same host observer then measured
+**29.367771 seconds** (**2.107% fast**), also with all 210 pairs in order and a
+final mute. The candidate was approximately 4.949 ms longer than that matched
+control; these single runs do not show that the slot transaction caused the
+earlier difference. The difference from the prior measurement remains
+unexplained and requires repeated controlled runs. The private MAME WAV
+contained a variable PSG-channel waveform during the fixture (roughly 8,148
+PCM counts standard deviation in a one-second window after removing its DC
+mean), and was effectively constant after completion. The WAV header remains unfinished while MAME is running.
+
+A real Arkanoid VGM completed with all 266 register/value pairs in order:
+4.435463 seconds versus the decoded 4.430204 seconds (+0.119%). A natural
+real two-entry M3U completed with all 266 Ark1 and 820 Flicky pairs in order,
+including both mute operations. Ark1 measured 4.431187 seconds against
+4.430204 (+0.022%); Flicky measured 19.857142 seconds against 20.089977
+(-1.159%). Track durations use first PSG data to mute, adjusted by the nominal
+pre-first-write samples when applicable; they are not exact `$66` timestamps.
+The `TIMING_TRACE` marker was updated for slot restoration but has not been
+exercised in this run.
+
+**Stop during a playlist transition: NOT RUN.** Four attempts to type the
+on-demand command while the guest loaded the next floppy track lost keystrokes
+in natural-keyboard delivery; three submitted malformed commands and produced
+error 216, and the other was abandoned before submission. A host-paced retry
+also lost characters. No attempt sent a signal. These are automation failures,
+not passes or proof of a player failure. The separate static
+`abortFlag` playlist concern below remains unresolved.
 
 Evidence: `trace-candidate-play-floppy-complete.json`,
-`trace-candidate-ondemand-floppy-complete.json`,
-`trace-candidate-synthetic30.json` and `candidate.wav` in the ignored private
-run directory. The synthetic fixture SHA-256 is
+`trace-candidate-ondemand-floppy-complete.json`, `trace-repeat1-cycle*-end.json`,
+`trace-repeat2-cycle*-end.json`, `trace-repeat2-disk-dir.json`,
+`trace-repeat2-arkanoid-vgm.json`, `trace-repeat2-playlist-complete.json`,
+`trace-candidate-synthetic30.json`, `trace-control2-synthetic30.json` and
+`candidate.wav` in the ignored private run directory. The synthetic fixture
+SHA-256 is
 `b87c4bd79d2b36fa1654e88ae3454cd9de85de99ab72f0aef43ccf8c1d7e3840`.
 
 ## Ownership and signal audit
@@ -132,8 +166,8 @@ separate measurements; no delay constant was changed to hide this outlier.
 Capture and classify any actual recurrence of the reboot. Validate a bounded
 MPI selection/restore experiment under floppy load, with disk transfers,
 signal delivery, register order, audio, timing and all error exits checked.
-Repeat on-demand stops at different positions and playlist transitions across
-multiple clean boots; the requested 20-cycle stability target has not been
-met. Retest full register streams, duration, M3U and ordinary Shell/disk
-activity after any code correction. Do not treat one successful VHD stop as
-universal stability.
+Repeat stops during playlist transitions once natural-keyboard delivery can be
+made reliable; test interrupted loads, rollback and error cleanup. Investigate
+the differing timing-control results and verify IRQ/FIRQ latency under sustained
+floppy transfers. The 20-cycle series covers only the stated conditions and
+should not be treated as universal stability.

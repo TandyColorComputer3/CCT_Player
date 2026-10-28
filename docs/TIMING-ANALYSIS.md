@@ -1,5 +1,7 @@
 # CoCoPSG timing measurements
 
+This is the historical `d4f98b1` timing checkpoint. Later matched-control and storage results are in [STABILITY-ANALYSIS.md](STABILITY-ANALYSIS.md).
+
 **Run:** 2026-10-26, isolated MAME 0.289 `coco3h`, HD6309 native mode, 2 MB, NTSC EOU Level II, CoCoPSG in MPI slot 2. All timestamps below come from MAME `manager.machine.time`; they are emulated seconds, not host wall time. A separate pre-existing MAME instance and its mounted disks were left untouched.
 
 The production `cctplaymt` measured here is 8,988 bytes, CRC `$05B97E` Good. The original `cctplay` remains byte-identical to its rebuild (SHA-256 `eabe6b6f3910ebd1af557f64b02c1fb1e1802a3a07a1bf134016b1a4a6792f36`).

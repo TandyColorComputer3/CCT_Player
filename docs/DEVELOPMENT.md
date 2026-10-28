@@ -30,16 +30,15 @@ bash scripts/run-mame.sh psg
 ```
 The build produces the byte-identical baseline `build/cctplay`, experimental PSG player `build/cctplaymt`, end-marker diagnostic `build/ccttiming`, verbose loader diagnostic `build/cctplaydbg`, counter `build/cctcounter`, stop helper `build/cctstop`, and hardware and clock probes. The private test floppy contains those modules and `synthetic.vgm`; extra music paths passed to `stage-test-disk.sh` are copied only to the ignored private disk. Set `CCT_TEST_DISK` to an absolute path inside `emulator/images/` to stage a separate unmounted disk.
 
-At DECB's `OK` prompt enter `DOS`. After the 6309 EOU Shell loads, select the private test disk and preload the background commands:
+At DECB's `OK` prompt enter `DOS`. After the 6309 EOU Shell loads, select the private test disk for command lookup:
 ```text
 chx /d1
-load cctplaymt cctstop
 ```
 Start a supported PSG file with Shell's normal background operator:
 ```text
 cctplaymt -psg 2 /d1/synthetic.vgm &
 ```
-Shell prints the background PID as (for example) `&003`. To request the player's normal signal-driven cleanup rather than killing it fatally, run `cctstop 3`. Preloading avoids removable-disk command lookup while the player is loading from that same disk. The production `cctplaymt` is intentionally quiet after launch so its output cannot overwrite the returned Shell prompt; use `cctplaydbg` in the foreground for loader diagnostics.
+Shell prints the background PID as (for example) `&003`. To request the player's normal signal-driven cleanup rather than killing it fatally, run `cctstop 3`. Twenty on-demand floppy-loaded stop cycles passed under the conditions in [STABILITY-ANALYSIS.md](STABILITY-ANALYSIS.md); the earlier reported reboots and playlist-transition stop remain unresolved. The production `cctplaymt` is intentionally quiet after launch so its output cannot overwrite the returned Shell prompt; use `cctplaydbg` in the foreground for loader diagnostics.
 
 The original reference remains available as `load /d1/cctplay` followed by `cctplay -psg 2 /d1/synthetic.vgm`. The original remains foreground/frozen behavior and is not the multitasking command.
 

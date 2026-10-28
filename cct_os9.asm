@@ -1803,9 +1803,15 @@ PLAY_CHIP_YM2149_CCT
       leax  strPlayingFrozen,PCR
       lbsr  PRINT_STR_OS9
         ifdef EXPERIMENTAL_PSG
-      ; Select the PSG before reading its control register. Mark hardware as
-      ; claimed before any allocation call can fail, so every error restores
-      ; the prior MPI/PIA/PSG control state through the common cleanup path.
+      ; User context: save the current MPI selection and briefly select the
+      ; PSG to snapshot and set its control register. IRQ/FIRQ are masked only
+      ; across the bounded hardware transaction (under 100 HD6309 cycles);
+      ; no OS call occurs until the original selection and CC are restored.
+      ; Mark the PSG active before allocation so errors take normal cleanup.
+      pshs  CC
+      orcc  #$50
+      lda   >mpi_reg
+      pshs  A
       lda   <mpiPSG
       sta   >mpi_reg
       lbrn  PLAY_CHIP_YM2149
@@ -1814,6 +1820,11 @@ PLAY_CHIP_YM2149_CCT
       lbrn  PLAY_CHIP_YM2149
       lda   >psg_control_reg
       sta   psgPrevControl,U
+      lda   <psgClock
+      sta   >psg_control_reg
+      puls  A
+      sta   >mpi_reg
+      puls  CC
       lda   #1
       sta   psgActiveFlag,U
       clr   psgCommandDebt,U
@@ -1831,7 +1842,7 @@ PLAY_CHIP_YM2149_CCT
         endc
 
         ifdef EXPERIMENTAL_PSG
-      ; The experimental PSG slot is already selected above.
+      ; The experimental setup already configured and deselected the PSG.
         else
       ; check if user is using a mega mini MPI with selectable CART audio slot and toggle it if exists
       lda 	<oplDetectFlag
@@ -1851,10 +1862,12 @@ PLAY_CHIP_YM2149_NO_MMMPI
       lbrn  PLAY_CHIP_YM2149
       lbrn  PLAY_CHIP_YM2149 
 
-      ; setup CoCoPSG control register and merge in our correct clock speed setting 
-      clra 
-      ora  	<psgClock 
-      sta  	>psg_control_reg
+        ifndef EXPERIMENTAL_PSG
+      ; setup CoCoPSG control register and merge in our correct clock speed setting
+      clra
+      ora   <psgClock
+      sta   >psg_control_reg
+        endc
 
       ; enable coco PIA sound output 
       lda   <prevPIA
@@ -2075,14 +2088,20 @@ VGM_YM2149_WAIT_ABORTED_END
 
 VGM_YM2149_CHECK_FOR_LOOP
         ifdef TIMING_TRACE
-      ; Diagnostic build only: mark the decoded $66 command in MAME's
-      ; write trace. Register selection alone changes no PSG register value;
-      ; the normal loop or cleanup selects a register before its next write.
-      ; Preserve A and leave interrupts enabled; no OS call or shared data.
-      pshs  a
+      ; Diagnostic build only: select the PSG and mark decoded $66 without
+      ; changing a PSG value. Preserve A, CC and the live MPI slot; this is a
+      ; bounded user-context hardware transaction and makes no OS calls.
+      pshs  CC,A
+      orcc  #$50
+      lda   >mpi_reg
+      pshs  A
+      lda   <mpiPSG
+      sta   >mpi_reg
       lda   #$FE
       sta   >psg_ym_reg_select
-      puls  a
+      puls  A
+      sta   >mpi_reg
+      puls  CC,A
         endc
       lda   vgmLoopCount,U 
       bmi   VGM_YM2149_CHECK_FOR_LOOP_FOREVER
@@ -2339,14 +2358,26 @@ VGM_PSG_COARSE_WAIT_ERROR
       orcc  #1
       rts
 
-; Input A=YM register, B=value. One bounded register-select/data sequence;
-; no OS call and no interrupt masking. Other processes do not share this
-; selected PSG slot during the experiment.
+; User context: A=YM register, B=value; preserves D and CC, no OS calls.
+; Save the live MPI selection, briefly mask IRQ/FIRQ, select the PSG, write
+; the register/value pair, and restore the selection before restoring CC.
+; The bounded transaction is under 100 HD6309 cycles; it cannot sleep or do
+; I/O. This keeps the floppy controller selected outside the PSG transaction.
 VGM_PSG_WRITE_REG
+      pshs  CC,A,B
+      orcc  #$50
+      lda   >mpi_reg
+      pshs  A
+      lda   <mpiPSG
+      sta   >mpi_reg
+      lda   2,S
+      ldb   3,S
       sta   >psg_ym_reg_select
       lbrn  VGM_PSG_WRITE_REG
       stb   >psg_ym_data_port
-      rts
+      puls  A
+      sta   >mpi_reg
+      puls  CC,A,B,PC
 
 ; Release transient DAT mappings and the guard allocation before the normal
 ; F$DelRAM loop frees all VGM/CCT file blocks. Best-effort cleanup still runs
@@ -2493,7 +2524,13 @@ VGM_YM2149_END
       ldu   <uRegImage
 
       pshs 	CC   		; save current state of interrupts
-      orcc 	#$50 		; temporarily disable them when talking to hardware directly 
+      orcc  #$50               ; bounded shared hardware transaction
+        ifdef EXPERIMENTAL_PSG
+      lda   >mpi_reg
+      pshs  A
+      lda   <mpiPSG
+      sta   >mpi_reg
+        endc
       ; turn off tone and noise output in the mixer
       lda  	#$07
       sta  	>psg_ym_reg_select
@@ -2502,7 +2539,14 @@ VGM_YM2149_END
       lbrn  VGM_YM2149_END
       ora  	#%00111111 			; turn off both noise and tone output on A,B,C 
       sta   >psg_ym_data_port
-      puls 	CC  		; restore CC and initial state of interrupts
+        ifdef EXPERIMENTAL_PSG
+      lda   psgPrevControl,U
+      sta   >psg_control_reg
+      clr   psgActiveFlag,U
+      puls  A
+      sta   >mpi_reg
+        endc
+      puls  CC                 ; restore original interrupt state
       bra  	PLAY_DONE_RESET_STATES
 
 VGM_SN76489_END

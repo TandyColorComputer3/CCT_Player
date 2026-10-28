@@ -1,6 +1,6 @@
 # Experimental CoCoPSG process prototype
 
-**Status:** background CoCoPSG VGM/CCT/M3U playback, natural completion, and stop with a preloaded helper are demonstrated in isolated EOU MAME. The measured timing correction and its limitations are in [TIMING-ANALYSIS.md](TIMING-ANALYSIS.md). On-demand stop attempts caused guest reboots; their cause is unresolved. GMC, OPL, and loop-bearing-file coverage remain pending.
+**Status:** background CoCoPSG VGM/CCT/M3U playback, natural completion, and on-demand single-track stops have been exercised in isolated EOU MAME. The measured timing correction and its limitations are in [TIMING-ANALYSIS.md](TIMING-ANALYSIS.md); later storage and timing-control results are in [STABILITY-ANALYSIS.md](STABILITY-ANALYSIS.md). Earlier reported reboots remain unresolved and were not reproduced. Playlist-transition stop, GMC, OPL, and loop-bearing-file coverage remain pending.
 
 ## What changed
 
@@ -18,17 +18,17 @@ The player no longer holds IRQ/FIRQ masked for the experimental playback loop. O
 
 The experimental stream reader no longer changes `$FFA9`. It maps one allocated physical song block into an unallocated process DAT slot with `F$MapBlk`, uses its returned logical address, and removes it with `F$ClrBlk` before mapping the next page. A one-block guard allocation is mapped first; because EOU `F$MapBlk` maps from the top down, the stream page is placed below that guard. The guard and stream state live in the process data area. See the [EOU Technical Reference Manual, F$MapBlk](https://www.lcurtisboyle.com/nitros9/EOUDOCS/NitrOS-9_EOU_Level_2_Technical_Reference_Manual.pdf).
 
-The process continues to own its file paths, allocated song blocks, and signal intercept. The signal handler sets the existing `abortFlag` through the U local-storage pointer supplied to `F$Icpt`; it does not assume DP is valid on asynchronous signal entry. Experimental waits check the flag without scanning `$FF02/$FF00`. The player selects the requested PSG slot before saving its control register. The startup snapshot of MPI selection and `$FF23` PIA state is restored during cleanup; PSG output is silenced, mappings are cleared, and the guard block is released before song RAM is returned. Loader-owned paths are marked invalid immediately after `I$Close`, including between playlist entries.
+The process continues to own its file paths, allocated song blocks, and signal intercept. The signal handler sets the existing `abortFlag` through the U local-storage pointer supplied to `F$Icpt`; it does not assume DP is valid on asynchronous signal entry. Experimental waits check the flag without scanning `$FF02/$FF00`. The player briefly selects the requested PSG slot to save and configure its control register, then restores the current MPI selection. Each PSG register transaction similarly saves, selects and restores the live MPI slot in a short IRQ/FIRQ-masked section. Cleanup silences the PSG and restores its control register under the same protection; the startup MPI and `$FF23` PIA state are also restored, mappings are cleared, and the guard block is released before song RAM is returned. Loader-owned paths are marked invalid immediately after `I$Close`, including between playlist entries.
 
-Normal completion and `cctstop` signal cleanup with a preloaded helper have run successfully on EOU. The player stops PSG writes and leaves the Shell usable. On-demand helper loading has also coincided with guest reboots; that failure remains unresolved. Production `cctplaymt` is quiet after background launch so asynchronous metadata cannot overwrite the returned prompt; `cctplaydbg` remains the foreground diagnostic build.
+Normal completion and on-demand `cctstop` signal cleanup have run successfully on EOU, including twenty floppy-loaded stops across three private boots. The player stops PSG writes and leaves the Shell usable in those cases. Earlier on-demand helper loads coincided with reported guest reboots; those incidents remain unresolved. Production `cctplaymt` is quiet after background launch so asynchronous metadata cannot overwrite the returned prompt; `cctplaydbg` remains the foreground diagnostic build.
 
-MPI selection, `$FF23`, and the PSG are global hardware resources. This prototype has no OS-9 device lock or IPC ownership protocol. The controlled concurrency run used only the counter as the second process; simultaneous use by another audio or MPI program remains untested and unsupported by this prototype.
+MPI selection, `$FF23`, and the PSG are global hardware resources. This prototype has no OS-9 device lock or IPC ownership protocol. Concurrent floppy reads and command loads were exercised in MAME; simultaneous use by another audio or MPI program remains untested and unsupported by this prototype.
 
 ## Timing and expected load
 
-The final MAME trace measured a 30-second synthetic file at 29.959 seconds, the Arkanoid PSG VGM at an estimated 4.458 versus 4.430 seconds, and Flicky CCT at 19.964 versus 20.090 seconds. All recorded register sequences matched. The controlled 10- and 30-second fixtures ranged from −0.72% to +0.86% in this run. Full measurements and the initial-wait estimate are in [TIMING-ANALYSIS.md](TIMING-ANALYSIS.md).
+An earlier MAME trace measured a 30-second synthetic file at 29.959 seconds, the Arkanoid PSG VGM at an estimated 4.458 versus 4.430 seconds, and Flicky CCT at 19.964 versus 20.090 seconds. All recorded register sequences matched. The controlled 10- and 30-second fixtures ranged from −0.72% to +0.86% in this run. Full measurements and the initial-wait estimate are in [TIMING-ANALYSIS.md](TIMING-ANALYSIS.md).
 
-The correction is calibrated for the tested NTSC/HD6309 configuration and remains relative. One synthetic event was about 176 ms late even though its total duration was accurate. Decode CPU time, total CPU share, and scheduler wait time were not separately measured. `F$TPS` returned `E$UnkSvc` on this EOU boot; a true absolute-deadline scheduler still needs a verified monotonic time source. PAL, 6809, extreme event rates and other workloads are untested. The present evidence does not justify a driver or kernel change.
+A later matched control measured the checkpoint and MPI change at 29.368 and 29.373 seconds respectively for the same fixture; the discrepancy from the earlier run remains unexplained. The correction is calibrated for the tested NTSC/HD6309 configuration and remains relative. One synthetic event was about 176 ms late even though its total duration was accurate. Decode CPU time, total CPU share, and scheduler wait time were not separately measured. `F$TPS` returned `E$UnkSvc` on this EOU boot; a true absolute-deadline scheduler still needs a verified monotonic time source. PAL, 6809, extreme event rates and other workloads are untested. The present evidence does not justify a driver or kernel change.
 
 ## Build and static validation
 
@@ -45,8 +45,8 @@ The current successful build produced:
 | Module | Size | CRC | Header result |
 | --- | ---: | --- | --- |
 | Original `cctplay` | 8,756 bytes | `$7A98E7` | Program, 6809 object code, re-entrant, read-only |
-| Experimental `cctplaymt` | 8,988 bytes | `$05B97E` | Program, 6809 object code, re-entrant, read-only |
-| End-marker diagnostic `ccttiming` | 8,997 bytes | `$6F48CC` | Program, 6809 object code, re-entrant, read-only |
+| Experimental `cctplaymt` | 9,053 bytes | `$7AE209` | Program, 6809 object code, re-entrant, read-only |
+| End-marker diagnostic `ccttiming` | 9,079 bytes | `$3C0A9B` | Program, 6809 object code, re-entrant, read-only |
 | Counter `cctcount` | 91 bytes | `$86E3C1` | Program, 6809 object code, re-entrant, read-only |
 | Graceful stop `cctstop` | 143 bytes | `$077B9E` | Program, 6809 object code, re-entrant, read-only |
 | Clock probe `tpsprobe` | 140 bytes | `$2C9AF5` | Program, 6809 object code, re-entrant, read-only |
@@ -71,11 +71,10 @@ bash scripts/stage-test-disk.sh
 bash scripts/run-mame.sh psg
 ```
 
-At Disk BASIC's `OK` prompt, enter `DOS`. In the EOU Shell select the private command directory and preload the commands:
+At Disk BASIC's `OK` prompt, enter `DOS`. In the EOU Shell select the private command directory:
 
 ```text
 chx /d1
-load cctplaymt cctstop
 ```
 
 Run a file or playlist in the background:
@@ -114,9 +113,9 @@ These entries describe the earlier concurrent milestone and its builds. The late
 
 ## Known limits and next steps
 
-- Real VGM, two original CCT files, and a two-entry M3U load and play in the background. The measured tracks meet 1% total-duration accuracy in the latest run, but event jitter and on-demand stop failures remain open.
+- Real VGM, two original CCT files, and a two-entry M3U load and play in the background. The latest matched-control and real-track measurements include deviations above 1%; see [STABILITY-ANALYSIS.md](STABILITY-ANALYSIS.md).
 - Relative delay loops compensate for estimated command and sleep costs, but not observed interrupt, scheduler, or disk delays. Counter progress and total duration passed in the measured runs; the synthetic trace still showed substantial local lateness.
 - The current POC is PSG-only. GMC and OPL playback continue to use the original interrupt-masked routines in the byte-identical default build and are excluded from `cctplaymt` dispatch.
 - Loop-bearing files, bad files, GMC, OPL hardware, 6809, and 512 KB remain untested. Cross-page playback, normal cleanup, two-entry path cleanup, and signal stop have runtime coverage.
-- Further work should characterize event jitter and the on-demand stop failure before considering a different timing mechanism.
+- Further work should characterize event jitter, investigate the earlier reported reboots, and verify stops during playlist transitions before considering a different timing mechanism.
 - Rollback this experiment by reverting the prototype commit. The tracked original `cctplay` and baseline build remain intact.
