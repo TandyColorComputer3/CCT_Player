@@ -1,6 +1,6 @@
 # Experimental CoCoPSG process prototype
 
-**Status:** background CoCoPSG VGM/CCT/M3U playback, natural completion, and on-demand single-track stops have been exercised in isolated EOU MAME. The measured timing correction and its limitations are in [TIMING-ANALYSIS.md](TIMING-ANALYSIS.md); later storage and timing-control results are in [STABILITY-ANALYSIS.md](STABILITY-ANALYSIS.md). Earlier reported reboots remain unresolved and were not reproduced. Controlled stops across playlist transitions now pass; see [PLAYLIST-STOP-TIMING.md](PLAYLIST-STOP-TIMING.md). GMC, OPL, and loop-bearing-file coverage remain pending.
+**Status:** background CoCoPSG VGM/CCT/M3U playback, natural completion, and on-demand single-track stops have been exercised in isolated EOU MAME. The measured timing correction and its limitations are in [TIMING-ANALYSIS.md](TIMING-ANALYSIS.md); later storage and timing-control results are in [STABILITY-ANALYSIS.md](STABILITY-ANALYSIS.md). Earlier reported reboots remain unresolved and were not reproduced. Controlled stops across playlist transitions now pass; see [PLAYLIST-STOP-TIMING.md](PLAYLIST-STOP-TIMING.md). GMC, OPL, and real loop-bearing-file coverage remain pending; a generated looping VGM has passed.
 
 ## What changed
 
@@ -45,8 +45,8 @@ The current successful build produced:
 | Module | Size | CRC | Header result |
 | --- | ---: | --- | --- |
 | Original `cctplay` | 8,756 bytes | `$7A98E7` | Program, 6809 object code, re-entrant, read-only |
-| Experimental `cctplaymt` | 9,377 bytes | `$BF0B8C` | Program, 6809 object code, re-entrant, read-only |
-| End-marker diagnostic `ccttiming` | 9,411 bytes | `$D1C30D` | Program, 6809 object code, re-entrant, read-only |
+| Experimental `cctplaymt` | 9,381 bytes | `$4BB36C` | Program, 6809 object code, re-entrant, read-only |
+| End-marker diagnostic `ccttiming` | 9,415 bytes | `$1FF9D2` | Program, 6809 object code, re-entrant, read-only |
 | Counter `cctcount` | 91 bytes | `$86E3C1` | Program, 6809 object code, re-entrant, read-only |
 | Test supervisor `psgsuper` | 459 bytes | `$9B130F` | Program, 6809 object code, re-entrant, read-only |
 | Bounded workload `timeload` | 102 bytes | `$12274D` | Program, 6809 object code, re-entrant, read-only |
@@ -118,6 +118,6 @@ These entries describe the earlier concurrent milestone and its builds. The late
 - Real VGM, two original CCT files, and a two-entry M3U load and play in the background. The latest matched-control and real-track measurements include deviations above 1%; see [STABILITY-ANALYSIS.md](STABILITY-ANALYSIS.md).
 - Relative delay loops compensate for estimated command and sleep costs, but not observed interrupt, scheduler, or disk delays. Counter progress and total duration passed in the measured runs; the synthetic trace still showed substantial local lateness.
 - The current POC is PSG-only. GMC and OPL playback continue to use the original interrupt-masked routines in the byte-identical default build and are excluded from `cctplaymt` dispatch.
-- Loop-bearing files, bad files, GMC, OPL hardware, 6809, and 512 KB remain untested. Cross-page playback, normal cleanup, two-entry path cleanup, and signal stop have runtime coverage.
-- Further work should characterize event jitter, investigate the earlier reported reboots, and investigate the intermittent playlist gap before considering a different timing mechanism.
+- Real loop-bearing files, bad files, GMC, OPL hardware, 6809, and 512 KB remain untested; one generated looping VGM passed. Cross-page playback, normal cleanup, two-entry path cleanup, and signal stop have runtime coverage.
+- Further work should characterize event jitter, investigate the earlier reported reboots, and check for remaining timing anomalies before considering a different timing mechanism.
 - Rollback this experiment by reverting the prototype commit. The tracked original `cctplay` and baseline build remain intact.

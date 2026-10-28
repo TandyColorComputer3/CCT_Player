@@ -1301,6 +1301,12 @@ VGM_ERROR_PRINT_RESULT
 
 ; -------- CCT format file loader --------
 CCT_LOADER
+	ifdef EXPERIMENTAL_PSG
+      ; CCT has no VGM loop offset. Reset per-track loop state before the
+      ; decoder can see $66, including after a loop-bearing playlist entry.
+      ; Ordinary user context, no OS call or interrupt mask; clobbers CC.
+      clr   vgmLoopCount,U
+	endc
 	; point to header area to extract device settings and file info
       leax  vgmDataBuffer,U
       ; byte 34 is chip type - $01=OPL3, $02=OPL2, $03=YM2149/AY
