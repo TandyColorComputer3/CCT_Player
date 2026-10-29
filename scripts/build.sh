@@ -31,6 +31,12 @@ echo "Built loader diagnostic player $root/build/cctplaydbg"
   --list=build/cctcounter.lst --symbols -o build/cctcounter tools/cctcounter.asm
 "$assembler" --6309 --format=os9 --includedir="$root" \
   --list=build/timeload.lst --symbols -o build/timeload tools/timeload.asm
+"$assembler" --6309 --format=os9 --includedir="$root" \
+  --list=build/diskload.lst --symbols -o build/diskload tools/diskload.asm
+"$assembler" --6309 --format=os9 --includedir="$root" \
+  --list=build/diskbench.lst --symbols -o build/diskbench tools/diskbench.asm
+"$assembler" --6309 --format=os9 --includedir="$root" --define=REAL_BENCH=1 \
+  --list=build/diskreal.lst --symbols -o build/diskreal tools/diskbench.asm
 echo "Built OS-9 counter utility $root/build/cctcounter"
 "$assembler" --6309 --format=os9 --includedir="$root" \
   --list=build/psgprobe.lst --symbols -o build/psgprobe tools/psgprobe.asm
@@ -65,6 +71,9 @@ fi
 "$tool" ident build/cctplaydbg
 "$tool" ident build/cctcounter
 "$tool" ident build/timeload
+"$tool" ident build/diskload
+"$tool" ident build/diskbench
+"$tool" ident build/diskreal
 "$tool" ident build/psgprobe
 "$tool" ident build/cctstop
 "$tool" ident build/psgsuper
