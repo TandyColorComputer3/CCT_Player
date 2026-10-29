@@ -1,5 +1,7 @@
 *******************************************************************************
 * Bounded timing workload: 60 counter lines, then exit naturally.
+* LONG_WORKLOAD builds countlong: 230 lines with identical per-line work,
+* covering the five-stream clock-scheduler matrix without PID termination.
 * Ordinary OS-9 user process; same I$Write/F$Sleep pattern as cctcount.
 * U is process data, no signal handler, no IRQ mask, no hardware writes.
 * Each iteration writes one six-byte CR/LF record and sleeps 61 ticks; the
@@ -20,11 +22,19 @@ counterText     RMB   6
 remaining       RMB   1
 data_size       EQU   .
 
+        ifdef LONG_WORKLOAD
+moduleName      FCS   "countlong"
+        else
 moduleName      FCS   "timeload"
+        endc
         FCB   1              ; module edition byte follows the FCS name
 
 START_EXEC
+        ifdef LONG_WORKLOAD
+        lda   #230
+        else
         lda   #60
+        endc
         sta   remaining,U
         ldd   #$3030
         std   counterText,U

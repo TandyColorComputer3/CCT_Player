@@ -15,15 +15,19 @@ if [ -f cctplay ] && ! cmp -s cctplay build/cctplay; then
   echo "Baseline rebuild differs from the original cctplay binary." >&2
   exit 1
 fi
-"$assembler" --6309 --format=os9 --define=EXPERIMENTAL_PSG \
+"$assembler" --6309 --format=os9 --define=EXPERIMENTAL_PSG --includedir="$root" \
+  -o build/cctplaymt-relative cct_os9.asm
+"$assembler" --6309 --format=os9 --define=EXPERIMENTAL_PSG --define=CYCLE_BASELINE \
+  --includedir="$root" --list=build/cctcycle.lst --symbols -o build/cctcycle cct_os9.asm
+"$assembler" --6309 --format=os9 --define=EXPERIMENTAL_PSG --define=CLOCK_SCHEDULER \
   --includedir="$root" --list=build/cctplaymt.lst --symbols \
   -o build/cctplaymt cct_os9.asm
 echo "Built experimental CoCoPSG player $root/build/cctplaymt"
-"$assembler" --6309 --format=os9 --define=EXPERIMENTAL_PSG --define=TIMING_TRACE \
+"$assembler" --6309 --format=os9 --define=EXPERIMENTAL_PSG --define=CLOCK_SCHEDULER --define=TIMING_TRACE \
   --includedir="$root" --list=build/ccttiming.lst --symbols \
   -o build/ccttiming cct_os9.asm
 echo "Built PSG end-marker diagnostic $root/build/ccttiming"
-"$assembler" --6309 --format=os9 --define=EXPERIMENTAL_PSG --define=LOADER_TRACE \
+"$assembler" --6309 --format=os9 --define=EXPERIMENTAL_PSG --define=CLOCK_SCHEDULER --define=LOADER_TRACE \
   --includedir="$root" --list=build/cctplaydbg.lst --symbols \
   -o build/cctplaydbg cct_os9.asm
 echo "Built loader diagnostic player $root/build/cctplaydbg"
@@ -80,3 +84,22 @@ fi
 "$tool" ident build/tpsprobe
 "$tool" ident build/sleepprb
 "$tool" ident build/sigprb
+
+# Keep descriptor and driver in one physical 8 KB module block.
+for module in cctclock ctclock clockprobe; do
+  "$assembler" --6309 --format=os9 --includedir="$root" \
+    --list="build/$module.lst" --symbols -o "build/$module" "tools/$module.asm"
+  "$tool" ident "build/$module"
+done
+cat build/cctclock build/ctclock > build/clockpack
+"$tool" ident build/cctcycle
+
+for mode in IDLE COUNTER; do
+  if [[ "$mode" == IDLE ]]; then out=idlebench; else out=countbench; fi
+  "$assembler" --6309 --format=os9 --includedir="$root" --define="${mode}_BENCH" \
+    --list="build/$out.lst" --symbols -o "build/$out" tools/diskbench.asm
+  "$tool" ident "build/$out"
+done
+"$assembler" --6309 --format=os9 --includedir="$root" --define=LONG_WORKLOAD \
+  --list=build/countlong.lst --symbols -o build/countlong tools/timeload.asm
+"$tool" ident build/countlong

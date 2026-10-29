@@ -148,6 +148,14 @@ psgWaitOriginal   RMB   2
 psgWaitRetries    RMB   1
 psgCommandDebt    RMB   2
 psgWaitFraction   RMB   1
+        ifdef CLOCK_SCHEDULER
+clockError       RMB   1  ; first failed clock service, returned by F$Exit
+clockPath        RMB   1  ; signed path, -1 when unowned
+clockDeadline    RMB   4  ; whole tick deadline, wraps with clock
+clockFraction    RMB   2  ; exact VGM sample remainder, 0..tick-1
+clockTarget      RMB   4  ; ceiling-rounded deadline for current wait
+clockBurst       RMB   1  ; bounded catch-up commands before yielding
+        endc
         endc
 
 ; gd3 tag variables 
@@ -179,7 +187,11 @@ moduleName              FCS   "ccttiming"
 moduleName              FCS   "cctplaydbg"
         else
         ifdef EXPERIMENTAL_PSG
+        ifdef CYCLE_BASELINE
+moduleName              FCS   "cctcycle"
+        else
 moduleName              FCS 	"cctplaymt"
+        endc
         else
 moduleName              FCS 	"cctplay"
         endc
@@ -368,6 +380,11 @@ bin32dec10K 		FQB 	10000
 ; -----------------------------------------------------
 
 START_EXEC
+        ifdef CLOCK_SCHEDULER
+      clr   clockError,U
+      lda   #$FF
+      sta   clockPath,U
+        endc
 **************************************************************************************
 * Program code area 
 * RULE #1 - USE U TO REFERENCE ANY CHANGEABLE VARIABLES IN THE DATA AREA.
@@ -1963,6 +1980,10 @@ PSG_INIT_ABORT_BEFORE
       puls  CC,B               ; no hardware was touched; restore incoming CC
       lbra  EXIT_DEALLOCATE_RAM
 PSG_INIT_CONTINUE
+        ifdef CLOCK_SCHEDULER
+      lbsr  PSG_CLOCK_START
+      lbcs  VGM_YM2149_WAIT_ABORTED
+        endc
       clr   psgCommandDebt,U
       clr   psgCommandDebt+1,U
       clr   psgWaitFraction,U
@@ -2073,6 +2094,10 @@ VGM_YM2149_CMD_CHIP
       lbcs  UNEXPECTED_END_ERROR_EXIT
       ldb   ,Y+
       lbsr  VGM_PSG_WRITE_REG
+        ifdef CLOCK_SCHEDULER
+      lbsr  PSG_CLOCK_BUDGET
+      lbcs  VGM_YM2149_WAIT_ABORTED
+        else
       ; Charge six 44.1 kHz samples for decoding and output. Captures of
       ; consecutive writes measured about 114 microseconds per command;
       ; six samples also cover the bounded accounting work here. Saturate the
@@ -2084,6 +2109,7 @@ VGM_YM2149_CMD_CHIP
       ldd   #PSG_SAMPLES_PER_TICK
 VGM_PSG_STORE_DEBT
       std   psgCommandDebt,U
+        endc
       lbra  VGM_YM2149_NEXT_COMMAND
         else
 VGM_YM2149_CMD_CHIP
@@ -2136,6 +2162,11 @@ VGM_YM2149_CMD_WAIT_MANUAL_SKIP_2
         endc
         ifdef EXPERIMENTAL_PSG
 VGM_YM2149_WAIT_SAMPLES
+        ifdef CLOCK_SCHEDULER
+      lbsr  PSG_CLOCK_WAIT
+      lbcs  VGM_YM2149_WAIT_ABORTED
+      lbra  VGM_YM2149_NEXT_COMMAND
+        else
       ; Interruptible 44.1 kHz CPU-cycle delay. OS-9 tick IRQs may preempt this
       ; user process; their runtime appears as experimental event lateness.
       lbsr  VGM_PSG_APPLY_DEBT
@@ -2170,6 +2201,7 @@ VGM_YM2149_WAIT_FINE_LOOP
       subd  #1
       bne   VGM_YM2149_WAIT_FINE_LOOP
       lbra  VGM_YM2149_NEXT_COMMAND
+        endc
         else
 VGM_YM2149_WAIT_SAMPLES
       ; coco3 fast mode, 44.1khz vgm sample rate, is 40.58439909297052 cycles per sample 
@@ -2787,6 +2819,9 @@ PLAY_DONE_RESTORE_PIA
 EXIT_DEALLOCATE_RAM
       ; deallocate ram before exiting 
       ldu   <uRegImage
+        ifdef CLOCK_SCHEDULER
+      lbsr  PSG_CLOCK_CLOSE
+        endc
         ifdef EXPERIMENTAL_PSG
       lbsr  PSG_RELEASE_LOAD_MAPS
       lbcs  EXIT_CLOSE_ALL_PATHS ; do not free a possibly mapped block
@@ -2839,6 +2874,9 @@ EXIT_PRINT_COMPLETE_MSG
       leax  strPlayComplete,PCR
       lbsr  PRINT_STR_OS9
 EXIT_CLOSE_ALL_PATHS
+        ifdef CLOCK_SCHEDULER
+      lbsr  PSG_CLOCK_CLOSE
+        endc
       ; check each path if they are open and close each if they are  
       lda   <playlistFilePath
       bmi   EXIT_CLOSE_ALL_PATHS_SKIP_PLAYLIST
@@ -2871,11 +2909,18 @@ EXIT_TO_OS9
 EXIT_TO_OS9_SKIP_KEY_CLEAR
 	endc
       clrb 
+        ifdef CLOCK_SCHEDULER
+      ldb   clockError,U
+        endc
       os9   F$Exit
 
 ********************************************************************
 * Start of Sub-routine area 
 ********************************************************************
+        ifdef CLOCK_SCHEDULER
+        include tools/psg-clock-scheduler.inc
+        endc
+
 ; ABORT signal handler
 SIGNAL_HANDLER
       cmpb  #S$Intrpt

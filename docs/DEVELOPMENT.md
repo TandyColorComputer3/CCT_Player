@@ -28,11 +28,12 @@ bash scripts/build.sh
 bash scripts/stage-test-disk.sh
 bash scripts/run-mame.sh psg
 ```
-The build produces the byte-identical baseline `build/cctplay`, experimental PSG player `build/cctplaymt`, end-marker diagnostic `build/ccttiming`, verbose loader diagnostic `build/cctplaydbg`, counter `build/cctcounter`, stop helper `build/cctstop`, and hardware and clock probes. The private test floppy contains those modules and `synthetic.vgm`; extra music paths passed to `stage-test-disk.sh` are copied only to the ignored private disk. Set `CCT_TEST_DISK` to an absolute path inside `emulator/images/` to stage a separate unmounted disk.
+The build produces the byte-identical baseline `build/cctplay`, experimental PSG player `build/cctplaymt`, end-marker diagnostic `build/ccttiming`, verbose loader diagnostic `build/cctplaydbg`, counter `build/cctcounter`, stop helper `build/cctstop`, and hardware and clock probes. The player now requires the optional `clockpack` (CCTClock driver and ctclock descriptor in one allocation). `build/cctplaymt-relative` reproduces the exact `6eb11eb` relative-delay binary, and `cctcycle` makes that engine available under another module name. See [CLOCK-SCHEDULER-DESIGN.md](CLOCK-SCHEDULER-DESIGN.md) for measurements and the remaining floppy timing limitation. The private test floppy contains those modules and `synthetic.vgm`; extra music paths passed to `stage-test-disk.sh` are copied only to the ignored private disk. Set `CCT_TEST_DISK` to an absolute path inside `emulator/images/` to stage a separate unmounted disk.
 
 At DECB's `OK` prompt enter `DOS`. After the 6309 EOU Shell loads, select the private test disk for command lookup:
 ```text
 chx /d1
+load clockpack
 ```
 Start a supported PSG file with Shell's normal background operator:
 ```text
@@ -56,7 +57,7 @@ On macOS, `run-mame.sh` and `stage-test-disk.sh` use `lsof` to stop when one of 
 - `cct_os9.asm`: Todd Wallace's version 1.6 source with conditional experimental PSG code; the default build preserves the original binary. `os9.d`, `rbf.d`, `scf.d` are the original includes.
 - `cctplay`: original prebuilt binary, useful for baseline verification
 - `build/cctplay`: byte-identical baseline rebuild; `build/cctplay.lst`: assembler listing
-- `build/cctplaymt`: experimental CoCoPSG process-timed module
+- `build/cctplaymt`: experimental CoCoPSG tick-deadline module; requires `clockpack`
 - `tools/cctcounter.asm`: independent counter process (requests 61 ticks to sleep 60 ticks, about one second at 60 Hz NTSC)
 - `tools/tpsprobe.asm`: prints the read-only `F$TPS` result and marks errors with `TPS!`
 - `tools/sleepprobe.asm`, `tools/signal-sleepprobe.asm`: select-port markers for normal and signal-interrupted `F$Sleep` measurements
@@ -65,6 +66,10 @@ On macOS, `run-mame.sh` and `stage-test-disk.sh` use `lsof` to stop when one of 
 - `tools/psgsuper.asm`: forks a player, signals only its returned child PID, and collects its exit status for transition tests
 - `tools/timeload.asm`: bounded 60-line counter workload for repeatable timing tests
 - `tools/diskload.asm`, `tools/diskbench.asm`: bounded read-only floppy workload and guest supervisors for repeated timing tests
+- `tools/cctclock.asm`, `tools/ctclock.asm`: optional atomic tick clock, packed together as `clockpack`; no boot-image changes
+- `tools/psg-clock-scheduler.inc`: elapsed tick deadlines and retained sample fractions in ordinary player context
+- `tools/clockprobe.asm`: independent before/after tick snapshots for clock-loss measurements
+- `idlebench`, `countbench`, `countlong`: five-track supervisors and extended counter workload built from the existing test sources
 - `scripts/summarize-psg-repeats.py`: verify PSG sequences and summarize timing errors from MAME observer captures
 - `docs/TIMING-WORKLOAD-BASELINE.md`: repeated idle, counter and floppy measurements and scheduler evaluation
 - `docs/PLAYLIST-STOP-TIMING.md`: stop-phase evidence, MPI audit, matched timing measurements and unresolved limitations

@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import runpy
 import statistics
 from pathlib import Path
@@ -73,11 +74,16 @@ def main() -> None:
                     local.append(segment[i][2] - segment[i - 1][2] - delta)
                 accumulated.append(segment[i][2] - start -
                                    (writes[i]["sample"] - writes[0]["sample"]) / 44100)
-            rows.append({"capture": str(capture), "first_to_mute_seconds": duration,
+            rows.append({"capture": str(capture), "first_write_seconds": start,
+                         "final_mute_seconds": mute, "first_to_mute_seconds": duration,
                          "estimated_full_seconds": estimate,
                          "error_percent": 100 * (estimate / expected_duration - 1),
                          "max_local_lateness_seconds": max(local) if local else None,
                          "max_accumulated_lateness_seconds": max(accumulated) if accumulated else None,
+                         "min_accumulated_error_seconds": min(accumulated) if accumulated else None,
+                         "median_accumulated_error_seconds": statistics.median(accumulated) if accumulated else None,
+                         "p95_absolute_event_error_seconds": sorted(map(abs, accumulated))[
+                             math.ceil(.95 * len(accumulated)) - 1] if accumulated else None,
                          "fdc_commands_during_playback": sum(
                              e.get("kind") == "fdc-command" and start <= e["seconds"] <= mute
                              for e in events),

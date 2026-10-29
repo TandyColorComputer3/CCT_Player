@@ -1,6 +1,6 @@
 # CCT_Player multitasking design
 
-**Status:** this is the original architecture investigation. Background CoCoPSG playback and process-timing measurements have since run in isolated EOU MAME; see [PSG-PROTOTYPE.md](PSG-PROTOTYPE.md) and [TIMING-ANALYSIS.md](TIMING-ANALYSIS.md). The current scope is a standalone player, and no driver or general audio service is being implemented.
+**Status:** this is the original architecture investigation. Background CoCoPSG playback and process-timing measurements have since run in isolated EOU MAME; see [PSG-PROTOTYPE.md](PSG-PROTOTYPE.md) and [TIMING-ANALYSIS.md](TIMING-ANALYSIS.md). The later [clock scheduler prototype](CLOCK-SCHEDULER-DESIGN.md) adds an optional atomic tick driver for the standalone player. It does not implement an audio service or scheduled register output in IRQ context.
 
 ## Current source findings
 

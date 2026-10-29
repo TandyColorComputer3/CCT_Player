@@ -59,11 +59,14 @@ if [ ! -f "$experimental" ] || [ ! -f "$timing" ] || [ ! -f "$diagnostic" ] || [
   echo "Missing experiment artifacts. Run bash scripts/build.sh" >&2
   exit 1
 fi
+for extra in clockpack clockprobe cctcycle idlebench countbench countlong; do
+  [[ -f "$root/build/$extra" ]] || { echo "Missing build/$extra; run scripts/build.sh" >&2; exit 1; }
+done
 mkdir -p "$(dirname "$img")"
 echo "Recreating PRIVATE stage disk (not the EOU boot or VHD): $img"
 rm -f "$img"
 "$tool" format -ds -t40 -e -nCCTTEST "$img"
-for entry in "cctplay:$binary" "cctplaymt:$experimental" "ccttiming:$timing" "cctplaydbg:$diagnostic" "cctcount:$counter" "timeload:$timeload" "diskload:$diskload" "diskbench:$diskbench" "diskreal:$diskreal" "psgprobe:$probe" "tpsprobe:$clockprobe" "sleepprb:$sleep_probe" "sigprb:$signal_probe" "cctstop:$stopper" "psgsuper:$supervisor"; do
+for entry in "idlebench:$root/build/idlebench" "countbench:$root/build/countbench" "countlong:$root/build/countlong" "clockpack:$root/build/clockpack" "clkprobe:$root/build/clockprobe" "cctcycle:$root/build/cctcycle" "cctplay:$binary" "cctplaymt:$experimental" "ccttiming:$timing" "cctplaydbg:$diagnostic" "cctcount:$counter" "timeload:$timeload" "diskload:$diskload" "diskbench:$diskbench" "diskreal:$diskreal" "psgprobe:$probe" "tpsprobe:$clockprobe" "sleepprb:$sleep_probe" "sigprb:$signal_probe" "cctstop:$stopper" "psgsuper:$supervisor"; do
   name="${entry%%:*}"
   module="${entry#*:}"
   "$tool" copy "$module" "$img,$name"

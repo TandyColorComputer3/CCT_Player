@@ -1,6 +1,8 @@
 *******************************************************************************
 * Bounded baseline supervisor: start diskload, then run synthetic30 five times.
 * REAL_BENCH builds diskreal, which runs Arkanoid VGM, Ark1 CCT, Flicky CCT.
+* IDLE_BENCH omits the workload child; COUNTER_BENCH uses countlong, the same
+* counter cadence as timeload extended to cover all five sequential players.
 * User process; no signal handling, direct device access, or interrupt masks.
 * F$Fork copies each CR-terminated parameter area; A returns the child PID.
 * F$Wait returns a child PID in A and its exit status in B. Each player is
@@ -20,10 +22,22 @@ data_size EQU .
         ifdef REAL_BENCH
 module_name FCS "diskreal"
         else
+        ifdef IDLE_BENCH
+module_name FCS "idlebench"
+        else
+        ifdef COUNTER_BENCH
+module_name FCS "countbench"
+        else
 module_name FCS "diskbench"
         endc
+        endc
+        endc
         FCB 1
+        ifdef COUNTER_BENCH
+disk_name FCS "countlong"
+        else
 disk_name FCS "diskload"
+        endc
 player_name FCS "cctplaymt"
 disk_params FCC "/d1/ark1.cct"
         FCB $0d
@@ -49,6 +63,7 @@ msg_error FCC "DISKBENCH ERROR"
         FCB $0d
 msg_error_end EQU *
 start
+        ifndef IDLE_BENCH
         pshs U
         leau disk_params,PCR
         leax disk_name,PCR
@@ -59,6 +74,7 @@ start
         puls CC,U
         bcs fail
         sta disk_pid,U
+        endc
         ifdef REAL_BENCH
         lda #3
         else
@@ -104,12 +120,14 @@ real_ready
         bne fail
         dec remaining,U
         bne next_player
+        ifndef IDLE_BENCH
         os9 F$Wait
         bcs fail
         cmpa disk_pid,U
         bne fail
         tstb
         bne fail
+        endc
         leax msg_ok,PCR
         ldy #msg_ok_end-msg_ok
         lda #1
