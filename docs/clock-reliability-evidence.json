@@ -1,0 +1,259 @@
+{
+  "checkpoint": "45217eb",
+  "date": "2026-10-31",
+  "notes": [
+    "Raw evidence remains ignored and private; filenames and hashes identify local artifacts.",
+    "busy-10us.json overflowed the initial event cap and is rejected. Use busy-10us-complete.json.",
+    "playlist.json and cct-restart-background.json are incomplete timing windows; full reruns are playlist-full.json and cct-restart-full.json.",
+    "loop-stop.json completed naturally without infinite-loop selection; signal-stop evidence is infinite-stop.json.",
+    "Observer evolved during investigation: initial idle/periodic captures omit clock-call or MPI taps; earlier process-owner fields lack descriptor validation. See the report.",
+    "WAV is objective signal evidence only; human listening is NOT RUN."
+  ],
+  "files": [
+    {
+      "path": "build/clock-regress/loop.vgm",
+      "bytes": 150,
+      "sha256": "5725ac75f9f0e0ee8d1ec53a6803c21dc4338d7e2a5b4748669d5c3ca810f226"
+    },
+    {
+      "path": "build/reliability-build.log",
+      "bytes": 7301,
+      "sha256": "796abd08cead04692e9ae17934b51df045d55dbdde07ace29c6d66551fb49bdc"
+    },
+    {
+      "path": "build/synthetic-30s.vgm",
+      "bytes": 2559,
+      "sha256": "b87c4bd79d2b36fa1654e88ae3454cd9de85de99ab72f0aef43ccf8c1d7e3840"
+    },
+    {
+      "path": "build/timing-fixtures/long30.vgm",
+      "bytes": 324,
+      "sha256": "718916a50367252960fd01d9553547da1a03013a4802cef42b7e2eca374dc559"
+    },
+    {
+      "path": "emulator/images/reliability/launch.sh",
+      "bytes": 739,
+      "sha256": "b957a544e5a21d50e113fc09d4549bdf45c5a99ac73cb39826ecbb410e8f05d1"
+    },
+    {
+      "path": "emulator/images/reliability/logs/busy-10us-complete.json",
+      "bytes": 79969250,
+      "sha256": "d0d6e630684bd36c8d62f50667de81c1371b7980ec7ca3addc1ec2786544ebcd"
+    },
+    {
+      "path": "emulator/images/reliability/logs/busy-10us.json",
+      "bytes": 59372786,
+      "sha256": "0d3ea53cb7019dcbdc29fce72997e746238210d8af77cfccdbf20a75dc9fe5a1"
+    },
+    {
+      "path": "emulator/images/reliability/logs/cct-restart-background.json",
+      "bytes": 5303749,
+      "sha256": "49855217cec4c69792b277963707c7210cd815cd75b4693bd6b51021f211cf60"
+    },
+    {
+      "path": "emulator/images/reliability/logs/cct-restart-full.json",
+      "bytes": 6617444,
+      "sha256": "bf875adf730058d35501124e92a1470bff54a140c72628a4d4a6c43ad0c4a567"
+    },
+    {
+      "path": "emulator/images/reliability/logs/counter-100us.json",
+      "bytes": 7787983,
+      "sha256": "c49dd30f6985204a02c45d8c68163d3bc95fbe18b7e4e373147d575c521ff848"
+    },
+    {
+      "path": "emulator/images/reliability/logs/idle-10us.json",
+      "bytes": 10618442,
+      "sha256": "2669bf9fa904125cc5de69113d748bce68fc9d751f1fefa87dea4d48ff70b11f"
+    },
+    {
+      "path": "emulator/images/reliability/logs/idle-taps-only.json",
+      "bytes": 46770418,
+      "sha256": "72532f80f77319ef2687d9054367260bdb957a18e3282134a117a889994ee851"
+    },
+    {
+      "path": "emulator/images/reliability/logs/infinite-stop.json",
+      "bytes": 4512247,
+      "sha256": "96a7a8183a6a3d821889153874280349ef33d63aeea725970bbab68f8e26e3ec"
+    },
+    {
+      "path": "emulator/images/reliability/logs/long-base-100us.json",
+      "bytes": 5784458,
+      "sha256": "a80b3f38558ac2313caf8a1ac29db4de167adbe21e9b5819d6142f12f86cc1ec"
+    },
+    {
+      "path": "emulator/images/reliability/logs/long-park-100us.json",
+      "bytes": 3441113,
+      "sha256": "9eddda274ff8b7cbfaed4c950ea9954719df064adcf5adc1280e2838bbaaed2a"
+    },
+    {
+      "path": "emulator/images/reliability/logs/loop-stop.json",
+      "bytes": 4903075,
+      "sha256": "0dee2a1f399084a640d5e8ca38e0588f28c9c4a1c6a543f790cfe5761c4cf562"
+    },
+    {
+      "path": "emulator/images/reliability/logs/ordinary-commands.json",
+      "bytes": 7123686,
+      "sha256": "77338bdb1e4e8b90206a1df1907abaf6b14f325e5f30714d5d1d397b09a90a32"
+    },
+    {
+      "path": "emulator/images/reliability/logs/ordinary-dir-floppy.json",
+      "bytes": 7472969,
+      "sha256": "76b1435fa0b68832db12c3c1cf04162652a6c861d903e1703cb26c1b623bac3f"
+    },
+    {
+      "path": "emulator/images/reliability/logs/ordinary-dir-vhd.json",
+      "bytes": 7572676,
+      "sha256": "51a1c66fa6754986beac8919ae4ec69ce454d514e602aba20339c1d3c2204796"
+    },
+    {
+      "path": "emulator/images/reliability/logs/ordinary-resident.json",
+      "bytes": 7249308,
+      "sha256": "f47bcb649dab7bee85e04266882d6f07fe151bc58a5681721e3fc25dc09262b1"
+    },
+    {
+      "path": "emulator/images/reliability/logs/ordinary-smallread-vhd.json",
+      "bytes": 7270225,
+      "sha256": "4fc2157c48a516739501bf4ab2468dadea08679eb85b55ae692fc5ec96075006"
+    },
+    {
+      "path": "emulator/images/reliability/logs/periodic-10us.json",
+      "bytes": 30351497,
+      "sha256": "72a40f4884f5cfb7f1fecdee6da272f2a50e62e8c73f4e998b24243864fed18f"
+    },
+    {
+      "path": "emulator/images/reliability/logs/playlist-complete.wav",
+      "bytes": 44259884,
+      "sha256": "abbd0e1c90be5ed0d85abc97966c2c5817c111da551443f8cb961193f21259b0"
+    },
+    {
+      "path": "emulator/images/reliability/logs/playlist-full.json",
+      "bytes": 10335509,
+      "sha256": "786283cf37e582869d3fcce141207a7fc177c9a377501cff8b0df5289b118aad"
+    },
+    {
+      "path": "emulator/images/reliability/logs/playlist.json",
+      "bytes": 6049584,
+      "sha256": "15607b9f83bfbcbd5665fe9555d7836cd08caa9018e082c6bb8c0b78c4ea540e"
+    },
+    {
+      "path": "emulator/images/reliability/logs/playlist.wav",
+      "bytes": 21542444,
+      "sha256": "57be0d8282e6101edf567e9da0c1980feca81e7fb0ca81397ebf987554e8679f"
+    },
+    {
+      "path": "emulator/images/reliability/logs/qualification.json",
+      "bytes": 88808,
+      "sha256": "ed549adc02393fa8062a55043dd9a16dbc9a01aa8a63e24439e92a7a7e66478e"
+    },
+    {
+      "path": "emulator/images/reliability/mcp/bridge-host.js",
+      "bytes": 1834,
+      "sha256": "8cb2e0a18dd7c59feb193f1983b42f8766e8685d18157bb89d0b449d74c6880f"
+    },
+    {
+      "path": "emulator/images/reliability/mcp/scripts/bridge.lua",
+      "bytes": 27030,
+      "sha256": "9e782ceb90b07319cc34d2c1ff7f1daee73a6c409ab1ca07f36d66a072757b3e"
+    },
+    {
+      "path": "emulator/images/reliability/mcp/scripts/m11i3_capture_addon.lua",
+      "bytes": 6708,
+      "sha256": "f7bc6723c3492ae3fda28ef502ccfc321ebf2e86a8f0e240850febfaf114ce43"
+    },
+    {
+      "path": "emulator/images/reliability/mcp/scripts/stability-observer.lua",
+      "bytes": 10082,
+      "sha256": "41940648e70cab683405b7ef11176fb775a971b1423e382b92329cfbc7f74390"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/busy-complete.png",
+      "bytes": 7111,
+      "sha256": "e2e06514d7bf116ca8649f565969b99401ccb10f6d3c80ceb22748ad6e3b1f3a"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/busy-status.png",
+      "bytes": 4484,
+      "sha256": "7f7ee531f9d7677eb764970b061472c42cd5e169b5ca19eaff4d4b9a2abc4418"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/commands.png",
+      "bytes": 4257,
+      "sha256": "c06e81894d676359165036bfb4d189e669a9e76fe2e2b6e25dc6dc9638829446"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/counter-complete.png",
+      "bytes": 1974,
+      "sha256": "198bfb85e07ce485a761b351986c39fa37badca17a0aad7d25ac26d4af7f1ff2"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/dir-floppy.png",
+      "bytes": 7221,
+      "sha256": "284c1f85d5edbf3e438be63f9ae9cf6bc6ec75cb4112de755292ae0d31a419f0"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/dir-vhd.png",
+      "bytes": 6456,
+      "sha256": "1fd02c30c2591a0e8eda532bbbbca1b5e51c860bec0ddd466f434d5a61f63460"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/loop-pid.png",
+      "bytes": 4252,
+      "sha256": "386c8c31e2b12bb658c057ed8cff746b83c49763a5389678b0954fb0880407db"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/mfree-after.png",
+      "bytes": 4026,
+      "sha256": "95dc053d37c67e845c521484802beba968366023680374eead3ff924b7753cc2"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/mfree-before.png",
+      "bytes": 4818,
+      "sha256": "ecc66cd7354797411b0719c61d45f3aa60d4aef1dff56defc58c4984822fe9de"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/playlist-complete.png",
+      "bytes": 3040,
+      "sha256": "57dcf98f1c3e33227a6ea289e38dd4d1db3fb57d267f6d22ab9244e40a86e322"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/preload.png",
+      "bytes": 6008,
+      "sha256": "1a5eeb5dbe72c960d5e27ce867a6e413fc474c529278556c6649bd5cbc4e07c6"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/resident.png",
+      "bytes": 6007,
+      "sha256": "ec12fa4ea5e5207e4188f54c2e8806171c629852e5729c83d3fce9c9da89f405"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/restart-full.png",
+      "bytes": 4439,
+      "sha256": "04de6aab4338b974b89c886bfe27b96a7de7a7fab280f280c6b91ab979b5ff92"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/restart.png",
+      "bytes": 4126,
+      "sha256": "9c94c53dbc58cab9e545a7f91b283d0450745aa2c820012b1212f51a5823d0e7"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/smallread-vhd.png",
+      "bytes": 6124,
+      "sha256": "c35466ecd05e7a6ae103f6e4762c7e2944a58eb3117be6547f4d5336b825c39a"
+    },
+    {
+      "path": "scripts/analyze-clock-reliability.py",
+      "bytes": 8352,
+      "sha256": "3e1003b0453982c53465b02b47a5989cec0de4ab2dc4494da960642741fb1c0b"
+    },
+    {
+      "path": "scripts/test-clock-reliability.py",
+      "bytes": 3457,
+      "sha256": "74cdf3027238cf737b67feb3fad76d104e86a26e30d5a68e8c2e9fec2d0d224c"
+    },
+    {
+      "path": "tools/reliability-observer.lua",
+      "bytes": 7088,
+      "sha256": "3e27d112341ad048d79477f33d8dbe6db5eacb8497e6a7e7965f45ba3e86db96"
+    }
+  ]
+}

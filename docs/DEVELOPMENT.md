@@ -99,3 +99,12 @@ On macOS, `run-mame.sh` and `stage-test-disk.sh` use `lsof` to stop when one of 
 MAME natural-keyboard automation posts a complete string much faster than a person types. During private floppy I/O, the guest can miss injected characters even though it accepts character-paced input. Treat a mangled automated command as an automation limitation and retain the screenshot; do not attribute Shell `Error #216` to the player unless the full command is visible and intact.
 
 **Do not confuse an assembly that succeeds or an emulator that boots with a proven multitasking player.**
+
+## Clock reliability investigation
+
+See [CLOCK-RELIABILITY.md](CLOCK-RELIABILITY.md) for generated-versus-serviced
+video counts, sampled HALT/mask attribution, ordinary Shell workloads,
+CPU-residency limits and the physical CoCoSDC/Mega Mini test procedure.
+The host-only `tools/reliability-observer.lua` and
+`scripts/analyze-clock-reliability.py` do not change guest scheduling.
+`cctpark` remains opt-in; command-loading jitter and floppy clock loss remain.
