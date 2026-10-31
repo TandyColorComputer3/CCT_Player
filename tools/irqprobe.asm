@@ -13,6 +13,9 @@ StopReq rmb 1
 Cursor  rmb 2
 Remain  rmb 2
 MemSize equ .
+        ifdef IRQ_CUSTOM
+Name    fcs "irqdense"
+        else
         ifdef IRQ_BURST
 Name    fcs "irqburst"
         else
@@ -26,8 +29,13 @@ Name    fcs "irqprobe"
         endc
         endc
         endc
+        endc
         fcb 1
+        ifdef IRQ_STREAM_TEST
+Device  fcc "/psgs"
+        else
 Device  fcc "/psgq"
+        endc
         fcb 13
 Message fcc "IRQPROBE COMPLETE"
         fcb 13
@@ -100,6 +108,9 @@ Intercept
         inc StopReq,u
         rti
 Events
+        ifdef IRQ_CUSTOM
+        include build/irq-dense.inc
+        else
         ifdef IRQ_BURST
         include build/irq-burst.inc
         else
@@ -110,6 +121,7 @@ Events
         include build/irq-over.inc
         else
         include build/irq-events.inc
+        endc
         endc
         endc
         endc

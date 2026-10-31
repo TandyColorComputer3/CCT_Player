@@ -6,8 +6,13 @@
 ; $81 starts preloaded stream; $82 stops/mutes. GetStat $80: X=state,
 ; Y=remaining records; $81: X=over-budget ticks,Y=underruns.
 ; States 0=loading,1=running,2=complete,3=underrun,4=stopped.
-; IRQ consumes <=8 PSG writes per tick, retains overflow for the next tick.
+; Default IRQ consumes <=8 PSG writes/tick; diagnostic overrides are explicit.
+; Overflow stays queued for the next tick.
 ; No OS calls, process pointers, allocation, parser or wait in IRQ context.
+; Budget override is diagnostic only; the ordinary prototype remains eight.
+        ifndef IRQ_BUDGET
+IRQ_BUDGET equ 8
+        endc
 H6309 equ 1
         include os9.d
         include scf.d
@@ -203,7 +208,7 @@ StoreY  std R$Y,y
         puls cc
         lbra OK
 ; IRQ entry U=driver storage, system map installed by kernel poll dispatcher.
-; Budget is eight register/value transactions, not eight unbounded groups.
+; Budget counts register/value transactions, not unbounded groups.
 ; Handler wall time is measured externally before accepting its budget.
 IRQ     lda #$80
         sta Packet+Vi.Stat,u
@@ -213,7 +218,7 @@ IRQ     lda #$80
         ldd Ticks,u
         addd #1
         std Ticks,u
-        lda #8
+        lda #IRQ_BUDGET
         sta Limit,u
 Next    ldd Count,u
         beq Underrun

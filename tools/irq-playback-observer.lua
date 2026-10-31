@@ -27,11 +27,11 @@ return function(commands,array,encode)
  end
  commands.irq_inspect=inspect
  commands.irq_capture=function(p)
-  assert(not active);assert(p.duration>0 and p.duration<=180)
+  assert(not active);assert(p.duration>0 and p.duration<=300)
   assert(p.path:match('^emulator/images/reliability/logs/[%w_-]+%.json$'))
   local initial=inspect(p);local base=initial.base;local events={};local taps={};local drops=0;local start=m.time:as_double();local inside=nil
   local function emit(kind,e) e=e or {};e.kind=kind;e.seconds=m.time:as_double();if #events<100000 then events[#events+1]=e else drops=drops+1 end end
-  local function state(u) return {u=u,ticks=sw(u+p.ticks),state=sb(u+p.state),count=sw(u+p.count),budgets=sw(u+p.budgets),underruns=sw(u+p.unders),owner=sw(u+p.owner)} end
+  local function state(u) return {u=u,ticks=sw(u+p.ticks),state=sb(u+p.state),count=sw(u+p.count),head=sb(u+p.count+2),tail=sb(u+p.count+3),budgets=sw(u+p.budgets),underruns=sw(u+p.unders),owner=sw(u+p.owner)} end
   local function hook(off,fn)
    local a=base+off
    taps[#taps+1]=mem:install_read_tap(a,a,'irq-probe-'..off,function(addr,d)
@@ -53,4 +53,5 @@ return function(commands,array,encode)
  end
  commands.irq_capture_status=function() return {active=active} end
  dofile("tools/irq-workloads.lua")(commands,array,encode)
+ dofile("tools/irq-density-workload.lua")(commands,array,encode)
 end
