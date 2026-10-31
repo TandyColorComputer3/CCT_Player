@@ -190,7 +190,11 @@ moduleName              FCS   "cctplaydbg"
         ifdef CYCLE_BASELINE
 moduleName              FCS   "cctcycle"
         else
+        ifdef CLOCK_PARK_LONG
+moduleName              FCS   "cctpark"
+        else
 moduleName              FCS 	"cctplaymt"
+        endc
         endc
         else
 moduleName              FCS 	"cctplay"

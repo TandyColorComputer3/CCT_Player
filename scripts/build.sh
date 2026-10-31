@@ -23,6 +23,10 @@ fi
   --includedir="$root" --list=build/cctplaymt.lst --symbols \
   -o build/cctplaymt cct_os9.asm
 echo "Built experimental CoCoPSG player $root/build/cctplaymt"
+# Keep the checkpoint clock scheduler available while profiling long sleeps.
+"$assembler" --6309 --format=os9 --define=EXPERIMENTAL_PSG --define=CLOCK_SCHEDULER \
+  --define=CLOCK_PARK_LONG --includedir="$root" --list=build/cctpark.lst --symbols \
+  -o build/cctpark cct_os9.asm
 "$assembler" --6309 --format=os9 --define=EXPERIMENTAL_PSG --define=CLOCK_SCHEDULER --define=TIMING_TRACE \
   --includedir="$root" --list=build/ccttiming.lst --symbols \
   -o build/ccttiming cct_os9.asm
@@ -71,6 +75,7 @@ elif ! command -v "$tool" >/dev/null 2>&1; then
 fi
 "$tool" ident build/cctplay
 "$tool" ident build/cctplaymt
+"$tool" ident build/cctpark
 "$tool" ident build/ccttiming
 "$tool" ident build/cctplaydbg
 "$tool" ident build/cctcounter
@@ -103,3 +108,34 @@ done
 "$assembler" --6309 --format=os9 --includedir="$root" --define=LONG_WORKLOAD \
   --list=build/countlong.lst --symbols -o build/countlong tools/timeload.asm
 "$tool" ident build/countlong
+
+# Matched five-repeat workloads for the optional long-sleep candidate.
+for mode in IDLE COUNTER DISK; do
+  case "$mode" in
+    IDLE) out=parkidle; define=--define=IDLE_BENCH ;;
+    COUNTER) out=parkcount; define=--define=COUNTER_BENCH ;;
+    DISK) out=parkdisk; define= ;;
+  esac
+  "$assembler" --6309 --format=os9 --includedir="$root" --define=PARK_BENCH ${define:+"$define"} \
+    --list="build/$out.lst" --symbols -o "build/$out" tools/diskbench.asm
+  "$tool" ident "build/$out"
+done
+
+# One preload link keeps the small diagnostic helpers in one module block.
+# Separate loads can exhaust a Shell process's eight logical MMU slots.
+cat build/idlebench build/countbench build/diskbench build/diskreal \
+  build/diskload build/countlong build/clockprobe build/cctstop \
+  build/parkidle build/parkcount build/parkdisk > build/perfpack
+
+"$assembler" --6309 --format=os9 --includedir="$root" --define=CONTINUOUS_READ \
+  --list=build/diskbusy.lst --symbols -o build/diskbusy tools/diskload.asm
+"$assembler" --6309 --format=os9 --includedir="$root" --define=BUSY_BENCH \
+  -o build/busybase tools/diskbench.asm
+"$assembler" --6309 --format=os9 --includedir="$root" --define=BUSY_BENCH --define=PARK_BENCH \
+  -o build/busypark tools/diskbench.asm
+cat build/busybase build/busypark build/diskbusy > build/busypack
+"$tool" ident build/busypack
+
+"$assembler" --6309 --format=os9 --includedir="$root" --define=REAL_BENCH --define=PARK_BENCH \
+  -o build/parkreal tools/diskbench.asm
+"$tool" ident build/parkreal

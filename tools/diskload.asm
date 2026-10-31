@@ -19,7 +19,13 @@ pathno  RMB 1
 count   RMB 1
 error   RMB 1
 data_size EQU .
+        ifdef CONTINUOUS_READ
+* Same 230 read-only cycles, with no intentional pause between them. This is
+* a finite disk burst; report its end separately from the player's end.
+module_name FCS "diskbusy"
+        else
 module_name FCS "diskload"
+        endc
         FCB 1
 start
         leay path,U
@@ -60,9 +66,11 @@ next_read
         bcs exit_error
         dec count,U
         beq completed
+        ifndef CONTINUOUS_READ
         ldx #61
         os9 F$Sleep
         bcs exit_error
+        endc
         bra next_read
 read_error
         stb error,U         ; retain I$Read error across I$Close

@@ -3,6 +3,9 @@
 * REAL_BENCH builds diskreal, which runs Arkanoid VGM, Ark1 CCT, Flicky CCT.
 * IDLE_BENCH omits the workload child; COUNTER_BENCH uses countlong, the same
 * counter cadence as timeload extended to cover all five sequential players.
+* PARK_BENCH selects the separately named cctpark comparison player.
+* BUSY_BENCH runs one synthetic30 child with diskbusy's finite 230-read burst.
+* It still waits for both children; never start the next workload on audio end.
 * User process; no signal handling, direct device access, or interrupt masks.
 * F$Fork copies each CR-terminated parameter area; A returns the child PID.
 * F$Wait returns a child PID in A and its exit status in B. Each player is
@@ -19,26 +22,58 @@ disk_pid RMB 1
 child_pid RMB 1
 remaining RMB 1
 data_size EQU .
+        ifdef BUSY_BENCH
+        ifdef PARK_BENCH
+module_name FCS "busypark"
+        else
+module_name FCS "busybase"
+        endc
+        else
         ifdef REAL_BENCH
+        ifdef PARK_BENCH
+module_name FCS "parkreal"
+        else
 module_name FCS "diskreal"
+        endc
         else
         ifdef IDLE_BENCH
+        ifdef PARK_BENCH
+module_name FCS "parkidle"
+        else
 module_name FCS "idlebench"
+        endc
         else
         ifdef COUNTER_BENCH
+        ifdef PARK_BENCH
+module_name FCS "parkcount"
+        else
 module_name FCS "countbench"
+        endc
+        else
+        ifdef PARK_BENCH
+module_name FCS "parkdisk"
         else
 module_name FCS "diskbench"
         endc
         endc
         endc
+        endc
+        endc
         FCB 1
+        ifdef BUSY_BENCH
+disk_name FCS "diskbusy"
+        else
         ifdef COUNTER_BENCH
 disk_name FCS "countlong"
         else
 disk_name FCS "diskload"
         endc
+        endc
+        ifdef PARK_BENCH
+player_name FCS "cctpark"
+        else
 player_name FCS "cctplaymt"
+        endc
 disk_params FCC "/d1/ark1.cct"
         FCB $0d
 disk_params_end EQU *
@@ -78,7 +113,11 @@ start
         ifdef REAL_BENCH
         lda #3
         else
+        ifdef BUSY_BENCH
+        lda #1
+        else
         lda #5
+        endc
         endc
         sta remaining,U
 next_player

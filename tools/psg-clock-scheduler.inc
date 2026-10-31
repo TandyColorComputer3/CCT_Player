@@ -2,7 +2,8 @@
 ; D and condition codes are scratch except where a routine says otherwise.
 ; /ctclock is optional and must be loaded; missing clock fails closed rather
 ; than silently reverting to CPU-cycle timing. No privileged calls or masks.
-; Clock reports ticks independent of scheduling; default NTSC is nominal 60Hz.
+; Clock reports serviced video ticks independent of player scheduling, but
+; cannot recover coalesced video interrupts. Default NTSC is nominal 60Hz.
 ; No per-wait rounding: exact sample remainders are retained across all waits
 ; and loop iterations; only the current delivery deadline is rounded upward.
 PSG_CLOCK_NAME fcc "/ctclock"
@@ -134,11 +135,28 @@ PSG_CLOCK_CHECK
       ldd ,s
       beq PSG_CLOCK_DUE_POP
 PSG_CLOCK_FUTURE_POP
+        ifdef CLOCK_PARK_LONG
+      ; User state: the positive target-now delta is bounded to 90 ticks.
+      ; EOU subtracts one tick from a positive sleep request. For delta>=2,
+      ; request delta to wake near the deadline, normally one tick early.
+      ; Delta=1 still uses X=2 to park rather than immediately reschedule.
+      ; Never infer elapsed time from this request: re-read the atomic clock
+      ; after every wake, preserving early-wakeup, signal and error handling.
+      ; X is scratch here; original stream X/Y remain on the outer stack.
+      ; No IRQ mask, additional mutable state, or skipped register writes.
+      ldx ,s
+      cmpx #2
+      bhs PSG_CLOCK_PARK
+      ldx #2
+PSG_CLOCK_PARK
+      leas 2,s
+        else
       leas 2,s
       ; X=2 parks until a clock tick rather than spinning through X=1
       ; reschedules when otherwise idle. This is only a wakeup request; a
       ; late or early wake is resolved by the next atomic clock snapshot.
       ldx #2
+        endc
       os9 F$Sleep
       lbcs PSG_CLOCK_ERROR
       clr clockBurst,u

@@ -43,6 +43,16 @@ Shell prints the background PID as (for example) `&003`. To request the player's
 
 The original reference remains available as `load /d1/cctplay` followed by `cctplay -psg 2 /d1/synthetic.vgm`. The original remains foreground/frozen behavior and is not the multitasking command.
 
+The opt-in `cctpark` build uses longer deadline sleeps to reduce clock calls
+while preserving all sound writes. Launch it with the same options as
+`cctplaymt`. It still requires `clockpack`; it does not fix floppy-induced
+clock loss. See [PERFORMANCE-OPTIMIZATION.md](PERFORMANCE-OPTIMIZATION.md).
+`perfpack` packs the small timing helpers into one allocation; `busypack`
+provides the finite continuous-read comparison. Use foreground supervisors
+for repeated automated runs. After background jobs finish, Shell+'s built-in
+`W` reaps their exit statuses; unattended accumulation of dead children can
+exhaust system resources even after their process RAM has been released.
+
 Other modes:
 ```bash
 bash scripts/run-mame.sh base           # no optional sound cartridge

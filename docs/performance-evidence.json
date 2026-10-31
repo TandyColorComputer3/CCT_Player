@@ -1,0 +1,183 @@
+{
+  "checkpoint": "bbdaf36",
+  "date": "2026-10-30",
+  "timebase": "MAME emulated seconds",
+  "notes": [
+    "Private evidence is ignored; hashes identify locally retained artifacts.",
+    "Combined disk capture is used for PSG integrity only. Clock counting uses verified-address parts 1 and 2.",
+    "Long-base-2 and long-park-2 were rejected launches, not timing results.",
+    "Real-park-disk retry was interrupted by a host exception; final comparison uses a fresh session."
+  ],
+  "files": [
+    {
+      "path": "emulator/images/performance/logs/trace-baseline-idle.json",
+      "sha256": "32371bf34eaf3b913d3de35919e3133caf232b4910ca8c6eab4e8984e518f3d2",
+      "bytes": 7610059
+    },
+    {
+      "path": "emulator/images/performance/logs/profile-disk-part1.json",
+      "sha256": "a2317bec7a4e179fe994da6115b85cff9b5c90f795a637e1c83de138bad8bdb8",
+      "bytes": 2230305
+    },
+    {
+      "path": "emulator/images/performance/logs/profile-disk-part2.json",
+      "sha256": "5cddd92e737ea7e4c92d16a562e094d3373b78cda6f6a576655a3c56c545c43f",
+      "bytes": 12412223
+    },
+    {
+      "path": "emulator/images/performance/logs/profile-disk-psg-combined.json",
+      "sha256": "5afb365197e70da5e299cf71f882001f9e247f91501df0664b4603165573012d",
+      "bytes": 16904615
+    },
+    {
+      "path": "emulator/images/performance/logs/base-counter.json",
+      "sha256": "5d70250f3da6500aeb028a85ffba12cc40a0a79836ef2308453a27a89bbf8167",
+      "bytes": 18183578
+    },
+    {
+      "path": "emulator/images/performance/logs/park-idle.json",
+      "sha256": "7b3d0b79f5bcef452ff798cb96a4cef8eb8f1bb0d5d51c9a1711e283ac7ed42d",
+      "bytes": 14742914
+    },
+    {
+      "path": "emulator/images/performance/logs/park-counter.json",
+      "sha256": "f60f6373efcbabae50bda1e259d52c59dd204ce90eb9de1ad25b4bc448db345d",
+      "bytes": 17736572
+    },
+    {
+      "path": "emulator/images/performance/logs/park-disk.json",
+      "sha256": "e11ae3e1a168acf47d8ce67fc6b05c835cb4c710270c7417b817a78234756999",
+      "bytes": 16239148
+    },
+    {
+      "path": "emulator/images/performance/logs/long-base.json",
+      "sha256": "3272dbb87921dd1bea9c13e386cf0e6b590cfba0de09b4facafdd67b4201a24e",
+      "bytes": 24271029
+    },
+    {
+      "path": "emulator/images/performance/logs/long-park.json",
+      "sha256": "9fad6571ffc74318b3c8542619bc6c09ac005181e50814e58ce033d66f7baa19",
+      "bytes": 7523210
+    },
+    {
+      "path": "emulator/images/performance/logs/long-base-3.json",
+      "sha256": "99bed6db09b504d3d65ab2f912e713c7490f7221fee2c063ce3f8bf88a03d723",
+      "bytes": 4378912
+    },
+    {
+      "path": "emulator/images/performance/logs/long-park-3.json",
+      "sha256": "4dcf53818e65fa595da0bae69978c4c279eef0fcc8f3552cb4170892b1fd7e6a",
+      "bytes": 3909649
+    },
+    {
+      "path": "emulator/images/performance/logs/busy-base.json",
+      "sha256": "e9a75968bf09e786f764e1b02dbf8b61dbf2a3f88b09e934900360439e587350",
+      "bytes": 4048106
+    },
+    {
+      "path": "emulator/images/performance/logs/busy-base-2.json",
+      "sha256": "99288c0ebdd0f2866ffaa4fcff03dded70ff7d71a321cb0d3e573ebfeebfd503",
+      "bytes": 3516446
+    },
+    {
+      "path": "emulator/images/performance/logs/busy-park.json",
+      "sha256": "7b345f345ffcdae4c9f0bc6c4a22fdad20bb9d5d0c49318ffda4efc89eaeb910",
+      "bytes": 4309991
+    },
+    {
+      "path": "emulator/images/performance/logs/busy-park-2.json",
+      "sha256": "88cdd74094d68a9e898af9583fd40a66b87c0921677e71008d4de4476b3913e5",
+      "bytes": 3733817
+    },
+    {
+      "path": "emulator/images/performance/logs/park-clock-playlist.json",
+      "sha256": "34806669020c16d0291e16fbb212fed18cca5eed36caca94090add64522360cb",
+      "bytes": 5401554
+    },
+    {
+      "path": "emulator/images/performance/logs/park-playlist-2.json",
+      "sha256": "d957592c93a4b4094f74b4a4b6638a8783902dfb0e3470bba4b0a2fc51ec5c60",
+      "bytes": 2993219
+    },
+    {
+      "path": "emulator/images/performance/logs/park-arkanoid-w.json",
+      "sha256": "0484c1b78e66b1c3de85b34d4f7247b28589176f6e445dea222a469673c1788b",
+      "bytes": 4002200
+    },
+    {
+      "path": "emulator/images/performance/logs/park-loop-stop.json",
+      "sha256": "03fd9cf19827e7e96102449ba9d47fa6263af9d445d3a496ff0b2cfae58d46eb",
+      "bytes": 16261039
+    },
+    {
+      "path": "emulator/images/performance/logs/trace-two-clock-paths.json",
+      "sha256": "1b6d71ab2cb7954cab54df6585bbd3ba4bad7fdf5f467b1fd075e9b50af58604",
+      "bytes": 2794709
+    },
+    {
+      "path": "emulator/images/performance/logs/trace-missing-clock.json",
+      "sha256": "853c4ac31e42c38cd74befb40b152cb3ef149c38a070cbe23623d0d8c3c4eefb",
+      "bytes": 3652992
+    },
+    {
+      "path": "emulator/images/performance/logs/trace-reload-restart.json",
+      "sha256": "dd4d83414a5e0e518f22def1e7b0a0ef9fb9d73d39ae16224bbbdf69aafa179c",
+      "bytes": 3594544
+    },
+    {
+      "path": "emulator/images/performance/logs/real-base-disk.json",
+      "sha256": "20e98d8fa00b295db8b9aed825a4f19398df0be35381de89cdf0bfb4437879b1",
+      "bytes": 9044086
+    },
+    {
+      "path": "emulator/images/performance/logs/real-park-disk-final.json",
+      "sha256": "793cb1c6ba27022a80697b8c74e63b4e6ca9f37105bcbc919f696cc43b70258c",
+      "bytes": 15289109
+    },
+    {
+      "path": "emulator/images/performance/logs/mame-fatal.txt",
+      "sha256": "69b8ac67acdd921eb51a570c3474a2d4016198090f379e9e85f8912df7143e46",
+      "bytes": 368
+    },
+    {
+      "path": "build/cctplay",
+      "sha256": "eabe6b6f3910ebd1af557f64b02c1fb1e1802a3a07a1bf134016b1a4a6792f36",
+      "bytes": 8756
+    },
+    {
+      "path": "build/cctplaymt",
+      "sha256": "05ee55b64485c7fa128b0d7099fb9eec7cc13cea83a1396a7c807f137887e953",
+      "bytes": 9653
+    },
+    {
+      "path": "build/cctplaymt-relative",
+      "sha256": "666f91ea6a3292e2c0b96f46547698b78bef7dd3215269cc0bc40f8c5035cb8d",
+      "bytes": 9381
+    },
+    {
+      "path": "build/cctpark",
+      "sha256": "34af73f92579e073c62238212dbf46649ff57a8e6bc9d290e2bac5cf72344fb5",
+      "bytes": 9658
+    },
+    {
+      "path": "build/clockpack",
+      "sha256": "b75745756b198ab102c11b1f3defa3d9b1faff09738ac9fa8dab507c6bb43641",
+      "bytes": 225
+    },
+    {
+      "path": "build/perfpack",
+      "sha256": "f25900cf5e588cf8956f882f17824b2559afa26db202b022c313dcffcf262794",
+      "bytes": 2159
+    },
+    {
+      "path": "build/busypack",
+      "sha256": "8853a4ff9c24f015a33f35279c388438b172d26c5e57e203917082fc9e84cee7",
+      "bytes": 586
+    },
+    {
+      "path": "build/parkreal",
+      "sha256": "5991f0db98eed213c63a1ca8d8efc0c82f94de8606a6c76fe4701b7f427e6e7d",
+      "bytes": 327
+    }
+  ]
+}

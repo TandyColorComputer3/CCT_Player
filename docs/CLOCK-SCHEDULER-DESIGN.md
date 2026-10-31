@@ -345,3 +345,25 @@ python3 scripts/summarize-psg-repeats.py "$FIXTURE_DIR/synthetic30.vgm" \
 The remaining all-workload timing failure is explicit. The historical
 reboot remains **UNRESOLVED / NOT REPRODUCED**, independently of these
 timing and functional results.
+
+## Follow-up: clock progress and long-wait overhead
+
+The follow-up at `bbdaf36` measured video-status acknowledgements and
+CCTClock increments against MAME time. In four complete periodic-floppy
+synthetic30 runs, 35.61–36.06 emulated seconds contained only about 1,800
+serviced ticks. Every observed video acknowledgement produced one clock
+increment, within 159.3 microseconds. The approximately six-second deficit
+is already present in the clock source; GetStat atomicity cannot recover it.
+Event delivery additionally lagged the serviced-clock timeline by up to
+ten ticks. IRQ assertions, CPU HALT versus masking, and exact CPU share were
+not separately measured.
+
+The optional `cctpark` comparison build parks across longer deadlines with
+`F$Sleep X=max(2, remaining_ticks)`, then re-reads the clock. It preserves
+the same absolute/fractional deadlines, bounded catch-up and all PSG writes.
+Two long30 runs reduced GetStat calls from 1,830 to 89–90 without additional
+process data or interrupt masking. Idle/counter timing passed, while periodic
+and back-to-back floppy timing still failed. `cctplaymt` and `cctcycle` remain
+unchanged comparison baselines. No fine-delay loop or system output queue
+was added. See [PERFORMANCE-OPTIMIZATION.md](PERFORMANCE-OPTIMIZATION.md) for
+the measurements, limitations, resource checks and host-emulator exception.
