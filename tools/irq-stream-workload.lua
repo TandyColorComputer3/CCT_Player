@@ -73,11 +73,24 @@ return function(commands,array,encode)
    {'sustained','/d1/flicky.cct',120,nil,{{after=1,text='diskburst /d1/synthetic30.vgm &{ENTER}'}},true},
    {'playlist','/d1/irq-real.m3u',150,nil,{{after=2,text='echo PLAYLIST{ENTER}'},{after=35,text='/dd/cmds/pwd{ENTER}'}}}
   }
+  if p.hardening then cases={
+   {'real-aggress','/d1/aggress.vgm',95},
+   {'real-penguin','/d1/pengui03.vgm',100},
+   {'real-qix','/d1/qix.vgm',115},
+   {'real-cct','/d1/penguin.cct',110},
+   {'original-cct','/d1/penguin.cct',125,nil,nil,nil,'/d1/cctplay'},
+   {'envelope','/d1/envelope.vgm',30},
+   {'mixed','/d1/mixed.vgm',40},
+   {'saturation','/d1/saturation.vgm',25},
+   {'long','/d1/streamlong.vgm',260},
+   {'floppy-dir','/d1/flicky.cct',85,nil,{{after=3,text='dir /d1{ENTER}'},{after=12,text='dir /d1{ENTER}'}}},
+   {'cctstop','/d1/sparse.vgm',45,nil,nil,nil,nil,'graceful'}
+  } end
   local thread=coroutine.create(function()
    for i,c in ipairs(cases) do if i>=(p.first or 1) and i<=(p.last or #cases) then
     case_name=c[1]
     commands.irq_stream_case({name=p.prefix..'-'..c[1],player_crc=p.player_crc,layout=p.layout,fast=p.fast,
-      command=(p.player or 'cctirq')..' -psg 2 -l 0 '..c[2],duration=c[3],concurrent=c[4],inputs=c[5],reap=c[6]})
+      command=(c[7] or p.player or 'cctirq')..' -psg 2 -l 0 '..c[2],duration=c[3],concurrent=c[4],inputs=c[5],reap=c[6],signal=c[8],after=2})
     while active do wait(1) end
     if failure then break end
    end end

@@ -38,6 +38,11 @@ PreviousControl rmb 1
 Queue   rmb 1024
 OwnedBlocks rmb 256        ; allocation ownership, never process pointers
 OwnedMaps rmb 16            ; physical block+1 for each owned logical slot
+IRQInstalled rmb 1       ; successful registrations only; not mere attempts
+TimerInstalled rmb 1
+        ifdef IRQ_FAIL_ALLOC
+AllocationAttempts rmb 1   ; diagnostic only; production storage unchanged
+        endc
 MemSize equ .
 Entry   lbra Init
         lbra Read
@@ -48,7 +53,19 @@ Entry   lbra Init
 Poll    fcb 0,1,10
 ; System Init: F$IRQ registers packet status/mask/handler/storage; F$VIRQ
 ; schedules its pending bit every video tick. Roll back IRQ if VIRQ fails.
-Init    lda #$80
+Init
+        clr IRQInstalled,u
+        clr TimerInstalled,u
+        ifdef IRQ_FAIL_INIT
+        ; Diagnostic: fail before registering either service. No kernel patch.
+        comb
+        ldb #E$NoRAM
+        rts
+        endc
+        ifdef IRQ_FAIL_ALLOC
+        clr AllocationAttempts,u
+        endc
+        lda #$80
         sta Packet+Vi.Stat,u
         ldd #1
         std Packet+Vi.Rst,u
@@ -58,27 +75,50 @@ Init    lda #$80
         leay IRQ,pcr
         os9 F$IRQ
         lbcs Return
+        inc IRQInstalled,u
         ldd #1
         ldx #1
         leay Packet,u
+        ifdef IRQ_FAIL_VIRQ
+        ; Diagnostic: exercise the real rollback after successful F$IRQ.
+        comb
+        ldb #E$NoRAM
+        else
         os9 F$VIRQ
-        bcc Return
+        endc
+        bcc InitTimerReady
         pshs b,cc
         lbsr RemoveIRQ
         puls cc,b,pc
+InitTimerReady
+        inc TimerInstalled,u
+        clrb
+        rts
 ; Stop under saved CC, remove producer before consumer. Return errors to
 ; IOMan rather than freeing a live registration. D/X/Y/CC scratch, U retained.
-Term    lbsr Stop
+Term    ldd Owner,u
+        beq TermTimer
+        lbsr Stop            ; Init failure never owned audio; do not mute it
+TermTimer
+        tst TimerInstalled,u
+        beq RemoveIRQ
         ldx #0
         leay Packet,u
         os9 F$VIRQ
         lbcs Return
+        clr TimerInstalled,u
 RemoveIRQ
+        tst IRQInstalled,u
+        beq RemoveDone
         leax Packet+Vi.Stat,u
         tfr x,d
         ldx #0
         leay IRQ,pcr
         os9 F$IRQ
+        bcs Return
+        clr IRQInstalled,u
+RemoveDone
+        clrb
 Return  rts
 Read    comb
         ldb #E$EOF
@@ -311,6 +351,18 @@ EndPlay sta State,u
 ; $84 allocates one 8 KiB block, returning X. $85 maps owned block X, returns
 ; Y=logical base. $86 clears logical base X. $87 frees unmapped owned block X.
 AllocateBlock
+        ifdef IRQ_FAIL_ALLOC
+        ; Diagnostic: one real block can be owned before the next request
+        ; fails. This exercises cleanup without starving unrelated processes.
+        inc AllocationAttempts,u
+        lda AllocationAttempts,u
+        cmpa #2
+        blo AllocateAllowed
+        comb
+        ldb #E$NoRAM
+        rts
+AllocateAllowed
+        endc
         ldy PD.RGS,y
         pshs y
         ldb #1

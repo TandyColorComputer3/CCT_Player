@@ -156,6 +156,7 @@ clockFraction    RMB   2  ; exact VGM sample remainder, 0..tick-1
 clockTarget      RMB   4  ; ceiling-rounded deadline for current wait
 clockBurst       RMB   1  ; bounded catch-up commands before yielding
         ifdef IRQ_STREAM
+irqErrorReported RMB   1  ; an error message has already reached stderr
 queueStarted     RMB   1  ; producer has started the system-owned consumer
 queueLast        RMB   2  ; last published deadline, modulo 16 bits
         endc
@@ -209,24 +210,41 @@ moduleName              FCS 	"cctplay"
         endc
         endc
         endc
+        ifdef IRQ_STREAM
+        fcb 14                 ; explicit module edition for the opt-in player
+strProgInfo fcb 0
+strThanksMsg equ strProgInfo
+        else
 strProgInfo             FCN   "\r\nCoCo ChipTunes Player v1.6\r\nWritten By Todd Wallace (LordDragon)\r\n\n"
 strThanksMsg            FCN   "\r\nSpecial thanks to Ed Snider, L. Curtis Boyle, William Astle, Deek,\r\nand everyone else on Discord for all your help.\r\n"
 
+        endc
 ; Error messages 
+        ifdef IRQ_STREAM
+strIRQError FCN "cctirq: queue or driver operation failed; OS-9 error returned.\r\n"
+        endc
 strErrorFile            FCN 	"Error: File not found. Exiting.\r\n"
 strErrorRam             FCN   "\r\nError: Not enough free RAM for that file. Aborted.\r\n"
 strErrorRead            FCN   "\r\nError accessing the file. Aborted.\r\n"
+        ifdef IRQ_STREAM
+strErrorParams FCN "Error: Invalid parameter. Type cctirq for usage.\r\n"
+        else
         ifdef EXPERIMENTAL_PSG
 strErrorParams          FCN   "Error: Invalid parameter. Type \x22cctplaymt\x22 for usage/syntax information.\r\n"
         else
 strErrorParams          FCN   "Error: Invalid parameter. Type \x22cctplay\x22 for usage/syntax information.\r\n"
         endc
+        endc
 strErrorSuddenEnd       FCN   "\r\nError: Song data ended unexpectedly. Incomplete file? Exiting.\r\n"
 strErrorUnknown         FCN   "\r\nError: Something weird has happened, probably a bug. Sorry about that. Aborting.\r\n"
+        ifdef IRQ_STREAM
+strErrorNoFilename FCN "Error: No filename specified. Type cctirq for usage.\r\n"
+        else
         ifdef EXPERIMENTAL_PSG
 strErrorNoFilename      FCN   "Error: No filename specified. Type \x22cctplaymt\x22 for usage/syntax information.\r\n"
         else
 strErrorNoFilename      FCN   "Error: No filename specified. Type \x22cctplay\x22 for usage/syntax information.\r\n"
+        endc
         endc
 strErrorFileInvalid     FCN   "Error: Unrecognized file format. File must be a VGM, CCT, or M3U playlist.\r\n"
 strErrorVGMchips        FCN   "Error: This VGM file requires an unsupported sound chip. Skipped.\r\n"
@@ -237,6 +255,41 @@ strErrorPlaylistFull 	FCN 	"Error: Playlist is too large. It must be under 1 KB 
 strGD3none              FCN   "No GD3 tag information found.\r\n"
 strVGMinvalidVer        FCN   "Unsupported VGM file version or file is corrupt.\r\n"
 
+        ifdef IRQ_STREAM
+; These background banners are suppressed; retain labels without the text.
+strIRQQuiet fcb 0
+strLoading equ strIRQQuiet
+strPlsEntriesMsg1 equ strIRQQuiet
+strPlsEntriesMsg2 equ strIRQQuiet
+strLoadingPLS equ strIRQQuiet
+strOf equ strIRQQuiet
+strDots equ strIRQQuiet
+strSongLengthMsg equ strIRQQuiet
+strSongLengthMins equ strIRQQuiet
+strSongLengthSecs equ strIRQQuiet
+strChipType equ strIRQQuiet
+strAY8910 equ strIRQQuiet
+strYM2149 equ strIRQQuiet
+strSN76489 equ strIRQQuiet
+strOPL2 equ strIRQQuiet
+strOPL3 equ strIRQQuiet
+strOutputDevice equ strIRQQuiet
+strMMMPI equ strIRQQuiet
+strCocoPSG equ strIRQQuiet
+strGMC equ strIRQQuiet
+strVGMclock equ strIRQQuiet
+strHz equ strIRQQuiet
+strCocoPSG1mhz equ strIRQQuiet
+strCocoPSG2mhz equ strIRQQuiet
+strCCTdeviceMsg equ strIRQQuiet
+strCCTauthorMsg equ strIRQQuiet
+strCCTtitleMsg equ strIRQQuiet
+strPlayingFrozen equ strIRQQuiet
+strPsgExperimentOnly equ strIRQQuiet
+strPlayComplete equ strIRQQuiet
+strPlayAborted equ strIRQQuiet
+strOutputSlot equ strIRQQuiet
+        else
 strLoading              FCN   "\x03\rLoading... "
 strPlsEntriesMsg1       FCN   "Playlist has "
 strPlsEntriesMsg2       FCN   " entries.\r\n"
@@ -283,6 +336,7 @@ strPlayingFrozen        FCN   "\r\nPlaying... (OS-9 will be frozen during playba
 strPlayComplete         FCN   "\x03\rPlayback complete!\r\n"
 strPlayAborted          FCN   "\x03\rPlayback aborted.\r\n"
 
+        endc
         ifdef LOADER_TRACE
 strTraceOpenOK          FCN   "\r\n[T] open"
 strTraceHeaderReadOK    FCN   " header"
@@ -300,11 +354,17 @@ strTraceGD3OK           FCN   " gd3"
         endc
 
         ifdef EXPERIMENTAL_PSG
+        ifdef IRQ_STREAM
+strUsageMsg FCC "Experimental CoCoPSG IRQ player (MPI slot 2).\r\n"
+           FCC "Syntax: cctirq [-l <0-9 | F>] <file.vgm|file.cct|list.m3u> &\r\n"
+           FCC "Stop: cctstop <process-id>. Default VGM extra loops: 1.\r\n"
+        else
 strUsageMsg             FCC   "Syntax: cctplaymt [-i] [-psg <slot>] [-l <0-9 | 'f'>] <filename>\r\n\n"
                         FCC   "    -i = Display format and supported hardware information.\r\n"
                         FCC   "    -l = Set the VGM loop count (0 through 9 or 'F'). Default is 1.\r\n"
                         FCC   "  -psg = Specify the CoCoPSG MPI slot (default is Slot 2).\r\n"
                         FCC   "This experimental build plays CoCoPSG/YM2149 tracks only.\r\n"
+        endc
         else
 strUsageMsg             FCC   "Syntax: cctplay [-i] [-psg <slot>] [-gmc <slot>] [-l <0-9 | 'f'>] <filename>\r\n\n"
             		FCC 	"    -i = Display information about supported formats, soundchips, and hardware.\r\n"
@@ -319,6 +379,10 @@ strUsageMsg             FCC   "Syntax: cctplay [-i] [-psg <slot>] [-gmc <slot>] 
         endc
 strUsageMsgSz 		EQU 	*-strUsageMsg
 
+        ifdef IRQ_STREAM
+strFileTypeInfo FCC "Experimental: single CoCoPSG, slot 2; VGM/CCT/M3U.\r\n"
+               FCC "PSG clock is 1 or 2 MHz. Other source clocks alter pitch.\r\n"
+        else
 strFileTypeInfo  		FCB 	$0C
 				FCC   "CoCo ChipTunes Player 1.6 supports the .VGM, .CCT, and .M3U file formats.\r\n\n"
 		  		FCC 	"The VGM file format covers a wide range of soundchips, but only a few of them\r\n"
@@ -338,6 +402,7 @@ strFileTypeInfo  		FCB 	$0C
 		  		FCC 	"different clock speeds than our CoCo accessories. Notes may sound a bit off-key\r\n"
 		  		FCC 	"or play a bit faster or slower than normal. There are various tools online that\r\n"
 		  		FCC 	"can attempt to convert these files to match your own hardware's clock speed.\r\n"
+        endc
 strFileTypeInfoSz 	EQU 	*-strFileTypeInfo
 
 strNewLine              FCN   "\r\n"
@@ -392,6 +457,9 @@ bin32dec10K 		FQB 	10000
 ; -----------------------------------------------------
 
 START_EXEC
+        ifdef IRQ_STREAM
+      clr   irqErrorReported,U
+        endc
         ifdef CLOCK_SCHEDULER
       clr   clockError,U
       lda   #$FF
@@ -822,7 +890,9 @@ VGM_LOADER_CLOCK_DONE
 	anda 	#%00000011  			; strip off everything but mpi slot value 0-3
 	adda 	#$31 					; convert to ASCII + 1 since MPI slots are 1-4
 	leax 	strOutputSlot,PCR 
+        ifndef IRQ_STREAM
 	sta  	11,X 					; WARNING: SELF-MODIFYING CODE. BE CAREFUL
+        endc
 	lbsr 	PRINT_STR_OS9
 
 	lbsr 	PRINT_VGM_CLOCK
@@ -837,7 +907,18 @@ VGM_LOADER_CHIP_NOT_SN76489
       ; if here, is valid version for the chip but does it contain a clock value for AY8910 or variant?
       leax  vgmDataBuffer+$74,U  
       lbsr  CHECK_FOR_32BIT_ZERO          ; is it a AY8910 or variant of it?
-      beq   VGM_LOADER_CHIP_NOT_AY8910_VARIANT    ; nope 
+        ifdef IRQ_STREAM
+      lbeq  VGM_LOADER_CHIP_NOT_AY8910_VARIANT
+        else
+      beq   VGM_LOADER_CHIP_NOT_AY8910_VARIANT    ; nope
+        endc
+        ifdef IRQ_STREAM
+      ; VGM clock bit 30 requests two AY chips. Reject before opening audio;
+      ; routing the second-chip writes into one PSG cannot preserve the song.
+      lda   vgmDataBuffer+$77,U
+      bita  #$40
+      lbne  VGM_UNSUPPORTED_CHIPS
+        endc
 	; ok it is, copy in the clock frequency for AY8910
 	lbsr  GRAB_VGM_CLOCK_VALUE
 	; assume cocopsg clock of 2mhz to start and set variable accordingly
@@ -887,7 +968,9 @@ VGM_LOADER_CHIP_PSG_PRINT_CLOCK
 	anda 	#%00000011  			; strip off everything but mpi slot value 0-3
 	adda 	#$31 					; convert to ASCII + 1 since MPI slots are 1-4
 	leax 	strOutputSlot,PCR 
+        ifndef IRQ_STREAM
 	sta  	11,X 					; WARNING: SELF-MODIFYING CODE. BE CAREFUL
+        endc
 	lbsr 	PRINT_STR_OS9
 
 	lbsr 	PRINT_VGM_CLOCK
@@ -1622,9 +1705,13 @@ PLAY_VGM_DATA
       lbeq  PLAY_CHIP_YM2149
       cmpa  #3               ; CCT format's code for YM2149/AY-3-8910
       lbeq  PLAY_CHIP_YM2149_CCT
+        ifdef IRQ_STREAM
+      lbra  VGM_UNSUPPORTED_CHIPS
+        else
       leax  strPsgExperimentOnly,PCR
       lbsr  PRINT_STR_OS9
       lbra  EXIT_DEALLOCATE_RAM
+        endc
         else
       ; what type of chip are we playing to?
       lda  	<vgmChipType
@@ -1641,6 +1728,11 @@ PLAY_VGM_DATA
       lbra  UNKNOWN_ERROR_EXIT
         endc
 
+        ifdef IRQ_STREAM
+; Non-PSG playback is rejected by this build; omit unreachable busy loops.
+PLAY_CHIP_OPL equ VGM_UNSUPPORTED_CHIPS
+PLAY_CHIP_SN76489 equ VGM_UNSUPPORTED_CHIPS
+        else
 PLAY_CHIP_OPL
       ; report coco will be frozen during playback 
       leax  strPlayingFrozen,PCR
@@ -2001,6 +2093,7 @@ VGM_SN76489_CHECK_FOR_LOOP_FOREVER
 
 ***********************************
 * experemtinal 
+        endc
 PLAY_CHIP_YM2149   
 PLAY_CHIP_YM2149_CCT
       ; Report the active PSG process-timing experiment or baseline behavior.
@@ -2791,6 +2884,9 @@ VGM_GET_RAM_BLOCK_NONE
 ; Error output section
 ; ------------------------------
 UNKNOWN_ERROR_EXIT
+        ifdef IRQ_STREAM
+      stb   clockError,U        ; retain the failing OS-9 status through cleanup
+        endc
       leax  strErrorUnknown,PCR
       lbsr  PRINT_STR_OS9
       lbra  EXIT_DEALLOCATE_RAM 
@@ -2805,11 +2901,18 @@ UNEXPECTED_END_ERROR_EXIT
       lbsr  PRINT_STR_OS9
         ifdef EXPERIMENTAL_PSG
       tst   psgActiveFlag,U
+        ifdef IRQ_STREAM
+      lbne  VGM_YM2149_END
+        else
       bne   VGM_YM2149_END
+        endc
         endc
       lbra  PLAY_DONE_RESET_STATES 
 
 READ_ERROR_EXIT
+        ifdef IRQ_STREAM
+      stb   clockError,U        ; retain the failing OS-9 status through cleanup
+        endc
 	stb  	<u8Value
 	lbsr 	PRINT_BYTE_HEX
 	lbsr 	PRINT_NEWLINE_OS9
@@ -2818,15 +2921,25 @@ READ_ERROR_EXIT
       lbra  EXIT_DEALLOCATE_RAM 
 
 RAM_ERROR_EXIT
+        ifdef IRQ_STREAM
+      stb   clockError,U        ; retain the failing OS-9 status through cleanup
+        endc
       leax  strErrorRam,PCR
       lbsr  PRINT_STR_OS9
         ifdef EXPERIMENTAL_PSG
       tst   psgActiveFlag,U
+        ifdef IRQ_STREAM
+      lbne  VGM_YM2149_END
+        else
       bne   VGM_YM2149_END
+        endc
         endc
       lbra  EXIT_DEALLOCATE_RAM 
 
 FILE_ERROR_EXIT
+        ifdef IRQ_STREAM
+      stb   clockError,U        ; retain the failing OS-9 status through cleanup
+        endc
       leax  strErrorFile,PCR
       lbsr  PRINT_STR_OS9
       lbra  EXIT_CLOSE_ALL_PATHS
@@ -3025,6 +3138,17 @@ EXIT_CLOSE_ALL_PATHS_SKIP_PLAYLIST
       lbrn  EXIT_CLOSE_ALL_PATHS          ; delay 5 cycles 
 EXIT_CLOSE_ALL_PATHS_SKIP_SONG
 EXIT_TO_OS9
+        ifdef IRQ_STREAM
+      ; User context: errors are visible even from a background launch.
+      ; Cleanup precedes this write; stderr failure cannot change exit status.
+      tst   clockError,U
+      beq   IRQ_EXIT_REPORTED
+      tst   irqErrorReported,U
+      bne   IRQ_EXIT_REPORTED
+      leax  strIRQError,PCR
+      lbsr  PRINT_STR_OS9
+IRQ_EXIT_REPORTED
+        endc
 	ifdef EXPERIMENTAL_PSG
 	; OS-9 signal delivery handles BREAK/ABORT; do not consume queued input.
 	else
@@ -3107,6 +3231,34 @@ CONVERT_COCO_ASCII_SKIP
 ; ------------------------------------------------------
 PRINT_STR_OS9
       pshs  Y,X,D 
+        ifdef IRQ_STREAM
+      ; X=NUL string, U=process data. Preserve D/X/Y; CC scratch.
+      ; Only error strings reach stderr. Normal background banners stay quiet.
+      leay  strIRQError,PCR
+      pshs  Y
+      cmpx  ,S++
+      blo   IRQ_PRINT_QUIET
+      leay  strGD3none,PCR
+      pshs  Y
+      cmpx  ,S++
+      blo   IRQ_PRINT_ERROR
+      leay  strVGMinvalidVer,PCR
+      pshs  Y
+      cmpx  ,S++
+      beq   IRQ_PRINT_ERROR
+IRQ_PRINT_QUIET
+      andcc #$FE
+      puls  D,X,Y,PC
+IRQ_PRINT_ERROR
+      tst   clockError,U
+      bne   IRQ_PRINT_HAVE_STATUS
+      ldb   #E$BMode           ; format/parameter errors have no OS call status
+      stb   clockError,U
+IRQ_PRINT_HAVE_STATUS
+      lda   #1
+      sta   irqErrorReported,U
+      lbra  PRINT_STR_LENGTH
+        endc
 
         ifdef EXPERIMENTAL_PSG
         ifndef LOADER_TRACE
@@ -3120,6 +3272,7 @@ PRINT_STR_OS9
         endc
         endc
 
+PRINT_STR_LENGTH
       ; first find length 
       clrb
 PRINT_STR_OS9_NEXT
@@ -3135,7 +3288,11 @@ PRINT_STR_OS9_FOUND_LENGTH
       clra 
       tfr   D,Y         ; move character count to Y for I$Write syscall 
 PRINT_STR_OS9_SKIP_LENGTH
+        ifdef IRQ_STREAM
+      lda   #2                 ; standard error path
+        else
       lda   #STDOUT
+        endc
       ldx   2,S         ; grab original value from stack 
       os9   I$Write
       nop 
@@ -3289,6 +3446,10 @@ L2    PSHS  U,Y,X,DP,D,CC     ; Push emulation mode machine state
 ; to detect whether or not MMMPI/OPL chip is connected
 ; Carry clear on positive detection, set if none found 
 ; ----------------------------------------------------------
+        ifdef IRQ_STREAM
+DETECT_OPL_CHIP orcc #1       ; PSG-only build never probes OPL hardware
+      rts
+        else
 DETECT_OPL_CHIP
       pshs  U,Y,X,D,CC 
 
@@ -3398,6 +3559,8 @@ DETECT_OPL_CHIP_SUCCESS
 ; --------------------------------------------------------------
 ; turn off all sound registers and disable sound on the OPL chip
 ; --------------------------------------------------------------
+        endc
+
 OPL_ALL_SOUND_OFF
 	pshs 	X,D,CC
 	
@@ -4101,6 +4264,9 @@ EXTRACT_GD3_TAG_INFO_SCAN_NULL_END
 ; print the vgm tag info to the screen 
 ; Entry: None 
 ; -----------------------------------------------
+        ifdef IRQ_STREAM
+GD3_PRINT_TAG rts             ; no background metadata output
+        else
 GD3_PRINT_TAG
       pshs  U,X,D 
 
@@ -4172,6 +4338,7 @@ GD3_PRINT_TAG_EXIT
       puls  D,X,U,PC
 
 
+        endc
 ; ------------------------------------------------------------------
 ; calculate song length from total samples
 ; Entry: X = pointer to 32 bit total number of samples in song track

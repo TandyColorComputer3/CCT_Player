@@ -55,7 +55,14 @@ return function(commands,array,encode)
   local initial=inspect(p);local base=initial.base;local events={};local taps={};local drops=0;local start=m.time:as_double();local inside=nil;local append=nil
   local function emit(kind,e) e=e or {};e.kind=kind;e.seconds=m.time:as_double();if #events<250000 then events[#events+1]=e else drops=drops+1 end end
   local function state(u) return {u=u,ticks=sw(u+p.ticks),state=sb(u+p.state),count=sw(u+p.count),head=sb(u+p.count+2),tail=sb(u+p.count+3),budgets=sw(u+p.budgets),underruns=sw(u+p.unders),owner=sw(u+p.owner)} end
-  live_owner=function() for _,e in ipairs(tables().polls) do if e.handler==base+p.irq then return state(e.storage) end end;return nil end
+  -- A host status query may land inside a transient kernel MMU mapping.
+  -- Treat unavailable tables as an unknown sample, never a freed queue.
+  -- Initial/final inspections still require validated tables.
+  live_owner=function()
+   local ok,t=pcall(tables);if not ok then return nil end
+   for _,e in ipairs(t.polls) do if e.handler==base+p.irq then return state(e.storage) end end
+   return nil
+  end
   local function hook(off,fn)
    local a=base+off
    taps[#taps+1]=mem:install_read_tap(a,a,'irq-probe-'..off,function(addr,d)
@@ -94,4 +101,5 @@ return function(commands,array,encode)
  dofile("tools/irq-workloads.lua")(commands,array,encode)
  dofile("tools/irq-density-workload.lua")(commands,array,encode)
  dofile("tools/irq-stream-workload.lua")(commands,array,encode)
+ dofile("tools/irq-hardening-workload.lua")(commands,array,encode)
 end

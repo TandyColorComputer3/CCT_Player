@@ -109,7 +109,10 @@ PSG_QUEUE_STATUS
       lbcs PSG_QUEUE_ERROR
       cmpx #1
       bne PSG_QUEUE_FAILED
-      ldx #2
+      ; Full ring holds at least 16 service ticks at the 16-record limit.
+      ; Sleep four ticks (EOU Sleep N resumes after N-1): nominal reserve
+      ; is 192 records. Further descheduling can reduce it; signals wake us.
+      ldx #5
       os9 F$Sleep
       lbcs PSG_QUEUE_ERROR
       bra PSG_QUEUE_RETRY
@@ -159,7 +162,9 @@ PSG_QUEUE_DRAIN
       beq PSG_QUEUE_DRAIN_DONE
       cmpx #1
       bne PSG_QUEUE_DRAIN_ERROR
-      ldx #2
+      ; The terminal is queued: only completion reporting waits here.
+      ; Four-tick polling reduces calls without delaying any sound event.
+      ldx #5
       os9 F$Sleep
       lbcs PSG_CLOCK_ERROR
       bra PSG_QUEUE_DRAIN

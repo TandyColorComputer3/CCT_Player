@@ -43,5 +43,20 @@ def edge_cases():
     save('burst',events);save('under',[(0,7,62),(0,8,15),(0,0,200),(0,1,0)])
     save('over',[(0,8,0)]*257)
 
+def hardening_cases():
+    # Original sparse/full-ring stop cases. Both sound one steady tone while
+    # waiting twelve seconds. Full keeps 256 future records pending at stop.
+    header=bytearray(Path('build/irq-synthetic30.vgm').read_bytes()[:128])
+    initial=bytes([0xa0,7,62,0xa0,8,15,0xa0,0,200,0xa0,1,0])
+    delay=bytes([0x61,0x44,0xac])*12
+    for name,tail in [('sparse',bytes([0xa0,8,0])),
+                      ('full',b''.join(bytes([0xa0,13,10 if i%2 else 14]) for i in range(300)))]:
+        commands=initial+delay+tail+bytes([0x66])
+        image=header+commands
+        struct.pack_into('<I',image,4,len(image)-4)
+        struct.pack_into('<I',image,0x18,12*44100)
+        Path('build/harden-'+name+'.vgm').write_bytes(image)
+    Path('build/harden-list.m3u').write_bytes(b'#EXTM3U\r/d1/arkanoid.vgm\r/d1/flicky.cct\r/d1/arkanoid.vgm\r')
+
 if __name__=='__main__':
-    generate();edge_cases()
+    generate();edge_cases();hardening_cases()

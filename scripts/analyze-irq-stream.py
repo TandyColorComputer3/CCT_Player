@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Audit streaming publication, IRQ cost and process CPU samples from captures."""
-import argparse,collections,json,runpy
+import argparse,collections,json,runpy,statistics
 from pathlib import Path
 HERE=Path(__file__).parent
 base=runpy.run_path(str(HERE/'analyze-irq-playback.py'))['analyze']
@@ -47,8 +47,31 @@ def analyze(track,capture,irq=True):
  r=dense(track,capture) if irq else base(track,capture)
  if irq:r.update(audit(capture))
  _,t=read(track,0);cp=capture.with_name(capture.stem+'-clock.json')
- if cp.exists() and t['writes'][0]['sample']==0:
-  c=clock(t,cp)
+ if irq:
+  events=json.loads(capture.read_text())['events']
+  published=[e for e in events if e['kind']=='append-ok']
+  if len(published)==len(t['writes'])+1:
+   # No extra long-gap markers in these fixtures. Infer the queued horizon
+   # from exact ordered publication, not from a user-process clock read.
+   deadlines=[(w['sample']+734)//735 for w in t['writes']]+[(t['samples']+734)//735]
+   accepted=0;counts=[];horizons=[]
+   for e in events:
+    if e['kind']=='append-ok':accepted+=1
+    elif e['kind']=='handler-enter' and e['state']==1 and e['seconds']<published[-1]['seconds']:
+     counts.append(e['count'])
+     horizons.append(max(0,deadlines[accepted-1]-((e['ticks']+1)&65535)))
+   if counts:
+    r['steady_queue_before_terminal']={'samples':len(counts),'minimum_records':min(counts),
+      'median_records':statistics.median(counts),'minimum_lookahead_ticks':min(horizons),
+      'median_lookahead_ticks':statistics.median(horizons),'maximum_lookahead_ticks':max(horizons)}
+
+ if cp.exists() and t['writes']:
+  # Clock-domain counts use first-write to mute. Remove leading source silence
+  # only from this local analysis view; IRQ epoch/deadline checks stay absolute.
+  origin=t['writes'][0]['sample']
+  relative=dict(t,samples=t['samples']-origin,
+                writes=[dict(w,sample=w['sample']-origin) for w in t['writes']])
+  c=clock(relative,cp)
   # The clock analyzer's IRQ PID attribution is intentionally excluded.
   r['clock']={k:c[k] for k in ('video_edges','irq_acks','clock_ticks','clock_calls','coalesced_edge_states','longest_sampled_interval_seconds')}
  return r

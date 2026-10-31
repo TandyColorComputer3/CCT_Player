@@ -1,0 +1,2307 @@
+{
+  "modules": {
+    "cctirq": {
+      "bytes": 6973,
+      "sha256": "41d18e49f5394819cd2b43bfede0975dc831f7e36ce33eb4eb6c9946c3e385dc",
+      "crc": "5C3541"
+    },
+    "psgstream": {
+      "bytes": 1089,
+      "sha256": "fa41ccae49eba66a9e9fa6536badebc209669773efebc9dffcbb79a4048c8fa7",
+      "crc": "D54642"
+    },
+    "psgs": {
+      "bytes": 39,
+      "sha256": "28035c3c61d5263be287db1192fd8389fcd004db03290485e7030996f7993c02",
+      "crc": "FF27A8"
+    }
+  },
+  "timing": {
+    "baseline-flicky": {
+      "capture": "emulator/images/reliability/logs/harden-baseline-flicky.json",
+      "pairs": 820,
+      "duration": 20.125905982000404,
+      "maximum_event_lateness": 0.03940890800156893,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.035224442000764355,
+      "p99_event_lateness": 0.03686590300138093,
+      "handler_calls": 3424,
+      "maximum_handler_seconds": 0.0016398730003857054,
+      "median_handler_seconds": 1.0616000508889556e-05,
+      "running_handler_seconds": 0.1402938470018853,
+      "max_psg_writes_per_handler": 16,
+      "over_budget_ticks": 0,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+      "writes_in_irq": 821,
+      "epoch_to_first_write": 9.77769996097777e-05,
+      "maximum_epoch_event_lateness": 0.03950668500117871,
+      "minimum_epoch_event_error": 9.77769996097777e-05,
+      "epoch_duration": 20.126003759000014,
+      "expected_seconds": 20.08997732426304,
+      "maximum_serviced_tick_lateness": 0,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 256,
+      "final_head": 53,
+      "final_tail": 53,
+      "final_count": 0,
+      "full_ring_observed": true,
+      "envelope_writes": 1,
+      "expected_full_rate_writes_per_second": 40.8163726003648,
+      "accepted_records": 821,
+      "full_or_state_rejections": 844,
+      "producer_pids": [
+        3
+      ],
+      "tail_wraps": 3,
+      "maximum_append_masked_body_seconds": 8.604400136391632e-05,
+      "driver_calls": {
+        "setstat": 1717,
+        "getstat": 1206
+      },
+      "control_accesses": [
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ]
+      ],
+      "sampled_producer_user_seconds_whole_capture": 0.7087999999512249,
+      "steady_queue_before_terminal": {
+        "samples": 846,
+        "minimum_records": 251,
+        "median_records": 256.0,
+        "minimum_lookahead_ticks": 355,
+        "median_lookahead_ticks": 385.0,
+        "maximum_lookahead_ticks": 413
+      },
+      "clock": {
+        "video_edges": 1206,
+        "irq_acks": 1206,
+        "clock_ticks": 1206,
+        "clock_calls": 0,
+        "coalesced_edge_states": {},
+        "longest_sampled_interval_seconds": {
+          "halt": 0,
+          "irq_mask": 0.002096146999974735,
+          "firq_mask": 0.002096146999974735
+        }
+      }
+    },
+    "park4-flicky": {
+      "capture": "emulator/images/reliability/logs/harden-park4-flicky.json",
+      "pairs": 820,
+      "duration": 20.12590598099996,
+      "maximum_event_lateness": 0.03940890799974994,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.035224442000764355,
+      "p99_event_lateness": 0.03686590200093676,
+      "handler_calls": 3411,
+      "maximum_handler_seconds": 0.0016398740008298773,
+      "median_handler_seconds": 1.0616000508889556e-05,
+      "running_handler_seconds": 0.1402938470018853,
+      "max_psg_writes_per_handler": 16,
+      "over_budget_ticks": 0,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 3.0731000151718035e-05,
+      "writes_in_irq": 821,
+      "epoch_to_first_write": 9.777800005394965e-05,
+      "maximum_epoch_event_lateness": 0.03950668599980389,
+      "minimum_epoch_event_error": 9.777800005394965e-05,
+      "epoch_duration": 20.126003759000014,
+      "expected_seconds": 20.08997732426304,
+      "maximum_serviced_tick_lateness": 0,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 256,
+      "final_head": 53,
+      "final_tail": 53,
+      "final_count": 0,
+      "full_ring_observed": true,
+      "envelope_writes": 1,
+      "expected_full_rate_writes_per_second": 40.8163726003648,
+      "accepted_records": 821,
+      "full_or_state_rejections": 210,
+      "producer_pids": [
+        3
+      ],
+      "tail_wraps": 3,
+      "maximum_append_masked_body_seconds": 8.604399954492692e-05,
+      "driver_calls": {
+        "setstat": 1083,
+        "getstat": 301
+      },
+      "control_accesses": [
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ]
+      ],
+      "sampled_producer_user_seconds_whole_capture": 0.41270000000258733,
+      "steady_queue_before_terminal": {
+        "samples": 848,
+        "minimum_records": 240,
+        "median_records": 256.0,
+        "minimum_lookahead_ticks": 354,
+        "median_lookahead_ticks": 384.0,
+        "maximum_lookahead_ticks": 413
+      },
+      "clock": {
+        "video_edges": 1206,
+        "irq_acks": 1206,
+        "clock_ticks": 1206,
+        "clock_calls": 0,
+        "coalesced_edge_states": {},
+        "longest_sampled_interval_seconds": {
+          "halt": 0,
+          "irq_mask": 0.0020832330010307487,
+          "firq_mask": 0.0020832330010307487
+        }
+      }
+    },
+    "final-idle": {
+      "capture": "emulator/images/reliability/logs/harden-final-idle.json",
+      "pairs": 820,
+      "duration": 20.12590654000087,
+      "maximum_event_lateness": 0.039409467000659504,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.035224442000764355,
+      "p99_event_lateness": 0.03686590199911777,
+      "handler_calls": 3411,
+      "maximum_handler_seconds": 0.0016398740008298773,
+      "median_handler_seconds": 1.0616000508889556e-05,
+      "running_handler_seconds": 0.14029385003595962,
+      "max_psg_writes_per_handler": 16,
+      "over_budget_ticks": 0,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+      "writes_in_irq": 821,
+      "epoch_to_first_write": 9.777800005394965e-05,
+      "maximum_epoch_event_lateness": 0.03950724500071345,
+      "minimum_epoch_event_error": 9.777800005394965e-05,
+      "epoch_duration": 20.126004318000923,
+      "expected_seconds": 20.08997732426304,
+      "maximum_serviced_tick_lateness": 0,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 256,
+      "final_head": 53,
+      "final_tail": 53,
+      "final_count": 0,
+      "full_ring_observed": true,
+      "envelope_writes": 1,
+      "expected_full_rate_writes_per_second": 40.8163726003648,
+      "accepted_records": 821,
+      "full_or_state_rejections": 210,
+      "producer_pids": [
+        3
+      ],
+      "tail_wraps": 3,
+      "maximum_append_masked_body_seconds": 8.604499817010947e-05,
+      "driver_calls": {
+        "setstat": 1083,
+        "getstat": 301
+      },
+      "control_accesses": [
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ]
+      ],
+      "sampled_producer_user_seconds_whole_capture": 0.40720000003057066,
+      "steady_queue_before_terminal": {
+        "samples": 848,
+        "minimum_records": 240,
+        "median_records": 256.0,
+        "minimum_lookahead_ticks": 354,
+        "median_lookahead_ticks": 384.0,
+        "maximum_lookahead_ticks": 413
+      },
+      "clock": {
+        "video_edges": 1206,
+        "irq_acks": 1206,
+        "clock_ticks": 1206,
+        "clock_calls": 0,
+        "coalesced_edge_states": {},
+        "longest_sampled_interval_seconds": {
+          "halt": 0,
+          "irq_mask": 0.0021338810001907405,
+          "firq_mask": 0.0021338810001907405
+        }
+      }
+    },
+    "measured-real-aggress": {
+      "capture": "emulator/images/reliability/logs/harden-measured-real-aggress.json",
+      "pairs": 6209,
+      "duration": 57.05698714700338,
+      "maximum_event_lateness": 0.063544727452161,
+      "minimum_event_error": -0.0010403336047772882,
+      "p95_event_lateness": 0.06299965460839729,
+      "p99_event_lateness": 0.06327966261287798,
+      "handler_calls": 5519,
+      "maximum_handler_seconds": 0.001142602999607334,
+      "median_handler_seconds": 4.8609999794280156e-05,
+      "running_handler_seconds": 0.7838730380717607,
+      "max_psg_writes_per_handler": 11,
+      "over_budget_ticks": 0,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+      "writes_in_irq": 6210,
+      "epoch_to_first_write": 0.01678593699762132,
+      "maximum_epoch_event_lateness": 0.08028531297586028,
+      "minimum_epoch_event_error": 0.015700251918920216,
+      "epoch_duration": 57.073773084001004,
+      "expected_seconds": 56.99437641723356,
+      "maximum_serviced_tick_lateness": 0,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 256,
+      "final_head": 66,
+      "final_tail": 66,
+      "final_count": 0,
+      "full_ring_observed": true,
+      "envelope_writes": 0,
+      "expected_full_rate_writes_per_second": 108.94057256713079,
+      "accepted_records": 6210,
+      "full_or_state_rejections": 745,
+      "producer_pids": [
+        3
+      ],
+      "tail_wraps": 24,
+      "maximum_append_masked_body_seconds": 8.604500180808827e-05,
+      "driver_calls": {
+        "setstat": 6989,
+        "getstat": 791
+      },
+      "control_accesses": [
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ]
+      ],
+      "sampled_producer_user_seconds_whole_capture": 3.4028999996335187,
+      "steady_queue_before_terminal": {
+        "samples": 3242,
+        "minimum_records": 239,
+        "median_records": 254.0,
+        "minimum_lookahead_ticks": 73,
+        "median_lookahead_ticks": 150.0,
+        "maximum_lookahead_ticks": 206
+      },
+      "clock": {
+        "video_edges": 3419,
+        "irq_acks": 3419,
+        "clock_ticks": 3419,
+        "clock_calls": 0,
+        "coalesced_edge_states": {},
+        "longest_sampled_interval_seconds": {
+          "halt": 0,
+          "irq_mask": 0.0017000000007101335,
+          "firq_mask": 0.0017000000007101335
+        }
+      }
+    },
+    "measured-real-penguin": {
+      "capture": "emulator/images/reliability/logs/harden-measured-real-penguin.json",
+      "pairs": 8613,
+      "duration": 57.17400316899875,
+      "maximum_event_lateness": 0.06302115283144616,
+      "minimum_event_error": -0.002212197640142577,
+      "p95_event_lateness": 0.06260979438834369,
+      "p99_event_lateness": 0.06284285070494633,
+      "handler_calls": 5734,
+      "maximum_handler_seconds": 0.0013415110006462783,
+      "median_handler_seconds": 0.00014806300168856978,
+      "running_handler_seconds": 1.0233007119095419,
+      "max_psg_writes_per_handler": 13,
+      "over_budget_ticks": 0,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+      "writes_in_irq": 8614,
+      "epoch_to_first_write": 0.0167859370012593,
+      "maximum_epoch_event_lateness": 0.07976173835878342,
+      "minimum_epoch_event_error": 0.014528387887194683,
+      "epoch_duration": 57.19078910600001,
+      "expected_seconds": 57.11244897959184,
+      "maximum_serviced_tick_lateness": 0,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 256,
+      "final_head": 166,
+      "final_tail": 166,
+      "final_count": 0,
+      "full_ring_observed": true,
+      "envelope_writes": 0,
+      "expected_full_rate_writes_per_second": 150.80775126763885,
+      "accepted_records": 8614,
+      "full_or_state_rejections": 710,
+      "producer_pids": [
+        3
+      ],
+      "tail_wraps": 33,
+      "maximum_append_masked_body_seconds": 8.604499817010947e-05,
+      "driver_calls": {
+        "setstat": 9364,
+        "getstat": 734
+      },
+      "control_accesses": [
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ]
+      ],
+      "sampled_producer_user_seconds_whole_capture": 4.599799999625247,
+      "steady_queue_before_terminal": {
+        "samples": 3339,
+        "minimum_records": 237,
+        "median_records": 253,
+        "minimum_lookahead_ticks": 60,
+        "median_lookahead_ticks": 98,
+        "maximum_lookahead_ticks": 138
+      },
+      "clock": {
+        "video_edges": 3426,
+        "irq_acks": 3426,
+        "clock_ticks": 3426,
+        "clock_calls": 0,
+        "coalesced_edge_states": {},
+        "longest_sampled_interval_seconds": {
+          "halt": 0,
+          "irq_mask": 0.0020000000004074536,
+          "firq_mask": 0.0020000000004074536
+        }
+      }
+    },
+    "measured-real-qix": {
+      "capture": "emulator/images/reliability/logs/harden-measured-real-qix.json",
+      "pairs": 4860,
+      "duration": 72.2263193300023,
+      "maximum_event_lateness": 0.09334216886227864,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.0892370367911326,
+      "p99_event_lateness": 0.09241799152857766,
+      "handler_calls": 6720,
+      "maximum_handler_seconds": 0.0016611050014034845,
+      "median_handler_seconds": 4.860900298808701e-05,
+      "running_handler_seconds": 0.6942571439867606,
+      "max_psg_writes_per_handler": 16,
+      "over_budget_ticks": 1,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+      "writes_in_irq": 4861,
+      "epoch_to_first_write": 0.1335918769982527,
+      "maximum_epoch_event_lateness": 0.1089068349761817,
+      "minimum_epoch_event_error": 0.015564666113898964,
+      "epoch_duration": 72.35991120700055,
+      "expected_seconds": 72.25174603174604,
+      "maximum_serviced_tick_lateness": 1,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 256,
+      "final_head": 253,
+      "final_tail": 253,
+      "final_count": 0,
+      "full_ring_observed": true,
+      "envelope_writes": 1,
+      "expected_full_rate_writes_per_second": 67.26481042914324,
+      "accepted_records": 4861,
+      "full_or_state_rejections": 1024,
+      "producer_pids": [
+        3
+      ],
+      "tail_wraps": 18,
+      "maximum_append_masked_body_seconds": 8.604500180808827e-05,
+      "driver_calls": {
+        "setstat": 5913,
+        "getstat": 1073
+      },
+      "control_accesses": [
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ]
+      ],
+      "sampled_producer_user_seconds_whole_capture": 2.972299999619281,
+      "steady_queue_before_terminal": {
+        "samples": 4148,
+        "minimum_records": 246,
+        "median_records": 255.0,
+        "minimum_lookahead_ticks": 179,
+        "median_lookahead_ticks": 222.0,
+        "maximum_lookahead_ticks": 287
+      },
+      "clock": {
+        "video_edges": 4328,
+        "irq_acks": 4328,
+        "clock_ticks": 4328,
+        "clock_calls": 0,
+        "coalesced_edge_states": {},
+        "longest_sampled_interval_seconds": {
+          "halt": 0,
+          "irq_mask": 0.0021118350014148746,
+          "firq_mask": 0.0021118350014148746
+        }
+      }
+    },
+    "measured-real-cct": {
+      "capture": "emulator/images/reliability/logs/harden-measured-real-cct.json",
+      "pairs": 8613,
+      "duration": 57.17400316900239,
+      "maximum_event_lateness": 0.06302115283144616,
+      "minimum_event_error": -0.002212197640142577,
+      "p95_event_lateness": 0.06261015948805948,
+      "p99_event_lateness": 0.06284285070494633,
+      "handler_calls": 6334,
+      "maximum_handler_seconds": 0.0013415120010904502,
+      "median_handler_seconds": 4.8610003432258964e-05,
+      "running_handler_seconds": 1.023300731125346,
+      "max_psg_writes_per_handler": 13,
+      "over_budget_ticks": 1,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+      "writes_in_irq": 8614,
+      "epoch_to_first_write": 0.01678593699762132,
+      "maximum_epoch_event_lateness": 0.07976173835514544,
+      "minimum_epoch_event_error": 0.014528387883556704,
+      "epoch_duration": 57.19078910600001,
+      "expected_seconds": 57.11244897959184,
+      "maximum_serviced_tick_lateness": 0,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 256,
+      "final_head": 166,
+      "final_tail": 166,
+      "final_count": 0,
+      "full_ring_observed": true,
+      "envelope_writes": 0,
+      "expected_full_rate_writes_per_second": 150.80775126763885,
+      "accepted_records": 8614,
+      "full_or_state_rejections": 710,
+      "producer_pids": [
+        3
+      ],
+      "tail_wraps": 33,
+      "maximum_append_masked_body_seconds": 8.604499817010947e-05,
+      "driver_calls": {
+        "setstat": 9364,
+        "getstat": 734
+      },
+      "control_accesses": [
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ]
+      ],
+      "sampled_producer_user_seconds_whole_capture": 4.568200000452634,
+      "steady_queue_before_terminal": {
+        "samples": 3339,
+        "minimum_records": 237,
+        "median_records": 253,
+        "minimum_lookahead_ticks": 60,
+        "median_lookahead_ticks": 98,
+        "maximum_lookahead_ticks": 138
+      },
+      "clock": {
+        "video_edges": 3426,
+        "irq_acks": 3426,
+        "clock_ticks": 3426,
+        "clock_calls": 0,
+        "coalesced_edge_states": {},
+        "longest_sampled_interval_seconds": {
+          "halt": 0,
+          "irq_mask": 0.0018999999992956873,
+          "firq_mask": 0.0018999999992956873
+        }
+      }
+    },
+    "measured-envelope": {
+      "capture": "emulator/images/reliability/logs/harden-measured-envelope.json",
+      "pairs": 127,
+      "duration": 3.0206629669992253,
+      "maximum_event_lateness": 0.03579914726183242,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.020241582683952153,
+      "p99_event_lateness": 0.03572236899645542,
+      "handler_calls": 1771,
+      "maximum_handler_seconds": 0.0016611059982096776,
+      "median_handler_seconds": 1.0616000508889556e-05,
+      "running_handler_seconds": 0.021568668980762595,
+      "max_psg_writes_per_handler": 16,
+      "over_budget_ticks": 1,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+      "writes_in_irq": 128,
+      "epoch_to_first_write": 9.777800005394965e-05,
+      "maximum_epoch_event_lateness": 0.03589692526188637,
+      "minimum_epoch_event_error": 9.777800005394965e-05,
+      "epoch_duration": 3.0207607449992793,
+      "expected_seconds": 3.000453514739229,
+      "maximum_serviced_tick_lateness": 1,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 128,
+      "final_head": 128,
+      "final_tail": 128,
+      "final_count": 0,
+      "full_ring_observed": false,
+      "envelope_writes": 120,
+      "expected_full_rate_writes_per_second": 42.32693470374849,
+      "accepted_records": 128,
+      "full_or_state_rejections": 0,
+      "producer_pids": [
+        3
+      ],
+      "tail_wraps": 0,
+      "maximum_append_masked_body_seconds": 8.604499817010947e-05,
+      "driver_calls": {
+        "setstat": 144,
+        "getstat": 47
+      },
+      "control_accesses": [
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ]
+      ],
+      "sampled_producer_user_seconds_whole_capture": 0.08119999993868987,
+      "clock": {
+        "video_edges": 181,
+        "irq_acks": 181,
+        "clock_ticks": 181,
+        "clock_calls": 0,
+        "coalesced_edge_states": {},
+        "longest_sampled_interval_seconds": {
+          "halt": 0,
+          "irq_mask": 0.002300000000104774,
+          "firq_mask": 0.002300000000104774
+        }
+      }
+    },
+    "measured-mixed": {
+      "capture": "emulator/images/reliability/logs/harden-measured-mixed.json",
+      "pairs": 179,
+      "duration": 1.1517886080000608,
+      "maximum_event_lateness": 0.03245536483465207,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.03220433551570255,
+      "p99_event_lateness": 0.0324275154660765,
+      "handler_calls": 2376,
+      "maximum_handler_seconds": 0.0016611060018476564,
+      "median_handler_seconds": 1.0616000508889556e-05,
+      "running_handler_seconds": 0.021465861005708575,
+      "max_psg_writes_per_handler": 16,
+      "over_budget_ticks": 9,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+      "writes_in_irq": 180,
+      "epoch_to_first_write": 9.777700324775651e-05,
+      "maximum_epoch_event_lateness": 0.03255314183789983,
+      "minimum_epoch_event_error": 9.777700324775651e-05,
+      "epoch_duration": 1.1518863850033085,
+      "expected_seconds": 1.149750566893424,
+      "maximum_serviced_tick_lateness": 1,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 180,
+      "final_head": 180,
+      "final_tail": 180,
+      "final_count": 0,
+      "full_ring_observed": false,
+      "envelope_writes": 43,
+      "expected_full_rate_writes_per_second": 155.68594193751971,
+      "accepted_records": 180,
+      "full_or_state_rejections": 0,
+      "producer_pids": [
+        3
+      ],
+      "tail_wraps": 0,
+      "maximum_append_masked_body_seconds": 8.604400136391632e-05,
+      "driver_calls": {
+        "setstat": 196,
+        "getstat": 19
+      },
+      "control_accesses": [
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ]
+      ],
+      "sampled_producer_user_seconds_whole_capture": 0.06809999998949934,
+      "clock": {
+        "video_edges": 69,
+        "irq_acks": 69,
+        "clock_ticks": 69,
+        "clock_calls": 0,
+        "coalesced_edge_states": {},
+        "longest_sampled_interval_seconds": {
+          "halt": 0,
+          "irq_mask": 0.00240000000121654,
+          "firq_mask": 0.00240000000121654
+        }
+      }
+    },
+    "measured-saturation": {
+      "capture": "emulator/images/reliability/logs/harden-measured-saturation.json",
+      "pairs": 255,
+      "duration": 0.25182201999996323,
+      "maximum_event_lateness": 0.0017927046649371392,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.0016287736662586039,
+      "p99_event_lateness": 0.0017497199994977453,
+      "handler_calls": 1471,
+      "maximum_handler_seconds": 0.0016398740008298773,
+      "median_handler_seconds": 1.0616000508889556e-05,
+      "running_handler_seconds": 0.02620836699861684,
+      "max_psg_writes_per_handler": 16,
+      "over_budget_ticks": 9,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+      "writes_in_irq": 256,
+      "epoch_to_first_write": 9.777800005394965e-05,
+      "maximum_epoch_event_lateness": 0.0018904826649910889,
+      "minimum_epoch_event_error": 9.777800005394965e-05,
+      "epoch_duration": 0.2519197980000172,
+      "expected_seconds": 0.25,
+      "maximum_serviced_tick_lateness": 0,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 256,
+      "final_head": 0,
+      "final_tail": 0,
+      "final_count": 0,
+      "full_ring_observed": true,
+      "envelope_writes": 57,
+      "expected_full_rate_writes_per_second": 1020.0,
+      "accepted_records": 256,
+      "full_or_state_rejections": 0,
+      "producer_pids": [
+        3
+      ],
+      "tail_wraps": 1,
+      "maximum_append_masked_body_seconds": 8.604500180808827e-05,
+      "driver_calls": {
+        "setstat": 272,
+        "getstat": 5
+      },
+      "control_accesses": [
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ]
+      ],
+      "sampled_producer_user_seconds_whole_capture": 0.08580000001529697,
+      "clock": {
+        "video_edges": 15,
+        "irq_acks": 15,
+        "clock_ticks": 15,
+        "clock_calls": 0,
+        "coalesced_edge_states": {},
+        "longest_sampled_interval_seconds": {
+          "halt": 0,
+          "irq_mask": 0.00240000000121654,
+          "firq_mask": 0.00240000000121654
+        }
+      }
+    },
+    "measured-long": {
+      "capture": "emulator/images/reliability/logs/harden-measured-long.json",
+      "pairs": 5269,
+      "duration": 210.27140943099948,
+      "maximum_event_lateness": 0.27130215500073973,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.25749693300022614,
+      "p99_event_lateness": 0.2683847999986142,
+      "handler_calls": 15441,
+      "maximum_handler_seconds": 0.0016398730003857054,
+      "median_handler_seconds": 4.860900298808701e-05,
+      "running_handler_seconds": 1.1366218653492979,
+      "max_psg_writes_per_handler": 16,
+      "over_budget_ticks": 0,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+      "writes_in_irq": 5270,
+      "epoch_to_first_write": 9.77769996097777e-05,
+      "maximum_epoch_event_lateness": 0.2713999320003495,
+      "minimum_epoch_event_error": 9.77769996097777e-05,
+      "epoch_duration": 210.2715072079991,
+      "expected_seconds": 210.0,
+      "maximum_serviced_tick_lateness": 0,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 256,
+      "final_head": 150,
+      "final_tail": 150,
+      "final_count": 0,
+      "full_ring_observed": true,
+      "envelope_writes": 1053,
+      "expected_full_rate_writes_per_second": 25.090476190476192,
+      "accepted_records": 5270,
+      "full_or_state_rejections": 3000,
+      "producer_pids": [
+        3
+      ],
+      "tail_wraps": 20,
+      "maximum_append_masked_body_seconds": 8.604400136391632e-05,
+      "driver_calls": {
+        "setstat": 8298,
+        "getstat": 3151
+      },
+      "control_accesses": [
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ]
+      ],
+      "sampled_producer_user_seconds_whole_capture": 3.013700000003155,
+      "steady_queue_before_terminal": {
+        "samples": 12002,
+        "minimum_records": 240,
+        "median_records": 256.0,
+        "minimum_lookahead_ticks": 572,
+        "median_lookahead_ticks": 616.0,
+        "maximum_lookahead_ticks": 622
+      },
+      "clock": {
+        "video_edges": 12600,
+        "irq_acks": 12600,
+        "clock_ticks": 12600,
+        "clock_calls": 0,
+        "coalesced_edge_states": {},
+        "longest_sampled_interval_seconds": {
+          "halt": 0,
+          "irq_mask": 0.0021296099985192996,
+          "firq_mask": 0.0021296099985192996
+        }
+      }
+    },
+    "measured-floppy-dir": {
+      "capture": "emulator/images/reliability/logs/harden-measured-floppy-dir.json",
+      "pairs": 820,
+      "duration": 21.460958155999833,
+      "maximum_event_lateness": 1.3744610819991792,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 1.3702760579997282,
+      "p99_event_lateness": 1.3719175179980816,
+      "handler_calls": 4535,
+      "maximum_handler_seconds": 0.0016398739971918985,
+      "median_handler_seconds": 1.0616000508889556e-05,
+      "running_handler_seconds": 0.14029385203321,
+      "max_psg_writes_per_handler": 16,
+      "over_budget_ticks": 0,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+      "writes_in_irq": 821,
+      "epoch_to_first_write": 9.777800005394965e-05,
+      "maximum_epoch_event_lateness": 1.374558859999233,
+      "minimum_epoch_event_error": 9.777800005394965e-05,
+      "epoch_duration": 21.461055933999887,
+      "expected_seconds": 20.08997732426304,
+      "maximum_serviced_tick_lateness": 0,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 256,
+      "final_head": 53,
+      "final_tail": 53,
+      "final_count": 0,
+      "full_ring_observed": true,
+      "envelope_writes": 1,
+      "expected_full_rate_writes_per_second": 40.8163726003648,
+      "accepted_records": 821,
+      "full_or_state_rejections": 197,
+      "producer_pids": [
+        3
+      ],
+      "tail_wraps": 3,
+      "maximum_append_masked_body_seconds": 8.604500180808827e-05,
+      "driver_calls": {
+        "setstat": 1070,
+        "getstat": 288
+      },
+      "control_accesses": [
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ]
+      ],
+      "sampled_producer_user_seconds_whole_capture": 0.4091000000225904,
+      "steady_queue_before_terminal": {
+        "samples": 849,
+        "minimum_records": 240,
+        "median_records": 256,
+        "minimum_lookahead_ticks": 353,
+        "median_lookahead_ticks": 384,
+        "maximum_lookahead_ticks": 410
+      },
+      "clock": {
+        "video_edges": 1286,
+        "irq_acks": 1206,
+        "clock_ticks": 1206,
+        "clock_calls": 0,
+        "coalesced_edge_states": {
+          "halt_and_irq_mask": 79,
+          "irq_mask_only": 1
+        },
+        "longest_sampled_interval_seconds": {
+          "halt": 0.19650000000183354,
+          "irq_mask": 0.205100000002858,
+          "firq_mask": 0.205100000002858
+        }
+      }
+    },
+    "workloads-counter": {
+      "capture": "emulator/images/reliability/logs/harden-workloads-counter.json",
+      "pairs": 820,
+      "duration": 20.12590598099996,
+      "maximum_event_lateness": 0.03940890799974994,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.035223882999854794,
+      "p99_event_lateness": 0.03686534399865238,
+      "handler_calls": 4918,
+      "maximum_handler_seconds": 0.0016398739971918985,
+      "median_handler_seconds": 1.0616000508889556e-05,
+      "running_handler_seconds": 0.14029384699097136,
+      "max_psg_writes_per_handler": 16,
+      "over_budget_ticks": 0,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 3.0731000151718035e-05,
+      "writes_in_irq": 821,
+      "epoch_to_first_write": 9.777800005394965e-05,
+      "maximum_epoch_event_lateness": 0.03950668599980389,
+      "minimum_epoch_event_error": 9.777800005394965e-05,
+      "epoch_duration": 20.126003759000014,
+      "expected_seconds": 20.08997732426304,
+      "maximum_serviced_tick_lateness": 0,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 256,
+      "final_head": 53,
+      "final_tail": 53,
+      "final_count": 0,
+      "full_ring_observed": true,
+      "envelope_writes": 1,
+      "expected_full_rate_writes_per_second": 40.8163726003648,
+      "accepted_records": 821,
+      "full_or_state_rejections": 210,
+      "producer_pids": [
+        4
+      ],
+      "tail_wraps": 3,
+      "maximum_append_masked_body_seconds": 8.604400136391632e-05,
+      "driver_calls": {
+        "setstat": 1083,
+        "getstat": 301
+      },
+      "control_accesses": [
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ]
+      ],
+      "sampled_producer_user_seconds_whole_capture": 0.4131999999881373,
+      "steady_queue_before_terminal": {
+        "samples": 847,
+        "minimum_records": 240,
+        "median_records": 256,
+        "minimum_lookahead_ticks": 352,
+        "median_lookahead_ticks": 384,
+        "maximum_lookahead_ticks": 410
+      },
+      "clock": {
+        "video_edges": 1206,
+        "irq_acks": 1206,
+        "clock_ticks": 1206,
+        "clock_calls": 0,
+        "coalesced_edge_states": {},
+        "longest_sampled_interval_seconds": {
+          "halt": 0,
+          "irq_mask": 0.0021083739993628114,
+          "firq_mask": 0.0021083739993628114
+        }
+      }
+    },
+    "workloads-commands": {
+      "capture": "emulator/images/reliability/logs/harden-workloads-commands.json",
+      "pairs": 820,
+      "duration": 20.12590598099996,
+      "maximum_event_lateness": 0.03940890799974994,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.035224442000764355,
+      "p99_event_lateness": 0.03686590199911777,
+      "handler_calls": 3419,
+      "maximum_handler_seconds": 0.0016398740008298773,
+      "median_handler_seconds": 1.0616000508889556e-05,
+      "running_handler_seconds": 0.1402938460742007,
+      "max_psg_writes_per_handler": 16,
+      "over_budget_ticks": 0,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 3.073000334552489e-05,
+      "writes_in_irq": 821,
+      "epoch_to_first_write": 9.777800005394965e-05,
+      "maximum_epoch_event_lateness": 0.03950668599980389,
+      "minimum_epoch_event_error": 9.777800005394965e-05,
+      "epoch_duration": 20.126003759000014,
+      "expected_seconds": 20.08997732426304,
+      "maximum_serviced_tick_lateness": 0,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 256,
+      "final_head": 53,
+      "final_tail": 53,
+      "final_count": 0,
+      "full_ring_observed": true,
+      "envelope_writes": 1,
+      "expected_full_rate_writes_per_second": 40.8163726003648,
+      "accepted_records": 821,
+      "full_or_state_rejections": 160,
+      "producer_pids": [
+        3
+      ],
+      "tail_wraps": 3,
+      "maximum_append_masked_body_seconds": 8.604500180808827e-05,
+      "driver_calls": {
+        "setstat": 1033,
+        "getstat": 251
+      },
+      "control_accesses": [
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ]
+      ],
+      "sampled_producer_user_seconds_whole_capture": 0.39319999998406274,
+      "steady_queue_before_terminal": {
+        "samples": 847,
+        "minimum_records": 193,
+        "median_records": 256,
+        "minimum_lookahead_ticks": 292,
+        "median_lookahead_ticks": 380,
+        "maximum_lookahead_ticks": 411
+      },
+      "clock": {
+        "video_edges": 1206,
+        "irq_acks": 1206,
+        "clock_ticks": 1206,
+        "clock_calls": 0,
+        "coalesced_edge_states": {},
+        "longest_sampled_interval_seconds": {
+          "halt": 0,
+          "irq_mask": 0.0021222059986030217,
+          "firq_mask": 0.0021222059986030217
+        }
+      }
+    },
+    "workloads-directory": {
+      "capture": "emulator/images/reliability/logs/harden-workloads-directory.json",
+      "pairs": 820,
+      "duration": 20.125938387998758,
+      "maximum_event_lateness": 0.03941896499934927,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.035268023000536886,
+      "p99_event_lateness": 0.036875400998251706,
+      "handler_calls": 3422,
+      "maximum_handler_seconds": 0.0016398740008298773,
+      "median_handler_seconds": 1.0616000508889556e-05,
+      "running_handler_seconds": 0.14029384199966444,
+      "max_psg_writes_per_handler": 16,
+      "over_budget_ticks": 0,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+      "writes_in_irq": 821,
+      "epoch_to_first_write": 9.777800005394965e-05,
+      "maximum_epoch_event_lateness": 0.03951674299940322,
+      "minimum_epoch_event_error": 9.777800005394965e-05,
+      "epoch_duration": 20.126036165998812,
+      "expected_seconds": 20.08997732426304,
+      "maximum_serviced_tick_lateness": 0,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 256,
+      "final_head": 53,
+      "final_tail": 53,
+      "final_count": 0,
+      "full_ring_observed": true,
+      "envelope_writes": 1,
+      "expected_full_rate_writes_per_second": 40.8163726003648,
+      "accepted_records": 821,
+      "full_or_state_rejections": 196,
+      "producer_pids": [
+        3
+      ],
+      "tail_wraps": 3,
+      "maximum_append_masked_body_seconds": 8.604400136391632e-05,
+      "driver_calls": {
+        "setstat": 1069,
+        "getstat": 264
+      },
+      "control_accesses": [
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ]
+      ],
+      "sampled_producer_user_seconds_whole_capture": 0.4027000001515262,
+      "steady_queue_before_terminal": {
+        "samples": 848,
+        "minimum_records": 240,
+        "median_records": 256.0,
+        "minimum_lookahead_ticks": 348,
+        "median_lookahead_ticks": 384.0,
+        "maximum_lookahead_ticks": 413
+      },
+      "clock": {
+        "video_edges": 1206,
+        "irq_acks": 1206,
+        "clock_ticks": 1206,
+        "clock_calls": 0,
+        "coalesced_edge_states": {},
+        "longest_sampled_interval_seconds": {
+          "halt": 0,
+          "irq_mask": 0.0020880400006717537,
+          "firq_mask": 0.0020880400006717537
+        }
+      }
+    },
+    "workloads-small-read": {
+      "capture": "emulator/images/reliability/logs/harden-workloads-small-read.json",
+      "pairs": 820,
+      "duration": 20.125905982000404,
+      "maximum_event_lateness": 0.03940890799974994,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.035223884000298966,
+      "p99_event_lateness": 0.03686534399865238,
+      "handler_calls": 3423,
+      "maximum_handler_seconds": 0.0016398730003857054,
+      "median_handler_seconds": 1.0616000508889556e-05,
+      "running_handler_seconds": 0.1402938500577875,
+      "max_psg_writes_per_handler": 16,
+      "over_budget_ticks": 0,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+      "writes_in_irq": 821,
+      "epoch_to_first_write": 9.77769996097777e-05,
+      "maximum_epoch_event_lateness": 0.03950668499935972,
+      "minimum_epoch_event_error": 9.77769996097777e-05,
+      "epoch_duration": 20.126003759000014,
+      "expected_seconds": 20.08997732426304,
+      "maximum_serviced_tick_lateness": 0,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 256,
+      "final_head": 53,
+      "final_tail": 53,
+      "final_count": 0,
+      "full_ring_observed": true,
+      "envelope_writes": 1,
+      "expected_full_rate_writes_per_second": 40.8163726003648,
+      "accepted_records": 821,
+      "full_or_state_rejections": 181,
+      "producer_pids": [
+        3
+      ],
+      "tail_wraps": 3,
+      "maximum_append_masked_body_seconds": 8.604499817010947e-05,
+      "driver_calls": {
+        "setstat": 1054,
+        "getstat": 247
+      },
+      "control_accesses": [
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ]
+      ],
+      "sampled_producer_user_seconds_whole_capture": 0.397000000000844,
+      "steady_queue_before_terminal": {
+        "samples": 847,
+        "minimum_records": 198,
+        "median_records": 256,
+        "minimum_lookahead_ticks": 294,
+        "median_lookahead_ticks": 383,
+        "maximum_lookahead_ticks": 411
+      },
+      "clock": {
+        "video_edges": 1206,
+        "irq_acks": 1206,
+        "clock_ticks": 1206,
+        "clock_calls": 0,
+        "coalesced_edge_states": {},
+        "longest_sampled_interval_seconds": {
+          "halt": 0,
+          "irq_mask": 0.002065156000753632,
+          "firq_mask": 0.002065156000753632
+        }
+      }
+    },
+    "workloads-periodic": {
+      "capture": "emulator/images/reliability/logs/harden-workloads-periodic.json",
+      "pairs": 820,
+      "duration": 22.46226111500073,
+      "maximum_event_lateness": 2.3757640410000747,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 2.164772518002721,
+      "p99_event_lateness": 2.2053943850014193,
+      "handler_calls": 6263,
+      "maximum_handler_seconds": 0.0016398740008298773,
+      "median_handler_seconds": 1.0616000508889556e-05,
+      "running_handler_seconds": 0.14029386603579042,
+      "max_psg_writes_per_handler": 16,
+      "over_budget_ticks": 0,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+      "writes_in_irq": 821,
+      "epoch_to_first_write": 9.777800005394965e-05,
+      "maximum_epoch_event_lateness": 2.3758618190001286,
+      "minimum_epoch_event_error": 9.777800005394965e-05,
+      "epoch_duration": 22.462358893000783,
+      "expected_seconds": 20.08997732426304,
+      "maximum_serviced_tick_lateness": 0,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 256,
+      "final_head": 53,
+      "final_tail": 53,
+      "final_count": 0,
+      "full_ring_observed": true,
+      "envelope_writes": 1,
+      "expected_full_rate_writes_per_second": 40.8163726003648,
+      "accepted_records": 821,
+      "full_or_state_rejections": 194,
+      "producer_pids": [
+        3
+      ],
+      "tail_wraps": 3,
+      "maximum_append_masked_body_seconds": 8.604399772593752e-05,
+      "driver_calls": {
+        "setstat": 1067,
+        "getstat": 276
+      },
+      "control_accesses": [
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ]
+      ],
+      "sampled_producer_user_seconds_whole_capture": 0.3992000000725966,
+      "steady_queue_before_terminal": {
+        "samples": 847,
+        "minimum_records": 240,
+        "median_records": 256,
+        "minimum_lookahead_ticks": 352,
+        "median_lookahead_ticks": 384,
+        "maximum_lookahead_ticks": 411
+      },
+      "clock": {
+        "video_edges": 1346,
+        "irq_acks": 1206,
+        "clock_ticks": 1206,
+        "clock_calls": 0,
+        "coalesced_edge_states": {
+          "halt_and_irq_mask": 136,
+          "irq_mask_only": 4
+        },
+        "longest_sampled_interval_seconds": {
+          "halt": 0.1635999999998603,
+          "irq_mask": 0.17269999999916763,
+          "firq_mask": 0.17269999999916763
+        }
+      }
+    },
+    "workloads-sustained": {
+      "capture": "emulator/images/reliability/logs/harden-workloads-sustained.json",
+      "pairs": 820,
+      "duration": 26.434052494001662,
+      "maximum_event_lateness": 6.347556537999189,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 5.84909630999973,
+      "p99_event_lateness": 6.177175706999115,
+      "handler_calls": 5027,
+      "maximum_handler_seconds": 0.0016398740008298773,
+      "median_handler_seconds": 1.0616000508889556e-05,
+      "running_handler_seconds": 0.14029385495450697,
+      "max_psg_writes_per_handler": 16,
+      "over_budget_ticks": 0,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+      "writes_in_irq": 821,
+      "epoch_to_first_write": 9.777800005394965e-05,
+      "maximum_epoch_event_lateness": 6.347654315999243,
+      "minimum_epoch_event_error": 9.777800005394965e-05,
+      "epoch_duration": 26.434150272001716,
+      "expected_seconds": 20.08997732426304,
+      "maximum_serviced_tick_lateness": 0,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 256,
+      "final_head": 53,
+      "final_tail": 53,
+      "final_count": 0,
+      "full_ring_observed": true,
+      "envelope_writes": 1,
+      "expected_full_rate_writes_per_second": 40.8163726003648,
+      "accepted_records": 821,
+      "full_or_state_rejections": 172,
+      "producer_pids": [
+        3
+      ],
+      "tail_wraps": 3,
+      "maximum_append_masked_body_seconds": 8.604499817010947e-05,
+      "driver_calls": {
+        "setstat": 1045,
+        "getstat": 236
+      },
+      "control_accesses": [
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ]
+      ],
+      "sampled_producer_user_seconds_whole_capture": 0.38900000002104207,
+      "steady_queue_before_terminal": {
+        "samples": 848,
+        "minimum_records": 240,
+        "median_records": 256.0,
+        "minimum_lookahead_ticks": 351,
+        "median_lookahead_ticks": 383.0,
+        "maximum_lookahead_ticks": 411
+      },
+      "clock": {
+        "video_edges": 1584,
+        "irq_acks": 1206,
+        "clock_ticks": 1206,
+        "clock_calls": 0,
+        "coalesced_edge_states": {
+          "halt_and_irq_mask": 369,
+          "irq_mask_only": 9
+        },
+        "longest_sampled_interval_seconds": {
+          "halt": 0.20080000000234577,
+          "irq_mask": 0.20999999999912689,
+          "firq_mask": 0.20999999999912689
+        }
+      }
+    }
+  },
+  "audio": {
+    "baseline-flicky": {
+      "track_sha256": "65ae436ba023bbe62fcdcbb7266f3283d600c0b5e1bd7aa56ec206aa9940337c",
+      "writes": 820,
+      "expected_seconds": 20.08997732426304,
+      "musical_event_span_seconds": 20.10940890800157,
+      "first_event_sample": 0,
+      "max_error_seconds": 0.03940890800156893,
+      "min_error_seconds": 0.0,
+      "source_clock_hz": 2000000,
+      "selected_clock_hz": 2000000,
+      "inferred_pitch_error_cents": 0.0,
+      "short_wait_count": 44,
+      "minimum_wait_samples": 441,
+      "register_counts": {
+        "7": 1,
+        "8": 225,
+        "9": 81,
+        "10": 211,
+        "11": 1,
+        "12": 1,
+        "13": 1,
+        "0": 97,
+        "1": 57,
+        "2": 27,
+        "3": 19,
+        "4": 82,
+        "5": 17
+      },
+      "max_writes_per_quantized_tick": 16,
+      "nonmute_writes_after_matched_music": 0,
+      "immediate_final_mute": true,
+      "first_event_to_mute_seconds": 20.125905982000404,
+      "pcm": {
+        "rate": 48000,
+        "channels": 4,
+        "window_frames": 965251,
+        "channel_stats": [
+          {
+            "channel": 0,
+            "dc_mean": 0,
+            "ac_rms": 0.0,
+            "peak": 0,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 2011,
+            "blocks": 2011
+          },
+          {
+            "channel": 1,
+            "dc_mean": 9464.507766373721,
+            "ac_rms": 14004.228382414953,
+            "peak": 32767,
+            "clipped_fraction": 0.1060221641832021,
+            "quiet_10ms_blocks": 22,
+            "blocks": 2011
+          },
+          {
+            "channel": 2,
+            "dc_mean": 0,
+            "ac_rms": 0.0,
+            "peak": 0,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 2011,
+            "blocks": 2011
+          },
+          {
+            "channel": 3,
+            "dc_mean": 0,
+            "ac_rms": 0.0,
+            "peak": 0,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 2011,
+            "blocks": 2011
+          }
+        ]
+      },
+      "maximum_ceiling_quantization_seconds": 0.013333333333333334,
+      "wav_sha256": "9b266a4fad979ccbf1ac58d27514e4e524b69bc2ea8c0a0bd4680efddeb6e6d0"
+    },
+    "final-idle": {
+      "track_sha256": "65ae436ba023bbe62fcdcbb7266f3283d600c0b5e1bd7aa56ec206aa9940337c",
+      "writes": 820,
+      "expected_seconds": 20.08997732426304,
+      "musical_event_span_seconds": 20.10940946700066,
+      "first_event_sample": 0,
+      "max_error_seconds": 0.039409467000659504,
+      "min_error_seconds": 0.0,
+      "source_clock_hz": 2000000,
+      "selected_clock_hz": 2000000,
+      "inferred_pitch_error_cents": 0.0,
+      "short_wait_count": 44,
+      "minimum_wait_samples": 441,
+      "register_counts": {
+        "7": 1,
+        "8": 225,
+        "9": 81,
+        "10": 211,
+        "11": 1,
+        "12": 1,
+        "13": 1,
+        "0": 97,
+        "1": 57,
+        "2": 27,
+        "3": 19,
+        "4": 82,
+        "5": 17
+      },
+      "max_writes_per_quantized_tick": 16,
+      "nonmute_writes_after_matched_music": 0,
+      "immediate_final_mute": true,
+      "first_event_to_mute_seconds": 20.12590654000087,
+      "pcm": {
+        "rate": 48000,
+        "channels": 4,
+        "window_frames": 965252,
+        "channel_stats": [
+          {
+            "channel": 0,
+            "dc_mean": 0,
+            "ac_rms": 0.0,
+            "peak": 0,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 2011,
+            "blocks": 2011
+          },
+          {
+            "channel": 1,
+            "dc_mean": 9505.395818915682,
+            "ac_rms": 13905.641385889512,
+            "peak": 32767,
+            "clipped_fraction": 0.10091250782179162,
+            "quiet_10ms_blocks": 26,
+            "blocks": 2011
+          },
+          {
+            "channel": 2,
+            "dc_mean": 0,
+            "ac_rms": 0.0,
+            "peak": 0,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 2011,
+            "blocks": 2011
+          },
+          {
+            "channel": 3,
+            "dc_mean": 0,
+            "ac_rms": 0.0,
+            "peak": 0,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 2011,
+            "blocks": 2011
+          }
+        ]
+      },
+      "maximum_ceiling_quantization_seconds": 0.013333333333333334,
+      "wav_sha256": "1641b5ecb47466b97762c17420f3413f393ef4d6578d7894f000feb67c93e1c2"
+    },
+    "measured-real-aggress": {
+      "track_sha256": "d2442d5a319ebafbfb4b77e37f4429b0760d3d83586fdd0b1f5a67e2ab6c029d",
+      "writes": 6209,
+      "expected_seconds": 56.99437641723356,
+      "musical_event_span_seconds": 57.056879871001,
+      "first_event_sample": 2,
+      "max_error_seconds": 0.063544727452161,
+      "min_error_seconds": -0.0010403336047772882,
+      "source_clock_hz": 1789773,
+      "selected_clock_hz": 2000000,
+      "inferred_pitch_error_cents": 192.26805649294906,
+      "short_wait_count": 5567,
+      "minimum_wait_samples": 1,
+      "register_counts": {
+        "10": 1087,
+        "9": 1158,
+        "8": 1961,
+        "7": 8,
+        "6": 3,
+        "5": 21,
+        "4": 1195,
+        "3": 21,
+        "2": 327,
+        "1": 214,
+        "0": 214
+      },
+      "max_writes_per_quantized_tick": 11,
+      "nonmute_writes_after_matched_music": 0,
+      "immediate_final_mute": true,
+      "first_event_to_mute_seconds": 57.05698714700338,
+      "pcm": {
+        "rate": 48000,
+        "channels": 4,
+        "window_frames": 2738730,
+        "channel_stats": [
+          {
+            "channel": 0,
+            "dc_mean": 0,
+            "ac_rms": 0.0,
+            "peak": 0,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 5706,
+            "blocks": 5706
+          },
+          {
+            "channel": 1,
+            "dc_mean": -9382.695916355391,
+            "ac_rms": 2648.551469165888,
+            "peak": 12809,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 10,
+            "blocks": 5706
+          },
+          {
+            "channel": 2,
+            "dc_mean": 0,
+            "ac_rms": 0.0,
+            "peak": 0,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 5706,
+            "blocks": 5706
+          },
+          {
+            "channel": 3,
+            "dc_mean": 0,
+            "ac_rms": 0.0,
+            "peak": 0,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 5706,
+            "blocks": 5706
+          }
+        ]
+      },
+      "maximum_ceiling_quantization_seconds": 0.016643990929705216,
+      "wav_sha256": "c4d1b93457faaadde71af87d8689e5d93715b036cebd174a560d8dc4f113822b"
+    },
+    "measured-real-penguin": {
+      "track_sha256": "f64146acc427fcf1e0ca4ae0659c4a3400a223d2d76d7b29e74d5c54ce4936fc",
+      "writes": 8613,
+      "expected_seconds": 57.11244897959184,
+      "musical_event_span_seconds": 57.17389589300001,
+      "first_event_sample": 2,
+      "max_error_seconds": 0.06302115283144616,
+      "min_error_seconds": -0.002212197640142577,
+      "source_clock_hz": 1789773,
+      "selected_clock_hz": 2000000,
+      "inferred_pitch_error_cents": 192.26805649294906,
+      "short_wait_count": 8977,
+      "minimum_wait_samples": 1,
+      "register_counts": {
+        "7": 802,
+        "1": 143,
+        "0": 310,
+        "8": 1687,
+        "3": 164,
+        "2": 207,
+        "9": 2444,
+        "5": 312,
+        "4": 1165,
+        "10": 1272,
+        "6": 107
+      },
+      "max_writes_per_quantized_tick": 13,
+      "nonmute_writes_after_matched_music": 0,
+      "immediate_final_mute": true,
+      "first_event_to_mute_seconds": 57.17400316899875,
+      "pcm": {
+        "rate": 48000,
+        "channels": 4,
+        "window_frames": 2744347,
+        "channel_stats": [
+          {
+            "channel": 0,
+            "dc_mean": 0,
+            "ac_rms": 0.0,
+            "peak": 0,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 5718,
+            "blocks": 5718
+          },
+          {
+            "channel": 1,
+            "dc_mean": -8574.536584112724,
+            "ac_rms": 3295.6314716205575,
+            "peak": 12810,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 72,
+            "blocks": 5718
+          },
+          {
+            "channel": 2,
+            "dc_mean": 0,
+            "ac_rms": 0.0,
+            "peak": 0,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 5718,
+            "blocks": 5718
+          },
+          {
+            "channel": 3,
+            "dc_mean": 0,
+            "ac_rms": 0.0,
+            "peak": 0,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 5718,
+            "blocks": 5718
+          }
+        ]
+      },
+      "maximum_ceiling_quantization_seconds": 0.016643990929705216,
+      "wav_sha256": "048323dcfd5ee0e737d215d234c1fdd3aae244d31d4f569cefca93e716b30e40"
+    },
+    "measured-real-qix": {
+      "track_sha256": "9ab6fb636853e24757c81ce21317d66d8f78d4be199e8fc77c96abc66b5a256f",
+      "writes": 4860,
+      "expected_seconds": 72.25174603174604,
+      "musical_event_span_seconds": 72.20972280200294,
+      "first_event_sample": 5205,
+      "max_error_seconds": 0.09334216886227864,
+      "min_error_seconds": 0.0,
+      "source_clock_hz": 1500000,
+      "selected_clock_hz": 2000000,
+      "inferred_pitch_error_cents": 498.0449991346125,
+      "short_wait_count": 4215,
+      "minimum_wait_samples": 1,
+      "register_counts": {
+        "0": 495,
+        "1": 49,
+        "2": 278,
+        "3": 67,
+        "4": 435,
+        "5": 386,
+        "6": 1,
+        "7": 5,
+        "8": 1125,
+        "9": 861,
+        "10": 1155,
+        "11": 1,
+        "12": 1,
+        "13": 1
+      },
+      "max_writes_per_quantized_tick": 19,
+      "nonmute_writes_after_matched_music": 0,
+      "immediate_final_mute": true,
+      "first_event_to_mute_seconds": 72.2263193300023,
+      "pcm": {
+        "rate": 48000,
+        "channels": 4,
+        "window_frames": 3466066,
+        "channel_stats": [
+          {
+            "channel": 0,
+            "dc_mean": 0,
+            "ac_rms": 0.0,
+            "peak": 0,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 7221,
+            "blocks": 7221
+          },
+          {
+            "channel": 1,
+            "dc_mean": -5138.103439461337,
+            "ac_rms": 5933.7273350088235,
+            "peak": 13347,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 3,
+            "blocks": 7221
+          },
+          {
+            "channel": 2,
+            "dc_mean": 0,
+            "ac_rms": 0.0,
+            "peak": 0,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 7221,
+            "blocks": 7221
+          },
+          {
+            "channel": 3,
+            "dc_mean": 0,
+            "ac_rms": 0.0,
+            "peak": 0,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 7221,
+            "blocks": 7221
+          }
+        ]
+      },
+      "maximum_ceiling_quantization_seconds": 0.015714285714285715,
+      "wav_sha256": "e1ee22ebffef9cff34635a4ddd8151bd02bda47fcd8be74e0878fe276eb1b4de"
+    },
+    "measured-real-cct": {
+      "track_sha256": "09531c5f3c3400a0e55162d50dba98268095fb1ce1d28cd8527eaf4026988be5",
+      "writes": 8613,
+      "expected_seconds": 57.11244897959184,
+      "musical_event_span_seconds": 57.17389589300001,
+      "first_event_sample": 2,
+      "max_error_seconds": 0.06302115283144616,
+      "min_error_seconds": -0.002212197640142577,
+      "source_clock_hz": 2000000,
+      "selected_clock_hz": 2000000,
+      "inferred_pitch_error_cents": 0.0,
+      "short_wait_count": 8977,
+      "minimum_wait_samples": 1,
+      "register_counts": {
+        "7": 802,
+        "1": 143,
+        "0": 310,
+        "8": 1687,
+        "3": 164,
+        "2": 207,
+        "9": 2444,
+        "5": 312,
+        "4": 1165,
+        "10": 1272,
+        "6": 107
+      },
+      "max_writes_per_quantized_tick": 13,
+      "nonmute_writes_after_matched_music": 0,
+      "immediate_final_mute": true,
+      "first_event_to_mute_seconds": 57.17400316900239,
+      "pcm": {
+        "rate": 48000,
+        "channels": 4,
+        "window_frames": 2744347,
+        "channel_stats": [
+          {
+            "channel": 0,
+            "dc_mean": 0,
+            "ac_rms": 0.0,
+            "peak": 0,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 5718,
+            "blocks": 5718
+          },
+          {
+            "channel": 1,
+            "dc_mean": -8565.259651567385,
+            "ac_rms": 3303.7167971158515,
+            "peak": 13109,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 72,
+            "blocks": 5718
+          },
+          {
+            "channel": 2,
+            "dc_mean": 0,
+            "ac_rms": 0.0,
+            "peak": 0,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 5718,
+            "blocks": 5718
+          },
+          {
+            "channel": 3,
+            "dc_mean": 0,
+            "ac_rms": 0.0,
+            "peak": 0,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 5718,
+            "blocks": 5718
+          }
+        ]
+      },
+      "maximum_ceiling_quantization_seconds": 0.016643990929705216,
+      "wav_sha256": "8a1198a9cb1fd56f92f6b596a3b9d9bd4d3f290744ffefa70ba27968fd27df16"
+    },
+    "measured-original-cct": {
+      "track_sha256": "09531c5f3c3400a0e55162d50dba98268095fb1ce1d28cd8527eaf4026988be5",
+      "writes": 8613,
+      "expected_seconds": 57.11244897959184,
+      "musical_event_span_seconds": 58.311919060000946,
+      "first_event_sample": 2,
+      "max_error_seconds": 1.1997195135156886,
+      "min_error_seconds": 0.0,
+      "source_clock_hz": 2000000,
+      "selected_clock_hz": 2000000,
+      "inferred_pitch_error_cents": 0.0,
+      "short_wait_count": 8977,
+      "minimum_wait_samples": 1,
+      "register_counts": {
+        "7": 802,
+        "1": 143,
+        "0": 310,
+        "8": 1687,
+        "3": 164,
+        "2": 207,
+        "9": 2444,
+        "5": 312,
+        "4": 1165,
+        "10": 1272,
+        "6": 107
+      },
+      "max_writes_per_quantized_tick": 13,
+      "nonmute_writes_after_matched_music": 97,
+      "immediate_final_mute": false,
+      "first_event_to_mute_seconds": 77.41759006099892,
+      "pcm": {
+        "rate": 48000,
+        "channels": 4,
+        "window_frames": 2798972,
+        "channel_stats": [
+          {
+            "channel": 0,
+            "dc_mean": 0,
+            "ac_rms": 0.0,
+            "peak": 0,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 5832,
+            "blocks": 5832
+          },
+          {
+            "channel": 1,
+            "dc_mean": -8556.376056280664,
+            "ac_rms": 3306.2100060524685,
+            "peak": 13007,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 72,
+            "blocks": 5832
+          },
+          {
+            "channel": 2,
+            "dc_mean": 0,
+            "ac_rms": 0.0,
+            "peak": 0,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 5832,
+            "blocks": 5832
+          },
+          {
+            "channel": 3,
+            "dc_mean": 0,
+            "ac_rms": 0.0,
+            "peak": 0,
+            "clipped_fraction": 0.0,
+            "quiet_10ms_blocks": 5832,
+            "blocks": 5832
+          }
+        ]
+      },
+      "maximum_ceiling_quantization_seconds": 0.016643990929705216,
+      "wav_sha256": "56dd9b321e5e8f38fa6268ca16c33f2ce0e58e35bfefcfa243505637b1ef52e0"
+    }
+  },
+  "cold_resources": {
+    "harden-shipping-allocation-resources": {
+      "resources_equal": true,
+      "tables_equal": true,
+      "remaining_experimental_modules": [],
+      "psg_data_writes": 3,
+      "dropped_events": 0
+    },
+    "harden-shipping-cct-resources": {
+      "resources_equal": true,
+      "tables_equal": true,
+      "remaining_experimental_modules": [],
+      "psg_data_writes": 824,
+      "dropped_events": 0
+    },
+    "harden-shipping-dual-resources": {
+      "resources_equal": true,
+      "tables_equal": true,
+      "remaining_experimental_modules": [],
+      "psg_data_writes": 0,
+      "dropped_events": 0
+    },
+    "harden-shipping-empty-resources": {
+      "resources_equal": true,
+      "tables_equal": true,
+      "remaining_experimental_modules": [],
+      "psg_data_writes": 0,
+      "dropped_events": 0
+    },
+    "harden-shipping-init-resources": {
+      "resources_equal": true,
+      "tables_equal": true,
+      "remaining_experimental_modules": [],
+      "psg_data_writes": 0,
+      "dropped_events": 0
+    },
+    "harden-shipping-missing-resources": {
+      "resources_equal": true,
+      "tables_equal": true,
+      "remaining_experimental_modules": [],
+      "psg_data_writes": 0,
+      "dropped_events": 0
+    },
+    "harden-shipping-playlist-resources": {
+      "resources_equal": true,
+      "tables_equal": true,
+      "remaining_experimental_modules": [],
+      "psg_data_writes": 1364,
+      "dropped_events": 0
+    },
+    "harden-shipping-repeat1-resources": {
+      "resources_equal": true,
+      "tables_equal": true,
+      "remaining_experimental_modules": [],
+      "psg_data_writes": 270,
+      "dropped_events": 0
+    },
+    "harden-shipping-repeat2-resources": {
+      "resources_equal": true,
+      "tables_equal": true,
+      "remaining_experimental_modules": [],
+      "psg_data_writes": 270,
+      "dropped_events": 0
+    },
+    "harden-shipping-virq-resources": {
+      "resources_equal": true,
+      "tables_equal": true,
+      "remaining_experimental_modules": [],
+      "psg_data_writes": 0,
+      "dropped_events": 0
+    },
+    "harden-stops-dense-stop-resources": {
+      "resources_equal": true,
+      "tables_equal": true,
+      "remaining_experimental_modules": [],
+      "psg_data_writes": 784,
+      "dropped_events": 0
+    },
+    "harden-stops-empty-stop-resources": {
+      "resources_equal": true,
+      "tables_equal": true,
+      "remaining_experimental_modules": [],
+      "psg_data_writes": 7,
+      "dropped_events": 0
+    },
+    "harden-stops-kill-loading-resources": {
+      "resources_equal": true,
+      "tables_equal": true,
+      "remaining_experimental_modules": [],
+      "psg_data_writes": 1,
+      "dropped_events": 0
+    },
+    "harden-stops-kill-queued-resources": {
+      "resources_equal": true,
+      "tables_equal": true,
+      "remaining_experimental_modules": [],
+      "psg_data_writes": 728,
+      "dropped_events": 0
+    },
+    "harden-stops-stop-repeat1-resources": {
+      "resources_equal": true,
+      "tables_equal": true,
+      "remaining_experimental_modules": [],
+      "psg_data_writes": 7,
+      "dropped_events": 0
+    },
+    "harden-stops-stop-repeat2-resources": {
+      "resources_equal": true,
+      "tables_equal": true,
+      "remaining_experimental_modules": [],
+      "psg_data_writes": 7,
+      "dropped_events": 0
+    },
+    "harden-stops-transition-stop-resources": {
+      "resources_equal": true,
+      "tables_equal": true,
+      "remaining_experimental_modules": [],
+      "psg_data_writes": 271,
+      "dropped_events": 0
+    }
+  },
+  "stop_detail": {
+    "harden-full-stop": {
+      "ordered_musical_prefix": 4,
+      "cleanup_mutes": 3,
+      "pending_records": 256,
+      "state": 4,
+      "owner": 0,
+      "underruns": 0,
+      "resources_equal": true,
+      "final_second_psg_pcm_ac_rms": 0.4381199848143771
+    },
+    "harden-paced-dense-stop": {
+      "ordered_musical_prefix": 1778,
+      "cleanup_mutes": 3,
+      "pending_records": 252,
+      "state": 4,
+      "owner": 0,
+      "underruns": 0,
+      "resources_equal": true,
+      "final_second_psg_pcm_ac_rms": 0.0
+    },
+    "harden-measured-cctstop": {
+      "ordered_musical_prefix": 4,
+      "cleanup_mutes": 3,
+      "pending_records": 2,
+      "state": 4,
+      "owner": 0,
+      "underruns": 0,
+      "resources_equal": true,
+      "final_second_psg_pcm_ac_rms": 0.4378101757611397
+    }
+  },
+  "spectrum_comparison": {
+    "seconds": 8,
+    "channel": 1,
+    "fft_size": 4096,
+    "frequency_resolution_hz": 11.71875,
+    "frequency_band_hz": [
+      100,
+      8000
+    ],
+    "power_spectrum_cosine_similarity": 0.9926501707400405,
+    "strongest_bins_hz": [
+      [
+        117.1875,
+        199.21875,
+        140.625,
+        257.8125,
+        222.65625,
+        187.5,
+        128.90625,
+        105.46875
+      ],
+      [
+        257.8125,
+        199.21875,
+        117.1875,
+        128.90625,
+        222.65625,
+        140.625,
+        187.5,
+        234.375
+      ]
+    ],
+    "limitation": "Phase/tempo-tolerant aggregate metric; not a perceptual or envelope-equivalence test."
+  },
+  "human_listening": {
+    "capture": "harden-listen-final",
+    "player_crc": "5C3541",
+    "driver_crc": "D54642",
+    "status": "PASS",
+    "user_response": "Audible; no obvious problems"
+  }
+}

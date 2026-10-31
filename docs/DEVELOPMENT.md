@@ -4,6 +4,10 @@
 
 `bash scripts/build-irq-stream.sh` (after the normal build) produces `cctirq`,
 `PSGStream`/`psgs`, and test helpers. It preserves every normal comparison build.
+Install `build/cctirq-standalone` as `cctirq` for automatic driver loading;
+the individual `build/cctirq` is the diagnostic program only. See
+[IRQ-PLAYER-HARDENING.md](IRQ-PLAYER-HARDENING.md) for installation, final
+audio/timing measurements, failure-path results and release qualifications.
 See [IRQ-STREAMING-INTEGRATION.md](IRQ-STREAMING-INTEGRATION.md) for the measured
 sixteen-record IRQ budget, real VGM/CCT/M3U results, resource ownership, stop
 validation and remaining floppy/sub-tick limitations. Keep it experimental;

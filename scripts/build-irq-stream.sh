@@ -21,3 +21,12 @@ symbols=dict(re.findall(r'^\[ G\] (\w+)\s+([0-9A-F]+)$',Path('build/psgstream.ls
 for k,n in [('irq','IRQ'),('ok','OK'),('ticks','Ticks'),('state','State'),('count','Count'),('budgets','Budgets'),('unders','Unders'),('owner','Owner'),('append','Append'),('busy','Busy'),('invalid','Invalid'),('locked','AppendLocked'),('unlock','AppendUnlock'),('unlockbusy','AppendBusy'),('unlockinvalid','AppendInvalid'),('setstat','SetStat'),('getstat','GetStat')]:p[k]=int(symbols[n],16)
 Path('build/psgstream.json').write_text(json.dumps(p)+'\n')
 PY
+
+# One physical code block: player + driver + descriptor. A cold I$Open can
+# then map the driver using one system DAT slot; no extra load link is needed.
+cat build/cctirq build/psgstream build/psgs > build/cctirq-standalone
+[ "$(wc -c < build/cctirq-standalone)" -le 8192 ] || { echo "Standalone pack exceeds one system block" >&2; exit 1; }
+for fault in INIT VIRQ ALLOC; do
+ "$a" --6309 --format=os9 --includedir=. --define="IRQ_FAIL_$fault" -o "build/psgstream-fail-$fault" tools/psgstream.asm
+ cat build/cctirq "build/psgstream-fail-$fault" build/psgs > "build/cctirq-fail-$fault"
+done
