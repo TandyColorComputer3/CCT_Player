@@ -16,13 +16,21 @@ H6309 SET 1
 path    RMB 128
 buffer  RMB 256
 pathno  RMB 1
+        ifdef LATENCY_STRESS
+count   RMB 2               ; finite 920-read matrix workload, not production
+        else
 count   RMB 1
+        endc
 error   RMB 1
 data_size EQU .
         ifdef CONTINUOUS_READ
-* Same 230 read-only cycles, with no intentional pause between them. This is
+* Same 230 read-only cycles (920 with LATENCY_STRESS), without sleeps. This is
 * a finite disk burst; report its end separately from the player's end.
+        ifdef LATENCY_STRESS
+module_name FCS "diskstress"
+        else
 module_name FCS "diskbusy"
+        endc
         else
 module_name FCS "diskload"
         endc
@@ -49,8 +57,13 @@ copy_path
 path_end
         lda #$0d
         sta ,Y
+        ifdef LATENCY_STRESS
+        ldd #920
+        std count,U
+        else
         lda #230
         sta count,U
+        endc
 next_read
         lda #1              ; I$Open: read-only
         leax path,U
@@ -64,7 +77,13 @@ next_read
         lda pathno,U
         os9 I$Close
         bcs exit_error
+        ifdef LATENCY_STRESS
+        ldd count,U
+        subd #1
+        std count,U
+        else
         dec count,U
+        endc
         beq completed
         ifndef CONTINUOUS_READ
         ldx #61

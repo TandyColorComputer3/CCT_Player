@@ -26,6 +26,13 @@ return function(commands, array, encode)
   local active=false; local serial=0
   local resets=0
   local reset_subscription=emu.add_machine_reset_notifier(function() resets=resets+1 end)
+  commands.reliability_load_scheduling=function()
+    assert(not commands.scheduling_status or not commands.scheduling_status().active,'call observer active')
+    assert(not commands.scheduling_series_status or not commands.scheduling_series_status().active,'workload series active')
+    dofile('tools/scheduling-observer.lua')(commands,array,encode)
+    dofile('tools/scheduling-workloads.lua')(commands,array,encode)
+    return {loaded=true}
+  end
   commands.reliability_speed=function(p) m.video.throttled=not p.fast;return {throttled=m.video.throttled} end
   commands.reliability_audio=function(p)
     if p.path then
@@ -37,7 +44,7 @@ return function(commands, array, encode)
   commands.reliability_start=function(p)
     assert(not active,'already sampling')
     local us=assert(tonumber(p.interval_us)); local duration=assert(tonumber(p.duration))
-    assert(us>=1 and us<=1000 and duration>0 and duration<=180)
+    assert(us>=1 and us<=1000 and duration>0 and duration<=360)
     local path=assert(p.path); assert(path:match('^emulator/images/reliability/logs/[%w_-]+%.json$'))
     if p.storage then
       local code,storage=assert(p.code),p.storage
@@ -54,7 +61,7 @@ return function(commands, array, encode)
     serial=serial+1; local token=serial;local initial_resets=resets; active=true
     local events, taps, bins={}, {}, {}; local dropped=0; local samples=0; local maxgap=0
     local begin=m.time:as_double(); local last=begin; local previous=nil; local previous_zone=nil; local previous_owner=nil
-    local input_index=1
+    local input_index=1;local input_epoch=nil;local selected_register=nil;local input_track=0
     local function emit(kind,fields)
       if #events>=1500000 then dropped=dropped+1;return end
       local e=fields or {};e.kind=kind;e.seconds=m.time:as_double();events[#events+1]=e
@@ -68,6 +75,14 @@ return function(commands, array, encode)
     end)
     taps[#taps+1]=mem:install_write_tap(0xff5e,0xff5f,'reliability-psg',function(a,d)
       emit('psg-write',{address=a,data=d,pid=owner()})
+      if a==0xff5e then selected_register=d
+      elseif p.input_anchor=='psg' then
+        if selected_register==7 and d==63 then
+          if p.repeat_inputs then input_epoch=nil;input_index=1 end
+        elseif not input_epoch then
+          input_epoch=m.time:as_double();input_track=input_track+1
+        end
+      end
     end)
     taps[#taps+1]=mem:install_write_tap(0xff48,0xff48,'reliability-fdc',function(a,d)
       emit('fdc-command',{data=d,cc=cc:read(0)})
@@ -90,11 +105,13 @@ return function(commands, array, encode)
         if resets~=initial_resets then emit('discontinuity',{reason='machine reset'});break end
         local now=m.time:as_double();local dt=now-last;maxgap=math.max(maxgap,dt);last=now
         local input=p.inputs and p.inputs[input_index]
-        if input and now-begin>=input.after then
+        local anchor=p.input_anchor=='psg' and input_epoch or begin
+        if p.input_anchor=='psg' and not input_epoch then anchor=nil end
+        if input and anchor and now-anchor>=input.after then
           local keyboard=m.natkeyboard
           if not keyboard.empty or keyboard.is_posting then emit('discontinuity',{reason='keyboard queue overlap'});break end
           keyboard.in_use=true;keyboard:post_coded(input.text)
-          emit('host-input',{text=input.text});input_index=input_index+1
+          emit('host-input',{text=input.text,track=input_track});input_index=input_index+1
         end
         local c=cc:read(0)&0x50;local h=halt:read(66);local s=susp:read(0)
         local pid=owner();local task=regs:read(1)&1;local z=zone:read(0)

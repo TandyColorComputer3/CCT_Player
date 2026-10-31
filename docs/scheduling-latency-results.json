@@ -1,0 +1,2165 @@
+{
+  "synthetic": [
+    {
+      "capture": "emulator/images/reliability/logs/lat-p128-1.json",
+      "interval_us": 100,
+      "max_sample_gap": 0.00010000000020227,
+      "first_write": 5873.6788942864,
+      "mute": 5903.7006819778,
+      "pairs": 210,
+      "duration": 30.021787691400277,
+      "duration_error_percent": 0.0726256380009227,
+      "video_edges": 1799,
+      "irq_acks": 1799,
+      "clock_ticks": 1799,
+      "clock_calls": 3384,
+      "fdc_commands": 0,
+      "clock_deficit_seconds": 0.03845435806694297,
+      "serviced_lateness_epoch": "initial clock snapshot",
+      "epoch_to_first_write_seconds": 0.004263112799890223,
+      "max_ack_to_tick_seconds": 0.00018661600006453227,
+      "max_local_lateness_seconds": 1.491581609300738,
+      "max_accumulated_lateness_seconds": 1.4862267373000577,
+      "max_serviced_clock_lateness_seconds": 1.4833333333333334,
+      "min_serviced_clock_error_seconds": 0.0,
+      "max_player_user_entry_gap_seconds": 1.504800000000614,
+      "ticks_with_other_process_current": 1781,
+      "sampled_seconds": {
+        "neither": 26.16458769140627,
+        "player_user": 1.0523876914012362,
+        "irq_mask_only": 3.857199999994009,
+        "firq_mask": 3.84799999999359,
+        "player_system": 3.703199999969911
+      },
+      "player_pid": 4,
+      "longest_sampled_interval_seconds": {
+        "halt": 0,
+        "irq_mask": 0.001299999999901047,
+        "firq_mask": 0.001299999999901047
+      },
+      "complete_ack_groups": 1798,
+      "edges_in_complete_ack_groups": 1798,
+      "coalesced_edge_states": {},
+      "post_ack_edge_samples_corrected": 1965,
+      "final_mpi": 255,
+      "p95_event_lateness": 0.7678788136008734,
+      "p99_event_lateness": 1.4858747371008576
+    },
+    {
+      "capture": "emulator/images/reliability/logs/lat-p128-2.json",
+      "interval_us": 100,
+      "max_sample_gap": 0.00010000000111177,
+      "first_write": 9788.1807637926,
+      "mute": 9818.2078001972,
+      "pairs": 210,
+      "duration": 30.02703640460095,
+      "duration_error_percent": 0.09012134866983601,
+      "video_edges": 1800,
+      "irq_acks": 1800,
+      "clock_ticks": 1800,
+      "clock_calls": 3382,
+      "fdc_commands": 0,
+      "clock_deficit_seconds": 0.027036404600949027,
+      "serviced_lateness_epoch": "initial clock snapshot",
+      "epoch_to_first_write_seconds": 0.003378083900315687,
+      "max_ack_to_tick_seconds": 0.00018661590002011508,
+      "max_local_lateness_seconds": 1.4888248335009848,
+      "max_accumulated_lateness_seconds": 1.4841309395997087,
+      "max_serviced_clock_lateness_seconds": 1.4833333333333334,
+      "min_serviced_clock_error_seconds": 0.0,
+      "max_player_user_entry_gap_seconds": 1.5675999999984924,
+      "ticks_with_other_process_current": 1783,
+      "sampled_seconds": {
+        "neither": 26.17780747564757,
+        "player_user": 1.0528364045658236,
+        "irq_mask_only": 3.84922892895338,
+        "firq_mask": 3.840528928962158,
+        "player_system": 3.700499999875319
+      },
+      "player_pid": 4,
+      "longest_sampled_interval_seconds": {
+        "halt": 0,
+        "irq_mask": 0.0010999999994965037,
+        "firq_mask": 0.0010999999994965037
+      },
+      "complete_ack_groups": 1799,
+      "edges_in_complete_ack_groups": 1799,
+      "coalesced_edge_states": {},
+      "post_ack_edge_samples_corrected": 1959,
+      "final_mpi": 255,
+      "p95_event_lateness": 0.754873246400166,
+      "p99_event_lateness": 1.483778939500553
+    },
+    {
+      "capture": "emulator/images/reliability/logs/lat-p129-1.json",
+      "interval_us": 100,
+      "max_sample_gap": 0.00010000000020227,
+      "first_write": 5973.5742625231,
+      "mute": 6003.59596417,
+      "pairs": 210,
+      "duration": 30.02170164690051,
+      "duration_error_percent": 0.07233882300170524,
+      "video_edges": 1799,
+      "irq_acks": 1799,
+      "clock_ticks": 1799,
+      "clock_calls": 3385,
+      "fdc_commands": 0,
+      "clock_deficit_seconds": 0.03836831356717596,
+      "serviced_lateness_epoch": "initial clock snapshot",
+      "epoch_to_first_write_seconds": 0.004968789299709897,
+      "max_ack_to_tick_seconds": 0.00018661590002011508,
+      "max_local_lateness_seconds": 1.4892902560004586,
+      "max_accumulated_lateness_seconds": 1.4838493395000114,
+      "max_serviced_clock_lateness_seconds": 1.4833333333333334,
+      "min_serviced_clock_error_seconds": 0.0,
+      "max_player_user_entry_gap_seconds": 1.5556000000005952,
+      "ticks_with_other_process_current": 1785,
+      "sampled_seconds": {
+        "neither": 26.169101646894887,
+        "player_user": 1.0562016469493756,
+        "irq_mask_only": 3.852600000005623,
+        "firq_mask": 3.8426000000054046,
+        "player_system": 3.700399999974252
+      },
+      "player_pid": 4,
+      "longest_sampled_interval_seconds": {
+        "halt": 0,
+        "irq_mask": 0.0011000000004059984,
+        "firq_mask": 0.0011000000004059984
+      },
+      "complete_ack_groups": 1798,
+      "edges_in_complete_ack_groups": 1798,
+      "coalesced_edge_states": {},
+      "post_ack_edge_samples_corrected": 1965,
+      "final_mpi": 255,
+      "p95_event_lateness": 0.7685666106999633,
+      "p99_event_lateness": 1.4834973393999462
+    },
+    {
+      "capture": "emulator/images/reliability/logs/lat-p136-1.json",
+      "interval_us": 100,
+      "max_sample_gap": 0.00010000000020227,
+      "first_write": 6066.343945477,
+      "mute": 6096.3654051936,
+      "pairs": 210,
+      "duration": 30.021459716600475,
+      "duration_error_percent": 0.07153238866826062,
+      "video_edges": 1799,
+      "irq_acks": 1799,
+      "clock_ticks": 1799,
+      "clock_calls": 3392,
+      "fdc_commands": 0,
+      "clock_deficit_seconds": 0.038126383267140795,
+      "serviced_lateness_epoch": "initial clock snapshot",
+      "epoch_to_first_write_seconds": 0.004926325799715414,
+      "max_ack_to_tick_seconds": 0.00018661590002011508,
+      "max_local_lateness_seconds": 1.4903071451999494,
+      "max_accumulated_lateness_seconds": 1.482998393100388,
+      "max_serviced_clock_lateness_seconds": 1.4833333333333334,
+      "min_serviced_clock_error_seconds": 0.0,
+      "max_player_user_entry_gap_seconds": 1.5361000000002605,
+      "ticks_with_other_process_current": 1783,
+      "sampled_seconds": {
+        "irq_mask_only": 3.86669282096409,
+        "firq_mask": 3.8577928209697347,
+        "player_user": 1.0570597165951767,
+        "neither": 26.154766895636385,
+        "player_system": 3.711099999966791
+      },
+      "player_pid": 4,
+      "longest_sampled_interval_seconds": {
+        "halt": 0,
+        "irq_mask": 0.00120000000060827,
+        "firq_mask": 0.00120000000060827
+      },
+      "complete_ack_groups": 1798,
+      "edges_in_complete_ack_groups": 1798,
+      "coalesced_edge_states": {},
+      "post_ack_edge_samples_corrected": 1962,
+      "final_mpi": 255,
+      "p95_event_lateness": 0.6425952580002559,
+      "p99_event_lateness": 1.4826463930003229
+    },
+    {
+      "capture": "emulator/images/reliability/logs/lat-p160-1.json",
+      "interval_us": 100,
+      "max_sample_gap": 0.00010000000020227,
+      "first_write": 6169.2121890297,
+      "mute": 6199.2483707332,
+      "pairs": 210,
+      "duration": 30.036181703500006,
+      "duration_error_percent": 0.12060567833336311,
+      "video_edges": 1800,
+      "irq_acks": 1800,
+      "clock_ticks": 1800,
+      "clock_calls": 3394,
+      "fdc_commands": 0,
+      "clock_deficit_seconds": 0.036181703500005824,
+      "serviced_lateness_epoch": "initial clock snapshot",
+      "epoch_to_first_write_seconds": 0.003378083900315687,
+      "max_ack_to_tick_seconds": 0.00018661600006453227,
+      "max_local_lateness_seconds": 1.4797147345998383,
+      "max_accumulated_lateness_seconds": 1.4841661395994379,
+      "max_serviced_clock_lateness_seconds": 1.4666666666666668,
+      "min_serviced_clock_error_seconds": 0.0,
+      "max_player_user_entry_gap_seconds": 1.539400000000569,
+      "ticks_with_other_process_current": 1786,
+      "sampled_seconds": {
+        "neither": 26.16708170347374,
+        "player_user": 1.0568817034381937,
+        "irq_mask_only": 3.8691000000262648,
+        "firq_mask": 3.860100000029888,
+        "player_system": 3.7145000000327855
+      },
+      "player_pid": 4,
+      "longest_sampled_interval_seconds": {
+        "halt": 0,
+        "irq_mask": 0.0014000000001033186,
+        "firq_mask": 0.0014000000001033186
+      },
+      "complete_ack_groups": 1799,
+      "edges_in_complete_ack_groups": 1799,
+      "coalesced_edge_states": {},
+      "post_ack_edge_samples_corrected": 1964,
+      "final_mpi": 255,
+      "p95_event_lateness": 0.6432975819998319,
+      "p99_event_lateness": 1.4838141393993283
+    }
+  ],
+  "calls": [
+    {
+      "capture": "emulator/images/reliability/logs/lat-p128-1-calls.json",
+      "calls": {
+        "Budget": {
+          "count": 6,
+          "min": 0.0011258416998316534,
+          "median": 0.0011258417503086093,
+          "p95": 0.0197181539997473,
+          "p99": 0.0197181539997473,
+          "max": 0.01976843979991827
+        },
+        "Epoch": {
+          "count": 1,
+          "min": 0.0007833400004528812,
+          "median": 0.0007833400004528812,
+          "p95": 0.0007833400004528812,
+          "p99": 0.0007833400004528812,
+          "max": 0.0007833400004528812
+        },
+        "GetStat": {
+          "count": 3384,
+          "min": 0.0007833399995433865,
+          "median": 0.0007833400004528812,
+          "p95": 0.0007833400004528812,
+          "p99": 0.0009504004001428257,
+          "max": 0.14711538669962465
+        },
+        "Sleep": {
+          "count": 1584,
+          "min": 0.004685513000367791,
+          "median": 0.01483987900064676,
+          "p95": 0.015366203000667156,
+          "p99": 0.02034113839999918,
+          "max": 1.5047927892001098
+        }
+      },
+      "longest_calls": [
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 5878.6586151671,
+          "end": 5880.1634079563,
+          "duration": 1.5047927892001098,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 2846,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0003047305999643868,
+            "sleep": 0.009000000000014552,
+            "ready": 1.4754880586033323,
+            "unknown": 0.01999999999679858
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 5888.7988486717,
+          "end": 5889.3052858044,
+          "duration": 0.5064371326998298,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 3454,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0004371327004264458,
+            "current-user": 0.0005000000001018634,
+            "sleep": 0.018000000000029104,
+            "ready": 0.4819999999990614,
+            "unknown": 0.005500000000211003
+          }
+        },
+        {
+          "label": "GetStat",
+          "pid": 4,
+          "start": 5880.1730879603,
+          "end": 5880.320203347,
+          "duration": 0.14711538669962465,
+          "request_x": 1,
+          "result_x": 5,
+          "result_y": 2937,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-user": 0.0003319374000056996,
+            "current-system": 0.0005000000001018634,
+            "ready": 0.14078344929930608,
+            "unknown": 0.005500000000211003
+          }
+        },
+        {
+          "label": "GetStat",
+          "pid": 4,
+          "start": 5890.2867555112,
+          "end": 5890.3945681264,
+          "duration": 0.1078126152006007,
+          "request_x": 1,
+          "result_x": 5,
+          "result_y": 3543,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0013126152007316705,
+            "ready": 0.10649999999986903
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 5897.3932472878,
+          "end": 5897.453060493,
+          "duration": 0.05981320520004374,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 3969,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0008132051998472889,
+            "sleep": 0.017500000000836735,
+            "ready": 0.041499999999359716
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 5897.4588807875,
+          "end": 5897.513002765,
+          "duration": 0.054121977500471985,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 3972,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.00012197750038467348,
+            "current-user": 0.0005000000001018634,
+            "sleep": 0.015499999999519787,
+            "unknown": 0.0020000000004074536,
+            "ready": 0.03600000000005821
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 5878.6028913095,
+          "end": 5878.6547867465,
+          "duration": 0.05189543699998467,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 2843,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0008954370005085366,
+            "sleep": 0.016999999999825377,
+            "ready": 0.033999999999650754
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 5897.5178212559,
+          "end": 5897.5386255818,
+          "duration": 0.020804325899916876,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 3976,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0008043259003898129,
+            "sleep": 0.006999999999607098,
+            "ready": 0.012999999999919964
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 5887.4471083383,
+          "end": 5887.4676165371,
+          "duration": 0.02050819880059862,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 3373,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.00031155939996097004,
+            "sleep": 0.018000000000029104,
+            "ready": 0.0021966394006085466
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 5887.5472372932,
+          "end": 5887.5675957523,
+          "duration": 0.020358459099952597,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 3379,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0008584590996179031,
+            "sleep": 0.018000000000029104,
+            "ready": 0.0015000000003055902
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 5888.0478815094,
+          "end": 5888.0682399684,
+          "duration": 0.02035845899990818,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 3409,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0003584589994716225,
+            "current-user": 0.0005000000001018634,
+            "sleep": 0.018000000000029104,
+            "ready": 0.0015000000003055902
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 5887.9477525544,
+          "end": 5887.96810375,
+          "duration": 0.02035119560059684,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 3403,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0008511956002621446,
+            "sleep": 0.018000000000029104,
+            "ready": 0.0015000000003055902
+          }
+        }
+      ],
+      "discarded_nonexecuted_prefetches": 4,
+      "unmatched_returns": 0,
+      "unfinished_calls": 0,
+      "observed_priorities": [
+        128
+      ]
+    },
+    {
+      "capture": "emulator/images/reliability/logs/lat-p128-2-calls.json",
+      "calls": {
+        "Budget": {
+          "count": 6,
+          "min": 0.0011258416998316534,
+          "median": 0.0018273277510161279,
+          "p95": 0.01909740459996101,
+          "p99": 0.01909740459996101,
+          "max": 0.03540059850092803
+        },
+        "Epoch": {
+          "count": 1,
+          "min": 0.0007833400013623759,
+          "median": 0.0007833400013623759,
+          "p95": 0.0007833400013623759,
+          "p99": 0.0007833400013623759,
+          "max": 0.0007833400013623759
+        },
+        "GetStat": {
+          "count": 3382,
+          "min": 0.0007833399013179587,
+          "median": 0.0007833399995433865,
+          "p95": 0.0007833400013623759,
+          "p99": 0.000950400399233331,
+          "max": 1.0248517687996355
+        },
+        "Sleep": {
+          "count": 1582,
+          "min": 0.0019549977005226538,
+          "median": 0.01483987900064676,
+          "p95": 0.015466774499145686,
+          "p99": 0.02014502400015772,
+          "max": 1.5667409032994328
+        }
+      },
+      "longest_calls": [
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 9793.0924804806,
+          "end": 9794.6592213839,
+          "duration": 1.5667409032994328,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 59085,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0002409033004369121,
+            "current-user": 0.0005000000001018634,
+            "sleep": 0.01749999999992724,
+            "ready": 1.533499999995911,
+            "unknown": 0.015000000003055902
+          }
+        },
+        {
+          "label": "GetStat",
+          "pid": 4,
+          "start": 9803.8189707821,
+          "end": 9804.8438225509,
+          "duration": 1.0248517687996355,
+          "request_x": 1,
+          "result_x": 7,
+          "result_y": 59727,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0035123323996231193,
+            "current-user": 0.0005000000001018634,
+            "ready": 1.0093394364030246,
+            "unknown": 0.01149999999688589
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 9803.289278732,
+          "end": 9803.7991632312,
+          "duration": 0.5098844992007798,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 59696,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0008844992007652763,
+            "sleep": 0.016999999999825377,
+            "ready": 0.48549999999886495,
+            "unknown": 0.006500000001324224
+          }
+        },
+        {
+          "label": "GetStat",
+          "pid": 4,
+          "start": 9794.6700216422,
+          "end": 9794.8408232862,
+          "duration": 0.17080164400067588,
+          "request_x": 1,
+          "result_x": 7,
+          "result_y": 59179,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-user": 0.00046147230023052543,
+            "current-system": 0.0005000000001018634,
+            "ready": 0.16634017169963045,
+            "unknown": 0.003500000000713044
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 9811.883173932,
+          "end": 9811.9674662329,
+          "duration": 0.08429230090041528,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 60211,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0003091825001320103,
+            "sleep": 0.018000000000029104,
+            "ready": 0.06498311840005044,
+            "unknown": 0.0010000000002037268
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 9811.973274794,
+          "end": 9812.0109969173,
+          "duration": 0.03772212330113689,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 60216,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0007083205000526505,
+            "sleep": 0.006999999999607098,
+            "unknown": 0.0015000000003055902,
+            "ready": 0.028500000000349246,
+            "current-user": 1.3802800822304562e-05
+          }
+        },
+        {
+          "label": "Budget",
+          "pid": 4,
+          "start": 9804.8541361551,
+          "end": 9804.8895367536,
+          "duration": 0.03540059850092803,
+          "request_x": 1,
+          "result_x": 0,
+          "result_y": 59789,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0019005984995601466,
+            "ready": 0.03350000000136788
+          }
+        },
+        {
+          "label": "GetStat",
+          "pid": 4,
+          "start": 9804.9090945521,
+          "end": 9804.9299525161,
+          "duration": 0.020857964000242646,
+          "request_x": 1,
+          "result_x": 7,
+          "result_y": 59793,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-user": 0.00038856239916640334,
+            "current-system": 0.0005000000001018634,
+            "ready": 0.01996940160097438
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 9810.1309177787,
+          "end": 9810.1513198187,
+          "duration": 0.02040203999968071,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 60106,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.00040204000106314197,
+            "current-user": 0.000499999998282874,
+            "sleep": 0.018000000000029104,
+            "ready": 0.0015000000003055902
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 9810.0307888237,
+          "end": 9810.0511299622,
+          "duration": 0.020341138499134104,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 60100,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0008411385006183991,
+            "sleep": 0.018000000000029104,
+            "ready": 0.0014999999984866008
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 9809.8305309138,
+          "end": 9809.8508720522,
+          "duration": 0.020341138400908676,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 60088,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-user": 0.0004522007002378814,
+            "sleep": 0.018000000000029104,
+            "ready": 0.0015000000003055902,
+            "current-system": 0.00038893770033610053
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 9809.9306598688,
+          "end": 9809.9510010072,
+          "duration": 0.020341138400908676,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 60094,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0003232457002013689,
+            "sleep": 0.018000000000029104,
+            "ready": 0.0020000000004074536,
+            "current-user": 1.789270027074963e-05
+          }
+        }
+      ],
+      "discarded_nonexecuted_prefetches": 0,
+      "unmatched_returns": 0,
+      "unfinished_calls": 0,
+      "observed_priorities": [
+        128
+      ]
+    },
+    {
+      "capture": "emulator/images/reliability/logs/lat-p129-1-calls.json",
+      "calls": {
+        "Budget": {
+          "count": 6,
+          "min": 0.0011258416998316534,
+          "median": 0.00229051524956958,
+          "p95": 0.019113049000225146,
+          "p99": 0.019113049000225146,
+          "max": 0.019961760499427328
+        },
+        "Epoch": {
+          "count": 1,
+          "min": 0.0007833399995433865,
+          "median": 0.0007833399995433865,
+          "p95": 0.0007833399995433865,
+          "p99": 0.0007833399995433865,
+          "max": 0.0007833399995433865
+        },
+        "GetStat": {
+          "count": 3385,
+          "min": 0.0007833399995433865,
+          "median": 0.0007833400004528812,
+          "p95": 0.0007833400004528812,
+          "p99": 0.0009504004001428257,
+          "max": 0.14656783099962922
+        },
+        "Sleep": {
+          "count": 1585,
+          "min": 0.005796269000711618,
+          "median": 0.01483987900064676,
+          "p95": 0.015453923699169536,
+          "p99": 0.020145024100202136,
+          "max": 1.5555919971993717
+        }
+      },
+      "longest_calls": [
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 5978.4978365873,
+          "end": 5980.0534285845,
+          "duration": 1.5555919971993717,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 8785,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0005919971990806516,
+            "sleep": 0.01749999999992724,
+            "ready": 1.5200000000022555,
+            "unknown": 0.01749999999810825
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 5988.7617132152,
+          "end": 5990.163242572,
+          "duration": 1.4015293567999834,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 9400,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-user": 0.0005293568001434323,
+            "sleep": 0.012999999999919964,
+            "unknown": 0.02299999999922875,
+            "ready": 1.3650000000006912
+          }
+        },
+        {
+          "label": "GetStat",
+          "pid": 4,
+          "start": 5980.0612586321,
+          "end": 5980.2078264631,
+          "duration": 0.14656783099962922,
+          "request_x": 1,
+          "result_x": 5,
+          "result_y": 8878,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-user": 0.0004471259999263566,
+            "current-system": 0.00062070500007394,
+            "ready": 0.14199999999891588,
+            "unknown": 0.003500000000713044
+          }
+        },
+        {
+          "label": "GetStat",
+          "pid": 4,
+          "start": 5990.1761330407,
+          "end": 5990.2847451991,
+          "duration": 0.10861215840031946,
+          "request_x": 1,
+          "result_x": 5,
+          "result_y": 9485,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0016121584003485623,
+            "current-user": 0.0005000000001018634,
+            "ready": 0.10649999999986903
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 5988.6946348387,
+          "end": 5988.7548967045,
+          "duration": 0.06026186580038484,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 9396,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.00026186580089415656,
+            "current-user": 0.0005000000001018634,
+            "sleep": 0.016999999999825377,
+            "ready": 0.04249999999956344
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 5997.3568683522,
+          "end": 5997.4118368063,
+          "duration": 0.05496845410016249,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 9915,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.00046845409997331444,
+            "sleep": 0.012500000000727596,
+            "unknown": 0.001999999999497959,
+            "ready": 0.03999999999996362
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 5997.28852948,
+          "end": 5997.3382246367,
+          "duration": 0.04969515670018154,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 9911,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0006762781003999407,
+            "sleep": 0.018000000000029104,
+            "ready": 0.03099999999994907,
+            "current-user": 1.8878599803429097e-05
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 5997.4156652269,
+          "end": 5997.4372428357,
+          "duration": 0.021577608799816517,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 9918,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 4.0531199374527205e-05,
+            "current-user": 0.0005370775998017052,
+            "sleep": 0.0039999999999054126,
+            "ready": 0.01700000000073487
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 5987.1426365953,
+          "end": 5987.1634979118,
+          "duration": 0.020861316499576787,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 9303,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0005691627993655857,
+            "current-user": 0.0004999999991923687,
+            "sleep": 0.01700000000073487,
+            "ready": 0.0027921537002839614
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 5995.2358870205,
+          "end": 5995.256228159,
+          "duration": 0.0203411385000436,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 9788,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0003187376005371334,
+            "sleep": 0.018000000000029104,
+            "ready": 0.001999999999497959,
+            "current-user": 2.240089997940231e-05
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 5995.4361443717,
+          "end": 5995.4564855102,
+          "duration": 0.0203411385000436,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 9800,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0003411385005165357,
+            "current-user": 0.0005000000001018634,
+            "sleep": 0.018000000000029104,
+            "ready": 0.0014999999993960955
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 5995.3360159755,
+          "end": 5995.3563571139,
+          "duration": 0.02034113839999918,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 9794,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0008411383996644872,
+            "sleep": 0.018000000000029104,
+            "ready": 0.0015000000003055902
+          }
+        }
+      ],
+      "discarded_nonexecuted_prefetches": 2,
+      "unmatched_returns": 0,
+      "unfinished_calls": 0,
+      "observed_priorities": [
+        129
+      ]
+    },
+    {
+      "capture": "emulator/images/reliability/logs/lat-p136-1-calls.json",
+      "calls": {
+        "Budget": {
+          "count": 6,
+          "min": 0.0011409274002289749,
+          "median": 0.0011523814500833396,
+          "p95": 0.001163835399893287,
+          "p99": 0.001163835399893287,
+          "max": 0.001163835399893287
+        },
+        "Epoch": {
+          "count": 1,
+          "min": 0.0007833399995433865,
+          "median": 0.0007833399995433865,
+          "p95": 0.0007833399995433865,
+          "p99": 0.0007833399995433865,
+          "max": 0.0007833399995433865
+        },
+        "GetStat": {
+          "count": 3392,
+          "min": 0.0007833399995433865,
+          "median": 0.0007833400004528812,
+          "p95": 0.0007833400004528812,
+          "p99": 0.0009504004001428257,
+          "max": 0.0022639754997726413
+        },
+        "Sleep": {
+          "count": 1592,
+          "min": 0.003645715800303151,
+          "median": 0.01483987900064676,
+          "p95": 0.01546677450005518,
+          "p99": 0.01851409010032512,
+          "max": 1.536068281399821
+        }
+      },
+      "longest_calls": [
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6071.2871823809,
+          "end": 6072.8232506623,
+          "duration": 1.536068281399821,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 14300,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-user": 0.0004677636998167145,
+            "sleep": 0.011500000000523869,
+            "ready": 1.5115000000014334,
+            "unknown": 0.012499999997999112,
+            "current-system": 0.0001005177000479307
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6081.4836437179,
+          "end": 6082.9284607114,
+          "duration": 1.444816993499444,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 14911,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.00031699349892733153,
+            "current-user": 0.0005000000001018634,
+            "sleep": 0.011000000000422006,
+            "ready": 1.4184999999997672,
+            "unknown": 0.014500000000225555
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6072.9359018826,
+          "end": 6073.077389737,
+          "duration": 0.14148785440011125,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 14399,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0009878544005914591,
+            "sleep": 0.014500000000225555,
+            "ready": 0.12399999999888678,
+            "unknown": 0.0020000000004074536
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6083.0662788245,
+          "end": 6083.1495883187,
+          "duration": 0.08330949419996614,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 15006,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0003713201003847644,
+            "sleep": 0.013500000000021828,
+            "ready": 0.06943817409955955
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6090.1283889704,
+          "end": 6090.1811901093,
+          "duration": 0.05280113889966742,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 15429,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0002611742002045503,
+            "sleep": 0.01099999999951251,
+            "ready": 0.03950000000077125,
+            "unknown": 0.001999999999497959,
+            "current-user": 3.9964699681149796e-05
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6090.0785463088,
+          "end": 6090.1245605498,
+          "duration": 0.04601424100019358,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 15426,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.001014241000120819,
+            "sleep": 0.010499999999410647,
+            "ready": 0.03450000000066211
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6073.0886174241,
+          "end": 6073.1125724306,
+          "duration": 0.02395500649981841,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 14408,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0005327204999048263,
+            "sleep": 0.011999999999716238,
+            "ready": 0.011422286000197346
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6090.1850185299,
+          "end": 6090.206584964,
+          "duration": 0.021566434100350307,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 15432,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.002066434100015613,
+            "sleep": 0.0039999999999054126,
+            "ready": 0.015500000000429281
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6083.1553968798,
+          "end": 6083.1748848369,
+          "duration": 0.019487957099954656,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 15011,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0009879571007331833,
+            "sleep": 0.007999999999810825,
+            "ready": 0.010499999999410647
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6088.3057149091,
+          "end": 6088.3244860151,
+          "duration": 0.018771105999803694,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 15320,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-user": 0.0004352354999355157,
+            "sleep": 0.018000000000029104,
+            "current-system": 0.0003358704998390749
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6090.0579705036,
+          "end": 6090.0766980287,
+          "duration": 0.01872752510007558,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 15425,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0007275251000464777,
+            "sleep": 0.018000000000029104
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6088.1054569991,
+          "end": 6088.1241716734,
+          "duration": 0.018714674300099432,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 15308,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0006931455000085407,
+            "sleep": 0.018000000000029104,
+            "current-user": 2.152880006178748e-05
+          }
+        }
+      ],
+      "discarded_nonexecuted_prefetches": 4,
+      "unmatched_returns": 0,
+      "unfinished_calls": 0,
+      "observed_priorities": [
+        136
+      ]
+    },
+    {
+      "capture": "emulator/images/reliability/logs/lat-p160-1-calls.json",
+      "calls": {
+        "Budget": {
+          "count": 6,
+          "min": 0.0011409274002289749,
+          "median": 0.0011409274993638974,
+          "p95": 0.001140927500273392,
+          "p99": 0.001140927500273392,
+          "max": 0.001140927500273392
+        },
+        "Epoch": {
+          "count": 1,
+          "min": 0.0007833399995433865,
+          "median": 0.0007833399995433865,
+          "p95": 0.0007833399995433865,
+          "p99": 0.0007833399995433865,
+          "max": 0.0007833399995433865
+        },
+        "GetStat": {
+          "count": 3394,
+          "min": 0.0007833399995433865,
+          "median": 0.0007833400004528812,
+          "p95": 0.0007833400004528812,
+          "p99": 0.0009504004001428257,
+          "max": 0.0025634550001996104
+        },
+        "Sleep": {
+          "count": 1594,
+          "min": 0.0019527627000570646,
+          "median": 0.01483987900064676,
+          "p95": 0.015466774600099598,
+          "p99": 0.018714674200055015,
+          "max": 1.5385333998001443
+        }
+      },
+      "longest_calls": [
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6174.1531384914,
+          "end": 6175.6916718912,
+          "duration": 1.5385333998001443,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 20423,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-user": 0.00047696050023660064,
+            "sleep": 0.011500000000523869,
+            "ready": 1.5104999999985012,
+            "unknown": 0.01600000000144064,
+            "current-system": 5.643929944199044e-05
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6184.3852719698,
+          "end": 6185.7992621317,
+          "duration": 1.4139901619000739,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 21036,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0004901618995063473,
+            "sleep": 0.009500000000116415,
+            "ready": 1.3899999999985084,
+            "unknown": 0.01400000000194268
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6175.8042862354,
+          "end": 6175.923659541,
+          "duration": 0.11937330560067494,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 20522,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0003292165001766989,
+            "sleep": 0.012000000000625732,
+            "ready": 0.09949999999935244,
+            "unknown": 0.007500000000618456,
+            "current-user": 4.408909990161192e-05
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6185.9024495768,
+          "end": 6185.9629947189,
+          "duration": 0.060545142099726945,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 21127,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.001045142099428631,
+            "sleep": 0.009500000000116415,
+            "ready": 0.0500000000001819
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6185.9679953558,
+          "end": 6186.0174262331,
+          "duration": 0.049430877300437714,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 21131,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0009308773005614057,
+            "sleep": 0.011499999999614374,
+            "ready": 0.037000000000261934
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6192.9443202732,
+          "end": 6192.990152368,
+          "duration": 0.045832094800061896,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 21549,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.00029517870007111924,
+            "sleep": 0.01099999999951251,
+            "ready": 0.03450000000066211,
+            "current-user": 3.691609981615329e-05
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6192.9939807886,
+          "end": 6193.0371645014,
+          "duration": 0.04318371279987332,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 21552,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0006837128003098769,
+            "sleep": 0.01099999999951251,
+            "ready": 0.029499999999643478,
+            "unknown": 0.0020000000004074536
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6184.3494176823,
+          "end": 6184.3824336195,
+          "duration": 0.03301593720061646,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 21034,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.001015937200463668,
+            "sleep": 0.011000000000422006,
+            "ready": 0.02099999999973079
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6193.0623196608,
+          "end": 6193.093692372,
+          "duration": 0.031372711199765035,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 21556,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0003727111989064724,
+            "sleep": 0.010000000000218279,
+            "ready": 0.021000000000640284
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6175.9352492854,
+          "end": 6175.9629338173,
+          "duration": 0.027684531900376896,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 20530,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0006845319003332406,
+            "sleep": 0.014000000000123691,
+            "ready": 0.012999999999919964
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6175.9647820974,
+          "end": 6175.9857132551,
+          "duration": 0.02093115770003351,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 20531,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0004311576994950883,
+            "sleep": 0.002500000000509317,
+            "ready": 0.018000000000029104
+          }
+        },
+        {
+          "label": "Sleep",
+          "pid": 4,
+          "start": 6186.0212546537,
+          "end": 6186.0407426108,
+          "duration": 0.019487957099954656,
+          "request_x": 2,
+          "result_x": 0,
+          "result_y": 21134,
+          "carry": 0,
+          "sampled_queue_seconds": {
+            "current-system": 0.0004879571006313199,
+            "sleep": 0.008499999999912689,
+            "ready": 0.010499999999410647
+          }
+        }
+      ],
+      "discarded_nonexecuted_prefetches": 6,
+      "unmatched_returns": 0,
+      "unfinished_calls": 0,
+      "observed_priorities": [
+        160
+      ]
+    }
+  ],
+  "music": [
+    {
+      "capture": "emulator/images/reliability/logs/music-idle.json",
+      "tracks": [
+        {
+          "track": "arkanoid.vgm",
+          "pairs": 266,
+          "first_write": 6696.5546980189,
+          "mute": 6700.9821770497,
+          "estimated_seconds": 4.433737534201347,
+          "expected_seconds": 4.430204081632653,
+          "max_event_lateness": 0.008980240371217363,
+          "p95_event_lateness": 0.0075132292079018725,
+          "p99_event_lateness": 0.008364585274740932,
+          "max_local_excess": 0.0013423026635268746,
+          "ticks": 265,
+          "clock_deficit": 0.01081236413331954,
+          "clock_calls": 384,
+          "fdc_commands": 0,
+          "posted_inputs": []
+        },
+        {
+          "track": "ark1.cct",
+          "pairs": 266,
+          "first_write": 6716.8975562153,
+          "mute": 6721.3248681858,
+          "estimated_seconds": 4.4335704739017014,
+          "expected_seconds": 4.430204081632653,
+          "max_event_lateness": 0.00898024047126178,
+          "p95_event_lateness": 0.007680289608501312,
+          "p99_event_lateness": 0.008383069371099783,
+          "max_local_excess": 0.0013423026635268746,
+          "ticks": 265,
+          "clock_deficit": 0.010645303833674014,
+          "clock_calls": 384,
+          "fdc_commands": 0,
+          "posted_inputs": []
+        },
+        {
+          "track": "flicky.cct",
+          "pairs": 820,
+          "first_write": 6737.0179704357,
+          "mute": 6757.1331415301,
+          "estimated_seconds": 20.115171094400466,
+          "expected_seconds": 20.08997732426304,
+          "max_event_lateness": 0.028361132000718214,
+          "p95_event_lateness": 0.024300167800063832,
+          "p99_event_lateness": 0.025894113800386975,
+          "max_local_excess": 0.012882400699236313,
+          "ticks": 1206,
+          "clock_deficit": 0.015171094400464824,
+          "clock_calls": 639,
+          "fdc_commands": 0,
+          "posted_inputs": []
+        }
+      ],
+      "remaining_pairs": 0,
+      "final_mpi": 255
+    },
+    {
+      "capture": "emulator/images/reliability/logs/music-counter.json",
+      "tracks": [
+        {
+          "track": "arkanoid.vgm",
+          "pairs": 266,
+          "first_write": 6824.5695200184,
+          "mute": 6828.9801499757,
+          "estimated_seconds": 4.416888460701804,
+          "expected_seconds": 4.430204081632653,
+          "max_event_lateness": 0.008223901840935887,
+          "p95_event_lateness": 0.0,
+          "p99_event_lateness": 0.007871901640826273,
+          "max_local_excess": 0.0013423026635268746,
+          "ticks": 264,
+          "clock_deficit": 0.010629957300443138,
+          "clock_calls": 384,
+          "fdc_commands": 0,
+          "posted_inputs": []
+        },
+        {
+          "track": "ark1.cct",
+          "pairs": 266,
+          "first_write": 6844.9070322825,
+          "mute": 6849.3230081722,
+          "estimated_seconds": 4.422234393101709,
+          "expected_seconds": 4.430204081632653,
+          "max_event_lateness": 0.00923352764111538,
+          "p95_event_lateness": 0.002889485619568699,
+          "p99_event_lateness": 0.008881527441005765,
+          "max_local_excess": 0.010552144867203121,
+          "ticks": 265,
+          "clock_deficit": -0.0006907769663184737,
+          "clock_calls": 384,
+          "fdc_commands": 0,
+          "posted_inputs": []
+        },
+        {
+          "track": "flicky.cct",
+          "pairs": 820,
+          "first_write": 6865.0290254749,
+          "mute": 6885.1307775416,
+          "estimated_seconds": 20.1017520667001,
+          "expected_seconds": 20.08997732426304,
+          "max_event_lateness": 0.015950053899977945,
+          "p95_event_lateness": 0.011370565600156368,
+          "p99_event_lateness": 0.013488623100311514,
+          "max_local_excess": 0.013892853400029714,
+          "ticks": 1205,
+          "clock_deficit": 0.01841873336676869,
+          "clock_calls": 639,
+          "fdc_commands": 0,
+          "posted_inputs": []
+        }
+      ],
+      "remaining_pairs": 0,
+      "final_mpi": 255
+    },
+    {
+      "capture": "emulator/images/reliability/logs/music-dir.json",
+      "tracks": [
+        {
+          "track": "arkanoid.vgm",
+          "pairs": 266,
+          "first_write": 6946.5446945097,
+          "mute": 6950.9705381367,
+          "estimated_seconds": 4.432102130401537,
+          "expected_seconds": 4.430204081632653,
+          "max_event_lateness": 0.3382602827714227,
+          "p95_event_lateness": 0.14603511044487472,
+          "p99_event_lateness": 0.3369151866085618,
+          "max_local_excess": 0.3286073904211162,
+          "ticks": 265,
+          "clock_deficit": 0.009176960333509676,
+          "clock_calls": 360,
+          "fdc_commands": 0,
+          "posted_inputs": [
+            {
+              "text": "dir /dd{ENTER}",
+              "kind": "host-input",
+              "track": 1,
+              "seconds": 6946.7447325957
+            }
+          ]
+        },
+        {
+          "track": "ark1.cct",
+          "pairs": 266,
+          "first_write": 6966.8860737468,
+          "mute": 6971.3135639523,
+          "estimated_seconds": 4.433748708900813,
+          "expected_seconds": 4.430204081632653,
+          "max_event_lateness": 0.3202367580706569,
+          "p95_event_lateness": 0.1401936128148764,
+          "p99_event_lateness": 0.3188916618077515,
+          "max_local_excess": 0.27931290446262436,
+          "ticks": 265,
+          "clock_deficit": 0.01082353883278575,
+          "clock_calls": 359,
+          "fdc_commands": 0,
+          "posted_inputs": [
+            {
+              "text": "dir /dd{ENTER}",
+              "kind": "host-input",
+              "track": 2,
+              "seconds": 6967.0861325957
+            }
+          ]
+        },
+        {
+          "track": "flicky.cct",
+          "pairs": 820,
+          "first_write": 6987.0066773767,
+          "mute": 7007.1216696774,
+          "estimated_seconds": 20.11499230069967,
+          "expected_seconds": 20.08997732426304,
+          "max_event_lateness": 0.3543966941999679,
+          "p95_event_lateness": 0.02511656239981619,
+          "p99_event_lateness": 0.2486765688999002,
+          "max_local_excess": 0.3402501772006144,
+          "ticks": 1206,
+          "clock_deficit": 0.014992300699667283,
+          "clock_calls": 623,
+          "fdc_commands": 0,
+          "posted_inputs": [
+            {
+              "text": "dir /dd{ENTER}",
+              "kind": "host-input",
+              "track": 3,
+              "seconds": 6987.2067325957
+            }
+          ]
+        }
+      ],
+      "remaining_pairs": 0,
+      "final_mpi": 255
+    },
+    {
+      "capture": "emulator/images/reliability/logs/music-command.json",
+      "tracks": [
+        {
+          "track": "arkanoid.vgm",
+          "pairs": 266,
+          "first_write": 7071.5395469265,
+          "mute": 7075.9648027691,
+          "estimated_seconds": 4.4315143460010145,
+          "expected_seconds": 4.430204081632653,
+          "max_event_lateness": 1.4512491276857635,
+          "p95_event_lateness": 1.3753788306185082,
+          "p99_event_lateness": 1.4381085141449985,
+          "max_local_excess": 1.442032627544273,
+          "ticks": 265,
+          "clock_deficit": 0.008589175932987025,
+          "clock_calls": 311,
+          "fdc_commands": 0,
+          "posted_inputs": [
+            {
+              "text": "/dd/cmds/pwd{ENTER}",
+              "kind": "host-input",
+              "track": 1,
+              "seconds": 7071.7396325957
+            }
+          ]
+        },
+        {
+          "track": "ark1.cct",
+          "pairs": 266,
+          "first_write": 7091.8803478776,
+          "mute": 7096.3081649404,
+          "estimated_seconds": 4.434075566201747,
+          "expected_seconds": 4.430204081632653,
+          "max_event_lateness": 1.5293421462450099,
+          "p95_event_lateness": 1.4233349576864147,
+          "p99_event_lateness": 1.528019725719066,
+          "max_local_excess": 1.4842411671965927,
+          "ticks": 265,
+          "clock_deficit": 0.011150396133719376,
+          "clock_calls": 312,
+          "fdc_commands": 0,
+          "posted_inputs": [
+            {
+              "text": "/dd/cmds/pwd{ENTER}",
+              "kind": "host-input",
+              "track": 2,
+              "seconds": 7092.0804325957
+            }
+          ]
+        },
+        {
+          "track": "flicky.cct",
+          "pairs": 820,
+          "first_write": 7112.0009978822,
+          "mute": 7132.1159337511,
+          "estimated_seconds": 20.11493586889992,
+          "expected_seconds": 20.08997732426304,
+          "max_event_lateness": 1.4083112261996575,
+          "p95_event_lateness": 0.775726405400019,
+          "p99_event_lateness": 1.2116971324001498,
+          "max_local_excess": 1.403668757900341,
+          "ticks": 1206,
+          "clock_deficit": 0.014935868899918603,
+          "clock_calls": 616,
+          "fdc_commands": 0,
+          "posted_inputs": [
+            {
+              "text": "/dd/cmds/pwd{ENTER}",
+              "kind": "host-input",
+              "track": 3,
+              "seconds": 7112.2010325957
+            }
+          ]
+        }
+      ],
+      "remaining_pairs": 0,
+      "final_mpi": 255
+    },
+    {
+      "capture": "emulator/images/reliability/logs/music-smallread.json",
+      "tracks": [
+        {
+          "track": "arkanoid.vgm",
+          "pairs": 266,
+          "first_write": 7196.5489470063,
+          "mute": 7201.4229102821,
+          "estimated_seconds": 4.880221779201085,
+          "expected_seconds": 4.430204081632653,
+          "max_event_lateness": 1.3624146467523501,
+          "p95_event_lateness": 1.2419104597084103,
+          "p99_event_lateness": 1.3358242096079582,
+          "max_local_excess": 1.357527450343974,
+          "ticks": 292,
+          "clock_deficit": 0.007296609133057963,
+          "clock_calls": 347,
+          "fdc_commands": 0,
+          "posted_inputs": [
+            {
+              "text": "/dd/cmds/list /dd/startup{ENTER}",
+              "kind": "host-input",
+              "track": 1,
+              "seconds": 7196.7490325957
+            }
+          ]
+        },
+        {
+          "track": "ark1.cct",
+          "pairs": 266,
+          "first_write": 7217.3418809666,
+          "mute": 7222.2074861945,
+          "estimated_seconds": 4.871863731301593,
+          "expected_seconds": 4.430204081632653,
+          "max_event_lateness": 1.6173164431118119,
+          "p95_event_lateness": 1.4825292472821725,
+          "p99_event_lateness": 1.605134146444918,
+          "max_local_excess": 1.3507751936443182,
+          "ticks": 291,
+          "clock_deficit": 0.015605227900232777,
+          "clock_calls": 346,
+          "fdc_commands": 0,
+          "posted_inputs": [
+            {
+              "text": "/dd/cmds/list /dd/startup{ENTER}",
+              "kind": "host-input",
+              "track": 2,
+              "seconds": 7217.5419325957
+            }
+          ]
+        },
+        {
+          "track": "flicky.cct",
+          "pairs": 820,
+          "first_write": 7237.9011533208,
+          "mute": 7258.010853886,
+          "estimated_seconds": 20.1097005652,
+          "expected_seconds": 20.08997732426304,
+          "max_event_lateness": 1.198926254299404,
+          "p95_event_lateness": 0.5979711605999181,
+          "p99_event_lateness": 1.190337607199908,
+          "max_local_excess": 1.1922630593001668,
+          "ticks": 1205,
+          "clock_deficit": 0.02636723186666856,
+          "clock_calls": 606,
+          "fdc_commands": 0,
+          "posted_inputs": [
+            {
+              "text": "/dd/cmds/list /dd/startup{ENTER}",
+              "kind": "host-input",
+              "track": 3,
+              "seconds": 7238.1012325957
+            }
+          ]
+        }
+      ],
+      "remaining_pairs": 0,
+      "final_mpi": 255
+    },
+    {
+      "capture": "emulator/images/reliability/logs/music-resident.json",
+      "tracks": [
+        {
+          "track": "arkanoid.vgm",
+          "pairs": 266,
+          "first_write": 8266.5594209646,
+          "mute": 8270.987246967,
+          "estimated_seconds": 4.4340845058016125,
+          "expected_seconds": 4.430204081632653,
+          "max_event_lateness": 0.1445249739456741,
+          "p95_event_lateness": 0.041645761778113854,
+          "p99_event_lateness": 0.13384936948539128,
+          "max_local_excess": 0.11802114086773752,
+          "ticks": 265,
+          "clock_deficit": 0.011159335733585074,
+          "clock_calls": 376,
+          "fdc_commands": 0,
+          "posted_inputs": [
+            {
+              "text": "pwd{ENTER}",
+              "kind": "host-input",
+              "track": 1,
+              "seconds": 8266.7594325957
+            }
+          ]
+        },
+        {
+          "track": "ark1.cct",
+          "pairs": 266,
+          "first_write": 8286.9016572941,
+          "mute": 8291.3295911315,
+          "estimated_seconds": 4.434192340801266,
+          "expected_seconds": 4.430204081632653,
+          "max_event_lateness": 0.12673667464450056,
+          "p95_event_lateness": 0.02829657537824959,
+          "p99_event_lateness": 0.10154854138177116,
+          "max_local_excess": 0.11841560456693212,
+          "ticks": 265,
+          "clock_deficit": 0.011267170733238352,
+          "clock_calls": 377,
+          "fdc_commands": 0,
+          "posted_inputs": [
+            {
+              "text": "pwd{ENTER}",
+              "kind": "host-input",
+              "track": 2,
+              "seconds": 8287.1017325957
+            }
+          ]
+        },
+        {
+          "track": "flicky.cct",
+          "pairs": 820,
+          "first_write": 8307.0244807599,
+          "mute": 8327.1373599422,
+          "estimated_seconds": 20.112879182301185,
+          "expected_seconds": 20.08997732426304,
+          "max_event_lateness": 0.027077169501062315,
+          "p95_event_lateness": 0.02252304760164492,
+          "p99_event_lateness": 0.024610710101551803,
+          "max_local_excess": 0.01388029310008278,
+          "ticks": 1206,
+          "clock_deficit": 0.01287918230118379,
+          "clock_calls": 638,
+          "fdc_commands": 0,
+          "posted_inputs": [
+            {
+              "text": "pwd{ENTER}",
+              "kind": "host-input",
+              "track": 3,
+              "seconds": 8307.2245325957
+            }
+          ]
+        }
+      ],
+      "remaining_pairs": 0,
+      "final_mpi": 255
+    },
+    {
+      "capture": "emulator/images/reliability/logs/music-periodic-full.json",
+      "tracks": [
+        {
+          "track": "arkanoid.vgm",
+          "pairs": 266,
+          "first_write": 8524.6088395494,
+          "mute": 8530.003574186,
+          "estimated_seconds": 5.4009931399998745,
+          "expected_seconds": 4.430204081632653,
+          "max_event_lateness": 0.9756153114078501,
+          "p95_event_lateness": 0.9734747756934103,
+          "p99_event_lateness": 0.9753645135925924,
+          "max_local_excess": 0.3196582867707465,
+          "ticks": 265,
+          "clock_deficit": 0.9780679699318471,
+          "clock_calls": 368,
+          "fdc_commands": 30,
+          "posted_inputs": []
+        },
+        {
+          "track": "ark1.cct",
+          "pairs": 266,
+          "first_write": 8559.186187949,
+          "mute": 8564.3978568096,
+          "estimated_seconds": 5.217927364001545,
+          "expected_seconds": 4.430204081632653,
+          "max_event_lateness": 0.803646749104983,
+          "p95_event_lateness": 0.7915302995076079,
+          "p99_event_lateness": 0.8009501784151172,
+          "max_local_excess": 0.40906826866691215,
+          "ticks": 265,
+          "clock_deficit": 0.7950021939335175,
+          "clock_calls": 346,
+          "fdc_commands": 30,
+          "posted_inputs": []
+        },
+        {
+          "track": "flicky.cct",
+          "pairs": 820,
+          "first_write": 8595.4678640507,
+          "mute": 8619.1133032463,
+          "estimated_seconds": 23.645439195599465,
+          "expected_seconds": 20.08997732426304,
+          "max_event_lateness": 3.5596371827993423,
+          "p95_event_lateness": 3.269965850399384,
+          "p99_event_lateness": 3.555739457298259,
+          "max_local_excess": 0.38695053889925474,
+          "ticks": 1198,
+          "clock_deficit": 3.6787725289328,
+          "clock_calls": 570,
+          "fdc_commands": 149,
+          "posted_inputs": []
+        }
+      ],
+      "remaining_pairs": 0,
+      "final_mpi": 255
+    },
+    {
+      "capture": "emulator/images/reliability/logs/music-sustained-complete.json",
+      "tracks": [
+        {
+          "track": "arkanoid.vgm",
+          "pairs": 266,
+          "first_write": 10164.939197269,
+          "mute": 10171.836754052,
+          "estimated_seconds": 6.903815286401615,
+          "expected_seconds": 4.430204081632653,
+          "max_event_lateness": 2.4781928066942216,
+          "p95_event_lateness": 2.1611904001678823,
+          "p99_event_lateness": 2.4768477104313167,
+          "max_local_excess": 0.26601876366791355,
+          "ticks": 262,
+          "clock_deficit": 2.5308901163335884,
+          "clock_calls": 278,
+          "fdc_commands": 113,
+          "posted_inputs": []
+        },
+        {
+          "track": "ark1.cct",
+          "pairs": 266,
+          "first_write": 10284.231846835,
+          "mute": 10292.043630123,
+          "estimated_seconds": 7.818041791401148,
+          "expected_seconds": 4.430204081632653,
+          "max_event_lateness": 3.3924193116937547,
+          "p95_event_lateness": 3.183639069168251,
+          "p99_event_lateness": 3.388120207431344,
+          "max_local_excess": 0.2689744175961785,
+          "ticks": 261,
+          "clock_deficit": 3.461783287999788,
+          "clock_calls": 280,
+          "fdc_commands": 130,
+          "posted_inputs": []
+        },
+        {
+          "track": "flicky.cct",
+          "pairs": 820,
+          "first_write": 10445.877042983,
+          "mute": 10478.844184049,
+          "estimated_seconds": 32.967141065999385,
+          "expected_seconds": 20.08997732426304,
+          "max_event_lateness": 12.884681937000714,
+          "p95_event_lateness": 12.457722950000754,
+          "p99_event_lateness": 12.85909105699917,
+          "max_local_excess": 0.4170671120012412,
+          "ticks": 1206,
+          "clock_deficit": 12.867141065999384,
+          "clock_calls": 418,
+          "fdc_commands": 546,
+          "posted_inputs": []
+        }
+      ],
+      "remaining_pairs": 0,
+      "final_mpi": 255
+    }
+  ],
+  "audio": [
+    {
+      "path": "emulator/images/reliability/logs/music-idle.wav",
+      "channels": 4,
+      "rate": 48000,
+      "frames": 5808000,
+      "last_second_rms": [
+        0.0,
+        0.4245314814388197,
+        0.0,
+        0.0
+      ],
+      "sample_width": 2
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-counter.wav",
+      "channels": 4,
+      "rate": 48000,
+      "frames": 5808000,
+      "last_second_rms": [
+        0.0,
+        0.4240248596453069,
+        0.0,
+        0.0
+      ],
+      "sample_width": 2
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-dir.wav",
+      "channels": 4,
+      "rate": 48000,
+      "frames": 5808000,
+      "last_second_rms": [
+        0.0,
+        0.4242199699440204,
+        0.0,
+        0.0
+      ],
+      "sample_width": 2
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-command.wav",
+      "channels": 4,
+      "rate": 48000,
+      "frames": 5808000,
+      "last_second_rms": [
+        0.0,
+        0.4245314814388197,
+        0.0,
+        0.0
+      ],
+      "sample_width": 2
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-smallread.wav",
+      "channels": 4,
+      "rate": 48000,
+      "frames": 5808000,
+      "last_second_rms": [
+        0.0,
+        0.4240248596453069,
+        0.0,
+        0.0
+      ],
+      "sample_width": 2
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-resident.wav",
+      "channels": 4,
+      "rate": 48000,
+      "frames": 5808000,
+      "last_second_rms": [
+        0.0,
+        0.4242199699440204,
+        0.0,
+        0.0
+      ],
+      "sample_width": 2
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-periodic-full.wav",
+      "channels": 4,
+      "rate": 48000,
+      "frames": 8688000,
+      "last_second_rms": [
+        0.0,
+        0.4240248596453069,
+        0.0,
+        0.0
+      ],
+      "sample_width": 2
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-sustained-complete.wav",
+      "channels": 4,
+      "rate": 48000,
+      "frames": 17328000,
+      "last_second_rms": [
+        0.0,
+        0.4245314814388197,
+        0.0,
+        0.0
+      ],
+      "sample_width": 2
+    }
+  ],
+  "restart": [
+    {
+      "capture": "emulator/images/reliability/logs/scheduling-restart.json",
+      "interval_us": 100,
+      "max_sample_gap": 0.00010000000111177,
+      "first_write": 11111.184744745,
+      "mute": 11131.298235178,
+      "pairs": 820,
+      "duration": 20.113490432999242,
+      "duration_error_percent": 0.11703900087436381,
+      "video_edges": 1206,
+      "irq_acks": 1206,
+      "clock_ticks": 1206,
+      "clock_calls": 639,
+      "fdc_commands": 0,
+      "clock_deficit_seconds": 0.013490432999240909,
+      "serviced_lateness_epoch": "initial clock snapshot",
+      "epoch_to_first_write_seconds": 0.003480891000435804,
+      "max_ack_to_tick_seconds": 0.00018661600006453227,
+      "max_local_lateness_seconds": 0.012872343001145054,
+      "max_accumulated_lateness_seconds": 0.026680471000581463,
+      "max_serviced_clock_lateness_seconds": 0.016666666666666666,
+      "min_serviced_clock_error_seconds": 0.0,
+      "max_player_user_entry_gap_seconds": 0.3616999999994732,
+      "ticks_with_other_process_current": 1205,
+      "sampled_seconds": {
+        "neither": 18.74839043303473,
+        "player_user": 0.3544904329755809,
+        "irq_mask_only": 1.3650999999645137,
+        "firq_mask": 1.3598999999521766,
+        "player_system": 0.7696000000287313
+      },
+      "player_pid": 3,
+      "longest_sampled_interval_seconds": {
+        "halt": 0,
+        "irq_mask": 0.000800000001618173,
+        "firq_mask": 0.000800000001618173
+      },
+      "complete_ack_groups": 1205,
+      "edges_in_complete_ack_groups": 1205,
+      "coalesced_edge_states": {},
+      "post_ack_edge_samples_corrected": 2095,
+      "final_mpi": 255
+    }
+  ],
+  "stop": {
+    "ordered_pairs_before_mute": 69,
+    "final_mpi": 255,
+    "quiet_seconds": 38.026657268,
+    "free_kib_before": 1792,
+    "free_kib_after": 1792,
+    "player_pid": 3,
+    "descriptor_absent_after_reap": true
+  }
+}

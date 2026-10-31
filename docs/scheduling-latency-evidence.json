@@ -1,0 +1,469 @@
+{
+  "checkpoint": "5753add",
+  "date": "2026-10-31",
+  "notes": [
+    "Raw evidence and copyrighted fixtures remain ignored and private.",
+    "Rejected: lat-p160-2 keyboard queue overlap; music-periodic and music-sustained mangled launches; music-sustained-full incomplete window.",
+    "Accepted music-sustained-complete replaces the incomplete sustained capture.",
+    "Early call traces include opcode prefetches; analyzer filters them by execution PC.",
+    "Call sampler follows the first player PID, not every subsequent playlist child.",
+    "Human listening and physical hardware tests NOT RUN."
+  ],
+  "files": [
+    {
+      "path": "build/cctcycle",
+      "bytes": 9380,
+      "sha256": "bf8c684d18cd95fb480f15355f7bf4e4cbf9ed57e2cf318801ba2b335164d070"
+    },
+    {
+      "path": "build/cctnice",
+      "bytes": 145,
+      "sha256": "6c36ae3978b3be71a9d4af96f2997472df5366908f05d8f5f7cf2a131b8131eb"
+    },
+    {
+      "path": "build/cctpark",
+      "bytes": 9658,
+      "sha256": "34af73f92579e073c62238212dbf46649ff57a8e6bc9d290e2bac5cf72344fb5"
+    },
+    {
+      "path": "build/cctplay",
+      "bytes": 8756,
+      "sha256": "eabe6b6f3910ebd1af557f64b02c1fb1e1802a3a07a1bf134016b1a4a6792f36"
+    },
+    {
+      "path": "build/cctplaymt",
+      "bytes": 9653,
+      "sha256": "05ee55b64485c7fa128b0d7099fb9eec7cc13cea83a1396a7c807f137887e953"
+    },
+    {
+      "path": "build/cctplaymt-relative",
+      "bytes": 9381,
+      "sha256": "666f91ea6a3292e2c0b96f46547698b78bef7dd3215269cc0bc40f8c5035cb8d"
+    },
+    {
+      "path": "build/clock-regress/loop.vgm",
+      "bytes": 150,
+      "sha256": "5725ac75f9f0e0ee8d1ec53a6803c21dc4338d7e2a5b4748669d5c3ca810f226"
+    },
+    {
+      "path": "build/diskstress",
+      "bytes": 142,
+      "sha256": "94b54b3553615edb644539204fd7255de329afd6f15292005fcbb29e5d464a8d"
+    },
+    {
+      "path": "build/latency.m3u",
+      "bytes": 53,
+      "sha256": "077e1f7d7b31a3f3b526120762c3e9701ea2fd7002b2434f6468c92276a6ecac"
+    },
+    {
+      "path": "build/latpack",
+      "bytes": 1047,
+      "sha256": "b345017a12de4eb9542264cf346a19cb0ed1c80e7904085fc38b3be39c184d4c"
+    },
+    {
+      "path": "build/musicbusy",
+      "bytes": 330,
+      "sha256": "43a44421a33ce5577abf26d6fdac32b210c6df2f88e671a4a2b47436f2ab7460"
+    },
+    {
+      "path": "build/musicdisk",
+      "bytes": 328,
+      "sha256": "032cde4970475dce4fc24e5c1617bf00df54bc75369a48eb64acff92e93d2af7"
+    },
+    {
+      "path": "build/scheduling-build.log",
+      "bytes": 7393,
+      "sha256": "fa20d5bc857c5dfc77924f2bc8e2a225d5f5082d2eb8b54350af9e8c77746998"
+    },
+    {
+      "path": "emulator/images/reliability/logs/lat-p128-1-calls.json",
+      "bytes": 5179844,
+      "sha256": "67851c150f12c28d367feecac7e066fb8d5b449551713e59e5ce5805ce46d6dd"
+    },
+    {
+      "path": "emulator/images/reliability/logs/lat-p128-1.json",
+      "bytes": 7559812,
+      "sha256": "3dcac00239e7641ae0395e5b45a8fdb2e0f8aab98278c13cff9a2961cdcb7861"
+    },
+    {
+      "path": "emulator/images/reliability/logs/lat-p128-2-calls.json",
+      "bytes": 7304889,
+      "sha256": "87062ac0e1982d1ccef919b6c6a991b659bc697efbf9134eebad8c5157121434"
+    },
+    {
+      "path": "emulator/images/reliability/logs/lat-p128-2.json",
+      "bytes": 7537846,
+      "sha256": "0c7f6e4508f68b041975618bba934ce8cbc2cce2b51dfa65e732475f33847671"
+    },
+    {
+      "path": "emulator/images/reliability/logs/lat-p129-1-calls.json",
+      "bytes": 6340875,
+      "sha256": "511c3465bc173b3cefcbfdbed51c2535801b138c51b96bc5fcffc0a7d9b66a71"
+    },
+    {
+      "path": "emulator/images/reliability/logs/lat-p129-1.json",
+      "bytes": 7538361,
+      "sha256": "c086cf8d08084d9d751125c6fc080100f0272f2a3362513c38efbebad82ed69b"
+    },
+    {
+      "path": "emulator/images/reliability/logs/lat-p136-1-calls.json",
+      "bytes": 6365687,
+      "sha256": "402bc8dc891b736c658e1b1222d4d12ff48b7a5cbe62d8546750946abbe011ae"
+    },
+    {
+      "path": "emulator/images/reliability/logs/lat-p136-1.json",
+      "bytes": 7473012,
+      "sha256": "da2b970a8698278c6292a9cda9efa4e6be530abbfa4c7ffe50b8fe2b7f085c50"
+    },
+    {
+      "path": "emulator/images/reliability/logs/lat-p160-1-calls.json",
+      "bytes": 7314988,
+      "sha256": "034d0894f7f3ed5789c61d09344ddf4574f6058f4983422ff0e8c290ec4273c5"
+    },
+    {
+      "path": "emulator/images/reliability/logs/lat-p160-1.json",
+      "bytes": 7551340,
+      "sha256": "d944fe747f2d290bcc5af4be5802bcf520202c2cafd5bb55d20c4f1e08f4a503"
+    },
+    {
+      "path": "emulator/images/reliability/logs/lat-p160-2-calls.json",
+      "bytes": 4948148,
+      "sha256": "fd6587b4359d720778789ffb8e6b64cd1f57caf5fd1def2bc4567f88b2b1eb58"
+    },
+    {
+      "path": "emulator/images/reliability/logs/lat-p160-2.json",
+      "bytes": 1746538,
+      "sha256": "26b8b63c959c9995f1e37fbe86f6fd3102949bf9abe6236c4389772b27a3b7d2"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-command-calls.json",
+      "bytes": 5342265,
+      "sha256": "987a52277c2d8af896f083713f79743e6a1845d322a95b5c48ff185b7928f41c"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-command.json",
+      "bytes": 13505075,
+      "sha256": "da028b5efd020de213a28d87a15e459ee26f9c5c7082b817846c102dad84766f"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-command.wav",
+      "bytes": 46464044,
+      "sha256": "680f22aedf50a93b0ffb4eff030ec578932a2b6812afe0b49442961b984633c8"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-counter-calls.json",
+      "bytes": 4797319,
+      "sha256": "a57784e15d5c91431e5fd5082ec8e98998e741dff03c3765f6af34fd7c580519"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-counter.json",
+      "bytes": 13474511,
+      "sha256": "916a5869f85a6d68dfbd41aa71ff4e112eeaf2014cc43526181fa4343dc04946"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-counter.wav",
+      "bytes": 46464044,
+      "sha256": "5c4f68a917aa2908a93780f7082a7a34de7be7c81c790358b861c461193a86b8"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-dir-calls.json",
+      "bytes": 5270832,
+      "sha256": "33a774be0b7368182c203c566837c2951d281e43d372f2ec413158074f9d1cd4"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-dir.json",
+      "bytes": 13867485,
+      "sha256": "e36de2192d59af05adad4d85fb284ac8ce6c8dec2df63ed22ee41b5eda2a9d86"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-dir.wav",
+      "bytes": 46464044,
+      "sha256": "d645c2126e7104f208f2ffacbe7859ff7767566c7700b0496bd30fdc1f23a78c"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-idle-calls.json",
+      "bytes": 4918646,
+      "sha256": "9786e20836015474cf720ac6566adf4d62ac78fd6f830775c3005635e6e3b77f"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-idle.json",
+      "bytes": 13234509,
+      "sha256": "752fb7282816b063de56c78c004f2cd868dd5e4ca7f9b911d0f8e9fb558c38fc"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-idle.wav",
+      "bytes": 46464044,
+      "sha256": "ca6a15232499cf6cdd40d71da1d4b61fa3ec9e24da2a3fe06cd8fd96a155b892"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-periodic-calls.json",
+      "bytes": 5316718,
+      "sha256": "3e19fea9318d66c3a557de349fa8435d2b10493edc948dd4e2220e6f0ad4a28f"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-periodic-full-calls.json",
+      "bytes": 10216093,
+      "sha256": "ff119f7023f38ea134f4087074c3d3fca20cf668dc69b0dae6708bf88a669904"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-periodic-full.json",
+      "bytes": 31258524,
+      "sha256": "9770396bed04c774480207cf16b1f618d1d36bba552bf677bce8b0c7ed822544"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-periodic-full.wav",
+      "bytes": 69504044,
+      "sha256": "ca3e284ea75055eb5484c3dd36868aab4ffffecdf5e9cd2b2df904bfe5057710"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-periodic.json",
+      "bytes": 23274440,
+      "sha256": "ba8f242bb94476374a22f6f108443d175b58817fe6b18213f56cc68a0fa9abae"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-periodic.wav",
+      "bytes": 69504044,
+      "sha256": "80aa6786cc629df4daab86eaa1c14d7f6cbc17b62a5dc8109f1551df77b70923"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-resident-calls.json",
+      "bytes": 4963740,
+      "sha256": "874559d1a9e5fd6e56e40b5aaa24fee3c67b8d678628e638929a927ffccd44a6"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-resident.json",
+      "bytes": 13337187,
+      "sha256": "8cd389886704a2c9b9e9726360f9e9beeb04c2ef4155b195859f4296d835ff3f"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-resident.wav",
+      "bytes": 46464044,
+      "sha256": "91ad697da424d3de130d580ac0450cb5d297ead2341e48cf7024cde39c76ef24"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-series.json",
+      "bytes": 73,
+      "sha256": "95c1e24e4c3f11041ea42765d4fc59d519267afe231e4923b72bc5d149f5da73"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-smallread-calls.json",
+      "bytes": 5779687,
+      "sha256": "267c7cc36a7408c7e43c0e24aa95071b03703c3d66e642d224969631117bc7ee"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-smallread.json",
+      "bytes": 13795182,
+      "sha256": "78d8b1b9a76a85036a28b43387b0b417375fb56580fa0099de0ab40cf9e4e211"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-smallread.wav",
+      "bytes": 46464044,
+      "sha256": "2280955c452dc7d089e62832185d39cd5dad8000d8d17ef4a06862c9c9c5a602"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-sustained-calls.json",
+      "bytes": 9770949,
+      "sha256": "afb95565a56e6fb9a8bcc2dfc9451d05256723955bcc2ace64302174ed64dadb"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-sustained-complete-calls.json",
+      "bytes": 34000624,
+      "sha256": "881265dab33212b23afb04594445364431d42cc5dd1f17ddf55ad65fe6ede7a7"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-sustained-complete.json",
+      "bytes": 102724946,
+      "sha256": "328e2afdb4aeffada55dfb525fcae3c305dd88ac9a41b51c0a229f3e1fbf61dc"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-sustained-complete.wav",
+      "bytes": 138624044,
+      "sha256": "37c001820a5577a61a5fa129b56e9944e35c4c89526a0640d2f825ce2beb7fac"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-sustained-full-calls.json",
+      "bytes": 16125692,
+      "sha256": "286d90db9061069c22ea2c59c17e8e1b572d64b7bd93b7a8895188d72d6e1eba"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-sustained-full.json",
+      "bytes": 48466679,
+      "sha256": "8a6fbe6dc5d5d2c1e6689b9d51f4fed58e19b426304c265c9299becf64318100"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-sustained-full.wav",
+      "bytes": 69504044,
+      "sha256": "64881ebbb7adfab9a6ca99df3482310646bb5d6cc5e9b613047db322f9f745fb"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-sustained.json",
+      "bytes": 38905032,
+      "sha256": "b76dd56704a3e5984631a41b615de7aff906548115ff20208571d81dc601a5ab"
+    },
+    {
+      "path": "emulator/images/reliability/logs/music-sustained.wav",
+      "bytes": 69504044,
+      "sha256": "8750cfd47604ee8b32497699deebb06d28794b1e2be5fd602d78cd737674ba9b"
+    },
+    {
+      "path": "emulator/images/reliability/logs/scheduling-restart.json",
+      "bytes": 6555872,
+      "sha256": "736e645355371618424008ed1ea36b3a4a9dfc00767671bc31c32b4d2743eb6b"
+    },
+    {
+      "path": "emulator/images/reliability/logs/scheduling-stop.json",
+      "bytes": 5077137,
+      "sha256": "5e72c2b221632e36766798906f385c0caaeaac7a24a31710e67614e452b0b8f6"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/emulator/images/reliability/snapshots/music-command.png",
+      "bytes": 3942,
+      "sha256": "a6b71dad2b11859dd307bdfb3f7bb53e89354a7adaca0647f3523de5a0bd58da"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/emulator/images/reliability/snapshots/music-counter.png",
+      "bytes": 1923,
+      "sha256": "7a011c26b65259dab47fc3a9d26e0e61ce37bb3708f90d6f4bf6523d3ecc7f1b"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/emulator/images/reliability/snapshots/music-dir.png",
+      "bytes": 6477,
+      "sha256": "3b716c1b2fe2efcefadf74d7ef7ef19cc691303c5faa2d6880b933e047d030c9"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/emulator/images/reliability/snapshots/music-idle.png",
+      "bytes": 4121,
+      "sha256": "d1abadb09862f298b805e423e2ca2f8a5ecd75213f323be135b6d8f1b8365397"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/emulator/images/reliability/snapshots/music-periodic.png",
+      "bytes": 3916,
+      "sha256": "ff941fbd35f6c592e5bfdfdafcd21ad25f2f59f7a177ecf847ea383377f4443d"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/emulator/images/reliability/snapshots/music-resident.png",
+      "bytes": 3650,
+      "sha256": "3f9e8847adfd2739992960f63eb398315bdf64a9af42f8fb3e1b233553ff4a9d"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/emulator/images/reliability/snapshots/music-smallread.png",
+      "bytes": 6006,
+      "sha256": "4053100a0a7e01a4743dbe34c90acc543282abbd715a4be89d4695c9608be727"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/emulator/images/reliability/snapshots/music-sustained.png",
+      "bytes": 4154,
+      "sha256": "1f4be3fbfcc842f263df77cde79391bd0572c46998fc33e735382a3f4e72a1be"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/music-periodic-full.png",
+      "bytes": 3328,
+      "sha256": "db75ebdd4c5ff112589c5892190dfa1ef178e3fbfbfc0757fef0979cd0fe355e"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/music-sustained-complete.png",
+      "bytes": 3804,
+      "sha256": "004885370514ee632f60f43d8b5abd88a5f1ffaeeb473d5c1ed45fb6734f9f65"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/music-sustained-full.png",
+      "bytes": 3590,
+      "sha256": "6a1740350bc18e3c71ac01686f44cf0fa7663c56b0edd16e209f309240b0752c"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/scheduling-after-stop-final.png",
+      "bytes": 4128,
+      "sha256": "42de57405f8427d9a4e5256435325ee287438cfff207e93f877a6e1624f6ffb2"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/scheduling-after-stop.png",
+      "bytes": 4128,
+      "sha256": "42de57405f8427d9a4e5256435325ee287438cfff207e93f877a6e1624f6ffb2"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/scheduling-before-stop.png",
+      "bytes": 3978,
+      "sha256": "4d2f8ac5d86dff0f8d2bf4d5cccbb9f02ecf2dff0219e605e141f08f1bd3b1a6"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/scheduling-final.png",
+      "bytes": 4119,
+      "sha256": "1be81de58ac8b5c22734a69be1a6b204927a828542f3ae07404063d28c0454c9"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/scheduling-memory-after.png",
+      "bytes": 3809,
+      "sha256": "453790e4cccc31d8b76484516b15beff71f62e530a9562fd71eb0d1d535e2f9c"
+    },
+    {
+      "path": "emulator/images/timing-run/media/v3-stage/ark1.cct",
+      "bytes": 88576,
+      "sha256": "7a8029ee746f7645e1d6c5a1874a0aa50353216ff2643e5bbf5ae766ac60f442"
+    },
+    {
+      "path": "emulator/images/timing-run/media/v3-stage/arkanoid.vgm",
+      "bytes": 1303,
+      "sha256": "7e8bba36ecbfe429c1cd0ff4d6e6490f4ab0e491279a5c6b3c7157e6be703698"
+    },
+    {
+      "path": "emulator/images/timing-run/media/v3-stage/flicky.cct",
+      "bytes": 88576,
+      "sha256": "65ae436ba023bbe62fcdcbb7266f3283d600c0b5e1bd7aa56ec206aa9940337c"
+    },
+    {
+      "path": "emulator/images/timing-run/media/v3-stage/synthetic30.vgm",
+      "bytes": 2559,
+      "sha256": "b87c4bd79d2b36fa1654e88ae3454cd9de85de99ab72f0aef43ccf8c1d7e3840"
+    },
+    {
+      "path": "scripts/analyze-scheduling-music.py",
+      "bytes": 2850,
+      "sha256": "a0067a19e5702c91b011d44445a5421fa1643a12f2b4bf32342e08ea018fd66d"
+    },
+    {
+      "path": "scripts/build-scheduling-tools.sh",
+      "bytes": 969,
+      "sha256": "de61af922dc9bddb38ac3993fe1715701227d055b13766d0913e338ae2cc4ee6"
+    },
+    {
+      "path": "scripts/summarize-scheduling-calls.py",
+      "bytes": 2684,
+      "sha256": "4a35c462efd1b0cd403f938a7794cf5b25ced7fe083976f69502d5dcbc273bcf"
+    },
+    {
+      "path": "scripts/test-scheduling-analysis.py",
+      "bytes": 2419,
+      "sha256": "f999cc30c5c6d74ce30d933bdf3702bef01a744fa28eea60042401821b382116"
+    },
+    {
+      "path": "tools/cctnice.asm",
+      "bytes": 1813,
+      "sha256": "bd187e89ed3a568490adb9c2c39f9729b0ced7c70ef1c199e0e8baab08e0879e"
+    },
+    {
+      "path": "tools/diskbench.asm",
+      "bytes": 5193,
+      "sha256": "b13a11c5f9fffeb1f60ebb99e903d475619b674f8cc2c51bfc8b7491f5a1d09f"
+    },
+    {
+      "path": "tools/diskload.asm",
+      "bytes": 2759,
+      "sha256": "404ed3ac3411e3c2a7f58cc53d8f286beccbc9fd892462b8ba434208589797fe"
+    },
+    {
+      "path": "tools/reliability-observer.lua",
+      "bytes": 8103,
+      "sha256": "7365523bed072c6cec98581f7a0567088f8f0dd8d53542362dbc5a0804339663"
+    },
+    {
+      "path": "tools/scheduling-observer.lua",
+      "bytes": 6135,
+      "sha256": "4a9235242c787d769c480c0c2edcf3ef6bf811974d94879b5ca2c7102f7d82c7"
+    },
+    {
+      "path": "tools/scheduling-workloads.lua",
+      "bytes": 3467,
+      "sha256": "9bcc40d1e1e9f79275dd28bc1c78c31fdb3edd5666c294aba32b929ad8c78bd8"
+    }
+  ]
+}

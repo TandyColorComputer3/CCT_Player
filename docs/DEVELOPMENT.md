@@ -108,3 +108,14 @@ CPU-residency limits and the physical CoCoSDC/Mega Mini test procedure.
 The host-only `tools/reliability-observer.lua` and
 `scripts/analyze-clock-reliability.py` do not change guest scheduling.
 `cctpark` remains opt-in; command-loading jitter and floppy clock loss remain.
+
+## Scheduling latency diagnostics
+
+See [SCHEDULING-LATENCY.md](SCHEDULING-LATENCY.md) for active-queue versus
+clock-call delays, priority comparisons and the real-music matrix. Build the
+opt-in guest supervisors with `bash scripts/build-scheduling-tools.sh`; this
+does not change any player variant. Stage `build/latpack` only on an unmounted
+private image. Host addons load through `reliability_load_scheduling` and use
+version-specific cctpark offsets documented in the report. Portable analyzer
+checks: `python3 scripts/test-scheduling-analysis.py` and
+`python3 scripts/test-clock-reliability.py`. No IRQ queue is implemented.

@@ -22,6 +22,16 @@ disk_pid RMB 1
 child_pid RMB 1
 remaining RMB 1
 data_size EQU .
+        ifdef MUSIC_BENCH
+* Separate names preserve the existing comparison modules. REAL_BENCH plays
+* the three private real fixtures; the reader is forked inside this supervisor
+* so host keyboard posting cannot be corrupted by already-active floppy I/O.
+        ifdef BUSY_BENCH
+module_name FCS "musicbusy"
+        else
+module_name FCS "musicdisk"
+        endc
+        else
         ifdef BUSY_BENCH
         ifdef PARK_BENCH
 module_name FCS "busypark"
@@ -59,9 +69,14 @@ module_name FCS "diskbench"
         endc
         endc
         endc
+        endc
         FCB 1
         ifdef BUSY_BENCH
+        ifdef MUSIC_BENCH
+disk_name FCS "diskstress"
+        else
 disk_name FCS "diskbusy"
+        endc
         else
         ifdef COUNTER_BENCH
 disk_name FCS "countlong"
