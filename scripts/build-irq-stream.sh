@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Explicit opt-in; run build.sh first for the unchanged comparison helpers.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+a="${LWASM_BIN:-lwasm}"
+python3 scripts/prepare-irq-fixture.py
+"$a" --6309 --format=os9 --includedir=. --define=IRQ_STREAM_TEST --define=IRQ_UNDER -o build/streamunder tools/irqprobe.asm
+"$a" --6309 --format=os9 --includedir=. --define=IRQ_STREAM_SUPERVISOR -o build/irqsuper tools/psgsuper.asm
+"$a" --6309 --format=os9 --includedir=. --define=IRQ_STREAM_SUPERVISOR --define=FATAL_STOP -o build/irqkill tools/psgsuper.asm
+for module in psgstream psgs; do
+ "$a" --6309 --format=os9 --includedir=. --symbols --list="build/$module.lst" -o "build/$module" "tools/$module.asm"
+done
+"$a" --6309 --format=os9 --includedir=. --define=EXPERIMENTAL_PSG --define=CLOCK_SCHEDULER --define=IRQ_STREAM --symbols --list=build/cctirq.lst -o build/cctirq cct_os9.asm
+"$a" --6309 --format=os9 --includedir=. --define=STREAM_WORKLOAD -o build/diskshort tools/diskload.asm
+"$a" --6309 --format=os9 --includedir=. --define=STREAM_WORKLOAD --define=CONTINUOUS_READ -o build/diskburst tools/diskload.asm
+cat build/clockpack build/psgstream build/psgs build/timeload build/countlong build/cctstop build/diskshort build/diskburst > build/streampack
+python3 - <<'PY'
+import json,re
+from pathlib import Path
+symbols=dict(re.findall(r'^\[ G\] (\w+)\s+([0-9A-F]+)$',Path('build/psgstream.lst').read_text(),re.M));b=Path('build/psgstream').read_bytes();p={'size':len(b),'crc':list(b[-3:])}
+for k,n in [('irq','IRQ'),('ok','OK'),('ticks','Ticks'),('state','State'),('count','Count'),('budgets','Budgets'),('unders','Unders'),('owner','Owner'),('append','Append'),('busy','Busy'),('invalid','Invalid'),('locked','AppendLocked'),('unlock','AppendUnlock'),('unlockbusy','AppendBusy'),('unlockinvalid','AppendInvalid'),('setstat','SetStat'),('getstat','GetStat')]:p[k]=int(symbols[n],16)
+Path('build/psgstream.json').write_text(json.dumps(p)+'\n')
+PY

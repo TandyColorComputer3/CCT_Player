@@ -29,9 +29,21 @@ params RMB 256
 hexbuf RMB 3
 stack_space RMB 512
 data_size EQU .
+        ifdef IRQ_STREAM_SUPERVISOR
+        ifdef FATAL_STOP
+module_name FCS "irqkill"
+        else
+module_name FCS "irqsuper"
+        endc
+        else
 module_name FCS "psgsuper"
+        endc
         FCB 1
+        ifdef IRQ_STREAM_SUPERVISOR
+player_name FCS "cctirq"
+        else
 player_name FCS "cctplaymt"
+        endc
 prefix FCC "-psg 2 "
 prefix_end EQU *
 msg_fork FCC "SUP PID="
@@ -142,7 +154,11 @@ path_done
         sta retry_count,U
 send_again
         lda child_pid,U
+        ifdef FATAL_STOP
+        ldb #S$Kill             ; ordinary F$Send; used only by test supervisor
+        else
         ldb #S$Intrpt
+        endc
         os9 F$Send
         bcc send_ok
         stb send_status,U

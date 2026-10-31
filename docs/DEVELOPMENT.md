@@ -1,5 +1,14 @@
 # CCT_Player EOU development & test workflow
 
+## Opt-in IRQ streaming experiment
+
+`bash scripts/build-irq-stream.sh` (after the normal build) produces `cctirq`,
+`PSGStream`/`psgs`, and test helpers. It preserves every normal comparison build.
+See [IRQ-STREAMING-INTEGRATION.md](IRQ-STREAMING-INTEGRATION.md) for the measured
+sixteen-record IRQ budget, real VGM/CCT/M3U results, resource ownership, stop
+validation and remaining floppy/sub-tick limitations. Keep it experimental;
+physical CoCoSDC/Mega Mini MPI validation is still pending.
+
 ## Clone and checkout (macOS / SEDONA)
 If the named project folder already exists but is EMPTY, clone into it:
 ```bash

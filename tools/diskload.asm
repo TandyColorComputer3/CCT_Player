@@ -29,10 +29,18 @@ data_size EQU .
         ifdef LATENCY_STRESS
 module_name FCS "diskstress"
         else
+        ifdef STREAM_WORKLOAD
+module_name FCS "diskburst"
+        else
 module_name FCS "diskbusy"
         endc
+        endc
+        else
+        ifdef STREAM_WORKLOAD
+module_name FCS "diskshort"
         else
 module_name FCS "diskload"
+        endc
         endc
         FCB 1
 start
@@ -61,7 +69,15 @@ path_end
         ldd #920
         std count,U
         else
+        ifdef STREAM_WORKLOAD
+        ifdef CONTINUOUS_READ
+        lda #128            ; bounded stress burst for streaming comparisons
+        else
+        lda #32             ; periodic read workload; no process termination
+        endc
+        else
         lda #230
+        endc
         sta count,U
         endc
 next_read

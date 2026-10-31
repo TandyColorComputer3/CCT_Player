@@ -1,0 +1,1757 @@
+{
+  "platform": "MAME 0.289 coco3h NTSC HD6309 2 MiB, EOU, CoCoPSG MPI slot 2",
+  "dense": {
+    "saturation-8": {
+      "capture": "emulator/images/reliability/logs/dense-saturation8.json",
+      "pairs": 255,
+      "duration": 0.5179548010019062,
+      "maximum_event_lateness": 0.26784808299998986,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.2510423296664764,
+      "p99_event_lateness": 0.2676558800012572,
+      "handler_calls": 719,
+      "maximum_handler_seconds": 0.0008386550034629181,
+      "median_handler_seconds": 1.0616000508889556e-05,
+      "running_handler_seconds": 0.0267888880080136,
+      "max_psg_writes_per_handler": 8,
+      "over_budget_ticks": 31,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 1.5645000530639663e-05,
+      "writes_in_irq": 256,
+      "epoch_to_first_write": 9.442599912290461e-05,
+      "maximum_epoch_event_lateness": 0.26794250899911276,
+      "minimum_epoch_event_error": 9.442599912290461e-05,
+      "epoch_duration": 0.5180492270010291,
+      "expected_seconds": 0.25,
+      "maximum_serviced_tick_lateness": 16,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 256,
+      "final_head": 0,
+      "final_tail": 0,
+      "final_count": 0,
+      "full_ring_observed": true,
+      "envelope_writes": 57,
+      "expected_full_rate_writes_per_second": 1020.0,
+      "sha256": "41b14673dcedc5319b6e83e565e6337124892d4121fd0bbaf466e183d96c0804"
+    },
+    "saturation-12": {
+      "capture": "emulator/images/reliability/logs/dense-saturation12.json",
+      "pairs": 255,
+      "duration": 0.350750263001828,
+      "maximum_event_lateness": 0.10064354600035585,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.08441440166667841,
+      "p99_event_lateness": 0.100451342001179,
+      "handler_calls": 719,
+      "maximum_handler_seconds": 0.0012230610009282827,
+      "median_handler_seconds": 1.0616000508889556e-05,
+      "running_handler_seconds": 0.02609047400619602,
+      "max_psg_writes_per_handler": 12,
+      "over_budget_ticks": 21,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 1.5645000530639663e-05,
+      "writes_in_irq": 256,
+      "epoch_to_first_write": 9.442599912290461e-05,
+      "maximum_epoch_event_lateness": 0.10073797199947876,
+      "minimum_epoch_event_error": 9.442599912290461e-05,
+      "epoch_duration": 0.3508446890009509,
+      "expected_seconds": 0.25,
+      "maximum_serviced_tick_lateness": 6,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 256,
+      "final_head": 0,
+      "final_tail": 0,
+      "final_count": 0,
+      "full_ring_observed": true,
+      "envelope_writes": 57,
+      "expected_full_rate_writes_per_second": 1020.0,
+      "sha256": "935b2b24587409bf69ddf6426801c2d95bd374bcac6180a4f10f0f77b876599f"
+    },
+    "saturation-16": {
+      "capture": "emulator/images/reliability/logs/dense-saturation16.json",
+      "pairs": 255,
+      "duration": 0.2517745280019881,
+      "maximum_event_lateness": 0.0017424196669404979,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.0015818406655550288,
+      "p99_event_lateness": 0.001699434001056932,
+      "handler_calls": 719,
+      "maximum_handler_seconds": 0.001586236001458019,
+      "median_handler_seconds": 1.0616000508889556e-05,
+      "running_handler_seconds": 0.025352950004162267,
+      "max_psg_writes_per_handler": 16,
+      "over_budget_ticks": 0,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 1.5645000530639663e-05,
+      "writes_in_irq": 256,
+      "epoch_to_first_write": 9.442499867873266e-05,
+      "maximum_epoch_event_lateness": 0.0018368446656192305,
+      "minimum_epoch_event_error": 9.442499867873266e-05,
+      "epoch_duration": 0.2518689530006668,
+      "expected_seconds": 0.25,
+      "maximum_serviced_tick_lateness": 0,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 256,
+      "final_head": 0,
+      "final_tail": 0,
+      "final_count": 0,
+      "full_ring_observed": true,
+      "envelope_writes": 57,
+      "expected_full_rate_writes_per_second": 1020.0,
+      "sha256": "5138977d43f0be2af9af04c6e8b7ed5e23ac6ecfc06d10cc8295944962c404cd"
+    },
+    "mixed-8": {
+      "capture": "emulator/images/reliability/logs/dense-mixed8.json",
+      "pairs": 179,
+      "duration": 1.151781345000927,
+      "maximum_event_lateness": 0.20137348710944258,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.18799716910703188,
+      "p99_event_lateness": 0.20127738610847934,
+      "handler_calls": 719,
+      "maximum_handler_seconds": 0.0008386549998249393,
+      "median_handler_seconds": 1.0616000508889556e-05,
+      "running_handler_seconds": 0.021120009005244356,
+      "max_psg_writes_per_handler": 8,
+      "over_budget_ticks": 21,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 1.5645000530639663e-05,
+      "writes_in_irq": 180,
+      "epoch_to_first_write": 9.442499867873266e-05,
+      "maximum_epoch_event_lateness": 0.20146791210812132,
+      "minimum_epoch_event_error": 9.442499867873266e-05,
+      "epoch_duration": 1.1518757699996058,
+      "expected_seconds": 1.149750566893424,
+      "maximum_serviced_tick_lateness": 12,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 180,
+      "final_head": 180,
+      "final_tail": 180,
+      "final_count": 0,
+      "full_ring_observed": false,
+      "envelope_writes": 43,
+      "expected_full_rate_writes_per_second": 155.68594193751971,
+      "sha256": "0c559cc12f38eaa30d70f06d502d647e4e80bc388ee8a75fb019d79627edb7ae"
+    },
+    "mixed-16": {
+      "capture": "emulator/images/reliability/logs/dense-mixed16.json",
+      "pairs": 179,
+      "duration": 1.151781344000483,
+      "maximum_event_lateness": 0.03245201183691483,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.03217774093570095,
+      "p99_event_lateness": 0.032417457466033,
+      "handler_calls": 719,
+      "maximum_handler_seconds": 0.0016074679988378193,
+      "median_handler_seconds": 1.0616000508889556e-05,
+      "running_handler_seconds": 0.020865225982561242,
+      "max_psg_writes_per_handler": 16,
+      "over_budget_ticks": 9,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 1.5645000530639663e-05,
+      "writes_in_irq": 180,
+      "epoch_to_first_write": 9.442599912290461e-05,
+      "maximum_epoch_event_lateness": 0.03254643783603774,
+      "minimum_epoch_event_error": 9.442599912290461e-05,
+      "epoch_duration": 1.1518757699996058,
+      "expected_seconds": 1.149750566893424,
+      "maximum_serviced_tick_lateness": 1,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 180,
+      "final_head": 180,
+      "final_tail": 180,
+      "final_count": 0,
+      "full_ring_observed": false,
+      "envelope_writes": 43,
+      "expected_full_rate_writes_per_second": 155.68594193751971,
+      "sha256": "17fadd86e3d2c8b7cab981f4f919e55b45b6c58c274291a1b648dda839320f8f"
+    },
+    "long-8": {
+      "capture": "emulator/images/reliability/logs/dense-long8.json",
+      "pairs": 187,
+      "duration": 210.27140775500084,
+      "maximum_event_lateness": 0.2713010369989206,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.26437501499822247,
+      "p99_event_lateness": 0.27120493599795736,
+      "handler_calls": 16179,
+      "maximum_handler_seconds": 0.0008386540030187462,
+      "median_handler_seconds": 4.8608999350108206e-05,
+      "running_handler_seconds": 0.6305903648208186,
+      "max_psg_writes_per_handler": 8,
+      "over_budget_ticks": 1,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 1.5645000530639663e-05,
+      "writes_in_irq": 188,
+      "epoch_to_first_write": 9.442500231671147e-05,
+      "maximum_epoch_event_lateness": 0.2713954620012373,
+      "minimum_epoch_event_error": 9.442500231671147e-05,
+      "epoch_duration": 210.27150218000315,
+      "expected_seconds": 210.0,
+      "maximum_serviced_tick_lateness": 1,
+      "minimum_serviced_tick_lateness": 0,
+      "max_occupancy": 188,
+      "final_head": 188,
+      "final_tail": 188,
+      "final_count": 0,
+      "full_ring_observed": false,
+      "envelope_writes": 45,
+      "expected_full_rate_writes_per_second": 0.8904761904761904,
+      "sha256": "b594e78374490f801167021b31ff180efa4564dd15183fb9e8614cde71c14b59"
+    }
+  },
+  "idle": {
+    "capture": "emulator/images/reliability/logs/owned-flicky-idle.json",
+    "pairs": 820,
+    "duration": 20.12590598099996,
+    "maximum_event_lateness": 0.03940890799974994,
+    "minimum_event_error": 0.0,
+    "p95_event_lateness": 0.035223882999854794,
+    "p99_event_lateness": 0.036865342998208206,
+    "handler_calls": 3416,
+    "maximum_handler_seconds": 0.0016398730003857054,
+    "median_handler_seconds": 1.0616000508889556e-05,
+    "running_handler_seconds": 0.1402938480314333,
+    "max_psg_writes_per_handler": 16,
+    "over_budget_ticks": 0,
+    "underruns": 0,
+    "final_mpi": 255,
+    "maximum_mpi_selection_seconds": 3.0731000151718035e-05,
+    "writes_in_irq": 821,
+    "epoch_to_first_write": 9.777800005394965e-05,
+    "maximum_epoch_event_lateness": 0.03950668599980389,
+    "minimum_epoch_event_error": 9.777800005394965e-05,
+    "epoch_duration": 20.126003759000014,
+    "expected_seconds": 20.08997732426304,
+    "maximum_serviced_tick_lateness": 0,
+    "minimum_serviced_tick_lateness": 0,
+    "max_occupancy": 256,
+    "final_head": 53,
+    "final_tail": 53,
+    "final_count": 0,
+    "full_ring_observed": true,
+    "envelope_writes": 1,
+    "expected_full_rate_writes_per_second": 40.8163726003648,
+    "accepted_records": 821,
+    "full_or_state_rejections": 844,
+    "producer_pids": [
+      3
+    ],
+    "tail_wraps": 3,
+    "maximum_append_masked_body_seconds": 8.604500180808827e-05,
+    "driver_calls": {
+      "setstat": 1717,
+      "getstat": 1206
+    },
+    "control_accesses": [
+      [
+        "control-read",
+        0
+      ],
+      [
+        "control-read",
+        0
+      ],
+      [
+        "control-write",
+        0
+      ],
+      [
+        "control-write",
+        0
+      ],
+      [
+        "control-write",
+        0
+      ]
+    ],
+    "sampled_producer_user_seconds_whole_capture": 0.706400000002759,
+    "clock": {
+      "video_edges": 1206,
+      "irq_acks": 1206,
+      "clock_ticks": 1206,
+      "clock_calls": 0,
+      "coalesced_edge_states": {},
+      "longest_sampled_interval_seconds": {
+        "halt": 0,
+        "irq_mask": 0.002042961998085957,
+        "firq_mask": 0.002042961998085957
+      }
+    },
+    "sha256": "df7a2408ac1c9bb7ac244b42fb29c967a1bd24a37ac9f5321fb1b4165e967cab"
+  },
+  "vgm": {
+    "capture": "emulator/images/reliability/logs/owned-matrix-vgm-idle.json",
+    "pairs": 266,
+    "duration": 4.42285162600092,
+    "maximum_event_lateness": 0.004581084696053672,
+    "minimum_event_error": -0.0012530815518254496,
+    "p95_event_lateness": 0.004097572519283332,
+    "p99_event_lateness": 0.004499847974422266,
+    "handler_calls": 2060,
+    "maximum_handler_seconds": 0.001440964999346761,
+    "median_handler_seconds": 1.0616000508889556e-05,
+    "running_handler_seconds": 0.03950335301851737,
+    "max_psg_writes_per_handler": 14,
+    "over_budget_ticks": 0,
+    "underruns": 0,
+    "final_mpi": 255,
+    "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+    "writes_in_irq": 267,
+    "epoch_to_first_write": 0.0167859370012593,
+    "maximum_epoch_event_lateness": 0.0151085182959525,
+    "minimum_epoch_event_error": 0.009274352048073309,
+    "epoch_duration": 4.439637563002179,
+    "expected_seconds": 4.430204081632653,
+    "maximum_serviced_tick_lateness": 0,
+    "minimum_serviced_tick_lateness": 0,
+    "max_occupancy": 256,
+    "final_head": 11,
+    "final_tail": 11,
+    "final_count": 0,
+    "full_ring_observed": true,
+    "envelope_writes": 2,
+    "expected_full_rate_writes_per_second": 60.04238068914685,
+    "accepted_records": 267,
+    "full_or_state_rejections": 2,
+    "producer_pids": [
+      3
+    ],
+    "tail_wraps": 1,
+    "maximum_append_masked_body_seconds": 8.604500180808827e-05,
+    "driver_calls": {
+      "setstat": 285,
+      "getstat": 267
+    },
+    "control_accesses": [
+      [
+        "control-read",
+        0
+      ],
+      [
+        "control-read",
+        0
+      ],
+      [
+        "control-write",
+        1
+      ],
+      [
+        "control-write",
+        0
+      ],
+      [
+        "control-write",
+        0
+      ]
+    ],
+    "sampled_producer_user_seconds_whole_capture": 0.19449999995049438,
+    "sha256": "4781902c0bf9e20c4a45aecded96f62eddc129f5227a7cec1b397eda5b33f5b1"
+  },
+  "workloads": {
+    "counter": {
+      "stream": {
+        "capture": "emulator/images/reliability/logs/owned-matrix-counter.json",
+        "pairs": 820,
+        "duration": 20.125905982000404,
+        "maximum_event_lateness": 0.03940890799974994,
+        "minimum_event_error": 0.0,
+        "p95_event_lateness": 0.035224442000764355,
+        "p99_event_lateness": 0.03686590299956194,
+        "handler_calls": 4927,
+        "maximum_handler_seconds": 0.0016398740008298773,
+        "median_handler_seconds": 1.0616000508889556e-05,
+        "running_handler_seconds": 0.14029384697278147,
+        "max_psg_writes_per_handler": 16,
+        "over_budget_ticks": 0,
+        "underruns": 0,
+        "final_mpi": 255,
+        "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+        "writes_in_irq": 821,
+        "epoch_to_first_write": 9.777800005394965e-05,
+        "maximum_epoch_event_lateness": 0.03950668599980389,
+        "minimum_epoch_event_error": 9.777800005394965e-05,
+        "epoch_duration": 20.126003760000458,
+        "expected_seconds": 20.08997732426304,
+        "maximum_serviced_tick_lateness": 0,
+        "minimum_serviced_tick_lateness": 0,
+        "max_occupancy": 256,
+        "final_head": 53,
+        "final_tail": 53,
+        "final_count": 0,
+        "full_ring_observed": true,
+        "envelope_writes": 1,
+        "expected_full_rate_writes_per_second": 40.8163726003648,
+        "accepted_records": 821,
+        "full_or_state_rejections": 842,
+        "producer_pids": [
+          4
+        ],
+        "tail_wraps": 3,
+        "maximum_append_masked_body_seconds": 8.604400136391632e-05,
+        "driver_calls": {
+          "setstat": 1715,
+          "getstat": 1204
+        },
+        "control_accesses": [
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ]
+        ],
+        "sampled_producer_user_seconds_whole_capture": 0.7053999999479856,
+        "clock": {
+          "video_edges": 1206,
+          "irq_acks": 1206,
+          "clock_ticks": 1206,
+          "clock_calls": 0,
+          "coalesced_edge_states": {},
+          "longest_sampled_interval_seconds": {
+            "halt": 0,
+            "irq_mask": 0.0020916260000376496,
+            "firq_mask": 0.0020916260000376496
+          }
+        },
+        "resources_equal": true,
+        "sha256": "f8364cb833df04b44376222d23d19e88b9c554a2d693f8a9a48666eb0268a5c7"
+      },
+      "park": {
+        "capture": "emulator/images/reliability/logs/park-matrix-counter.json",
+        "pairs": 820,
+        "duration": 20.104735687000357,
+        "maximum_event_lateness": 0.018933674000145118,
+        "minimum_event_error": -0.01926301299972688,
+        "p95_event_lateness": 0.014344687000413359,
+        "p99_event_lateness": 0.016472801999480424,
+        "handler_calls": 4935,
+        "maximum_handler_seconds": 1.0616000508889556e-05,
+        "median_handler_seconds": 1.0616000508889556e-05,
+        "running_handler_seconds": 0,
+        "max_psg_writes_per_handler": 0,
+        "over_budget_ticks": 0,
+        "underruns": 0,
+        "final_mpi": 255,
+        "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+        "writes_in_irq": 0,
+        "clock": {
+          "video_edges": 1205,
+          "irq_acks": 1205,
+          "clock_ticks": 1205,
+          "clock_calls": 639,
+          "coalesced_edge_states": {},
+          "longest_sampled_interval_seconds": {
+            "halt": 0,
+            "irq_mask": 0.0014999999984866008,
+            "firq_mask": 0.0014999999984866008
+          }
+        },
+        "sha256": "4f9f4c5577fcacb45f875baa4d48ac3b326391d54c89307c791a95a2efe01b4b"
+      }
+    },
+    "commands": {
+      "stream": {
+        "capture": "emulator/images/reliability/logs/owned-matrix-commands.json",
+        "pairs": 820,
+        "duration": 20.12590654000087,
+        "maximum_event_lateness": 0.039409467000659504,
+        "minimum_event_error": 0.0,
+        "p95_event_lateness": 0.035224442000764355,
+        "p99_event_lateness": 0.03686590199911777,
+        "handler_calls": 3425,
+        "maximum_handler_seconds": 0.0016398740008298773,
+        "median_handler_seconds": 1.0616000508889556e-05,
+        "running_handler_seconds": 0.14029385301910224,
+        "max_psg_writes_per_handler": 16,
+        "over_budget_ticks": 0,
+        "underruns": 0,
+        "final_mpi": 255,
+        "maximum_mpi_selection_seconds": 3.0731000151718035e-05,
+        "writes_in_irq": 821,
+        "epoch_to_first_write": 9.777800005394965e-05,
+        "maximum_epoch_event_lateness": 0.03950724500071345,
+        "minimum_epoch_event_error": 9.777800005394965e-05,
+        "epoch_duration": 20.126004318000923,
+        "expected_seconds": 20.08997732426304,
+        "maximum_serviced_tick_lateness": 0,
+        "minimum_serviced_tick_lateness": 0,
+        "max_occupancy": 256,
+        "final_head": 53,
+        "final_tail": 53,
+        "final_count": 0,
+        "full_ring_observed": true,
+        "envelope_writes": 1,
+        "expected_full_rate_writes_per_second": 40.8163726003648,
+        "accepted_records": 821,
+        "full_or_state_rejections": 635,
+        "producer_pids": [
+          3
+        ],
+        "tail_wraps": 3,
+        "maximum_append_masked_body_seconds": 8.604500180808827e-05,
+        "driver_calls": {
+          "setstat": 1508,
+          "getstat": 990
+        },
+        "control_accesses": [
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ]
+        ],
+        "sampled_producer_user_seconds_whole_capture": 0.6314000001257227,
+        "clock": {
+          "video_edges": 1206,
+          "irq_acks": 1206,
+          "clock_ticks": 1206,
+          "clock_calls": 0,
+          "coalesced_edge_states": {},
+          "longest_sampled_interval_seconds": {
+            "halt": 0,
+            "irq_mask": 0.002081775997794466,
+            "firq_mask": 0.002081775997794466
+          }
+        },
+        "resources_equal": true,
+        "sha256": "d882e66a22a93d70cd5cebbb1acfb76ff34d34ba1c745474adcaad8a6772c02f"
+      },
+      "park": {
+        "capture": "emulator/images/reliability/logs/park-matrix-commands.json",
+        "pairs": 820,
+        "duration": 20.110449264000636,
+        "maximum_event_lateness": 1.2482753329986007,
+        "minimum_event_error": -0.013717054999869971,
+        "p95_event_lateness": 0.7535038200006241,
+        "p99_event_lateness": 1.2412734799983447,
+        "handler_calls": 3437,
+        "maximum_handler_seconds": 1.0616000508889556e-05,
+        "median_handler_seconds": 1.0616000508889556e-05,
+        "running_handler_seconds": 0,
+        "max_psg_writes_per_handler": 0,
+        "over_budget_ticks": 0,
+        "underruns": 0,
+        "final_mpi": 255,
+        "maximum_mpi_selection_seconds": 3.073000334552489e-05,
+        "writes_in_irq": 0,
+        "clock": {
+          "video_edges": 1205,
+          "irq_acks": 1205,
+          "clock_ticks": 1205,
+          "clock_calls": 578,
+          "coalesced_edge_states": {},
+          "longest_sampled_interval_seconds": {
+            "halt": 0,
+            "irq_mask": 0.001299999999901047,
+            "firq_mask": 0.001299999999901047
+          }
+        },
+        "sha256": "dd92aec5badefe54427dd99d59818596be71ebfa0f6d5c45ebc842915bbd742b"
+      }
+    },
+    "directory": {
+      "stream": {
+        "capture": "emulator/images/reliability/logs/owned-matrix-directory.json",
+        "pairs": 820,
+        "duration": 20.125954590999754,
+        "maximum_event_lateness": 0.03956535200239131,
+        "minimum_event_error": 0.0,
+        "p95_event_lateness": 0.035235616001738634,
+        "p99_event_lateness": 0.036874842000980124,
+        "handler_calls": 3420,
+        "maximum_handler_seconds": 0.0016398740008298773,
+        "median_handler_seconds": 1.0616000508889556e-05,
+        "running_handler_seconds": 0.1402938549144892,
+        "max_psg_writes_per_handler": 16,
+        "over_budget_ticks": 0,
+        "underruns": 0,
+        "final_mpi": 255,
+        "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+        "writes_in_irq": 821,
+        "epoch_to_first_write": 9.777800005394965e-05,
+        "maximum_epoch_event_lateness": 0.03966313000244526,
+        "minimum_epoch_event_error": 9.777800005394965e-05,
+        "epoch_duration": 20.126052368999808,
+        "expected_seconds": 20.08997732426304,
+        "maximum_serviced_tick_lateness": 0,
+        "minimum_serviced_tick_lateness": 0,
+        "max_occupancy": 256,
+        "final_head": 53,
+        "final_tail": 53,
+        "final_count": 0,
+        "full_ring_observed": true,
+        "envelope_writes": 1,
+        "expected_full_rate_writes_per_second": 40.8163726003648,
+        "accepted_records": 821,
+        "full_or_state_rejections": 764,
+        "producer_pids": [
+          3
+        ],
+        "tail_wraps": 3,
+        "maximum_append_masked_body_seconds": 8.604400136391632e-05,
+        "driver_calls": {
+          "setstat": 1637,
+          "getstat": 844
+        },
+        "control_accesses": [
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ]
+        ],
+        "sampled_producer_user_seconds_whole_capture": 0.607499999958236,
+        "clock": {
+          "video_edges": 1206,
+          "irq_acks": 1206,
+          "clock_ticks": 1206,
+          "clock_calls": 0,
+          "coalesced_edge_states": {},
+          "longest_sampled_interval_seconds": {
+            "halt": 0,
+            "irq_mask": 0.00210000000151922,
+            "firq_mask": 0.00210000000151922
+          }
+        },
+        "resources_equal": true,
+        "sha256": "828810db8cf66ec8ad7c87e6964fe35d38ab9a66e4cb4d9f0c0906262252f190"
+      },
+      "park": {
+        "capture": "emulator/images/reliability/logs/park-matrix-directory.json",
+        "pairs": 820,
+        "duration": 20.160188560999813,
+        "maximum_event_lateness": 0.24255321899880045,
+        "minimum_event_error": -0.011009447003016204,
+        "p95_event_lateness": 0.09411093699687711,
+        "p99_event_lateness": 0.20001770099828686,
+        "handler_calls": 3435,
+        "maximum_handler_seconds": 1.0616000508889556e-05,
+        "median_handler_seconds": 1.0616000508889556e-05,
+        "running_handler_seconds": 0,
+        "max_psg_writes_per_handler": 0,
+        "over_budget_ticks": 0,
+        "underruns": 0,
+        "final_mpi": 255,
+        "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+        "writes_in_irq": 0,
+        "clock": {
+          "video_edges": 1208,
+          "irq_acks": 1208,
+          "clock_ticks": 1208,
+          "clock_calls": 551,
+          "coalesced_edge_states": {},
+          "longest_sampled_interval_seconds": {
+            "halt": 0,
+            "irq_mask": 0.0014000000010128133,
+            "firq_mask": 0.0014000000010128133
+          }
+        },
+        "sha256": "94091c2211a19fe9901de393c7b1e068aae8f81c80157f5d220d67ee3e2b5baa"
+      }
+    },
+    "small-read": {
+      "stream": {
+        "capture": "emulator/images/reliability/logs/owned-matrix-small-read.json",
+        "pairs": 820,
+        "duration": 20.125905982000404,
+        "maximum_event_lateness": 0.03940890799974994,
+        "minimum_event_error": 0.0,
+        "p95_event_lateness": 0.035224442000764355,
+        "p99_event_lateness": 0.03686590299956194,
+        "handler_calls": 3424,
+        "maximum_handler_seconds": 0.0016398730003857054,
+        "median_handler_seconds": 1.0616000508889556e-05,
+        "running_handler_seconds": 0.14029384996683802,
+        "max_psg_writes_per_handler": 16,
+        "over_budget_ticks": 0,
+        "underruns": 0,
+        "final_mpi": 255,
+        "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+        "writes_in_irq": 821,
+        "epoch_to_first_write": 9.77769996097777e-05,
+        "maximum_epoch_event_lateness": 0.03950668499935972,
+        "minimum_epoch_event_error": 9.77769996097777e-05,
+        "epoch_duration": 20.126003759000014,
+        "expected_seconds": 20.08997732426304,
+        "maximum_serviced_tick_lateness": 0,
+        "minimum_serviced_tick_lateness": 0,
+        "max_occupancy": 256,
+        "final_head": 53,
+        "final_tail": 53,
+        "final_count": 0,
+        "full_ring_observed": true,
+        "envelope_writes": 1,
+        "expected_full_rate_writes_per_second": 40.8163726003648,
+        "accepted_records": 821,
+        "full_or_state_rejections": 727,
+        "producer_pids": [
+          3
+        ],
+        "tail_wraps": 3,
+        "maximum_append_masked_body_seconds": 8.604399772593752e-05,
+        "driver_calls": {
+          "setstat": 1600,
+          "getstat": 982
+        },
+        "control_accesses": [
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ]
+        ],
+        "sampled_producer_user_seconds_whole_capture": 0.6368000000620668,
+        "clock": {
+          "video_edges": 1206,
+          "irq_acks": 1206,
+          "clock_ticks": 1206,
+          "clock_calls": 0,
+          "coalesced_edge_states": {},
+          "longest_sampled_interval_seconds": {
+            "halt": 0,
+            "irq_mask": 0.0021247260010568425,
+            "firq_mask": 0.0021247260010568425
+          }
+        },
+        "resources_equal": true,
+        "sha256": "d3e3cb22f8a6443a5c849bfcbc769bc835a53e1abb1494b4a3555e1a26467cf7"
+      },
+      "park": {
+        "capture": "emulator/images/reliability/logs/park-matrix-small-read.json",
+        "pairs": 820,
+        "duration": 20.110754889999953,
+        "maximum_event_lateness": 1.330098537998274,
+        "minimum_event_error": -0.01324380899968669,
+        "p95_event_lateness": 0.7645080379994766,
+        "p99_event_lateness": 1.201597968999704,
+        "handler_calls": 3436,
+        "maximum_handler_seconds": 1.0616000508889556e-05,
+        "median_handler_seconds": 1.0616000508889556e-05,
+        "running_handler_seconds": 0,
+        "max_psg_writes_per_handler": 0,
+        "over_budget_ticks": 0,
+        "underruns": 0,
+        "final_mpi": 255,
+        "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+        "writes_in_irq": 0,
+        "clock": {
+          "video_edges": 1205,
+          "irq_acks": 1205,
+          "clock_ticks": 1205,
+          "clock_calls": 559,
+          "coalesced_edge_states": {},
+          "longest_sampled_interval_seconds": {
+            "halt": 0,
+            "irq_mask": 0.0009000000027299393,
+            "firq_mask": 0.0009000000027299393
+          }
+        },
+        "sha256": "ad70b5a969b22ab71299283cedc9d18eafb145ca7dc2f73a0e6f1a2c77afe372"
+      }
+    },
+    "periodic": {
+      "stream": {
+        "capture": "emulator/images/reliability/logs/owned-matrix-periodic.json",
+        "pairs": 820,
+        "duration": 22.812712457001908,
+        "maximum_event_lateness": 2.726215942002163,
+        "minimum_event_error": 0.0,
+        "p95_event_lateness": 2.454288992999647,
+        "p99_event_lateness": 2.722716145000014,
+        "handler_calls": 6222,
+        "maximum_handler_seconds": 0.0016398740008298773,
+        "median_handler_seconds": 1.0616000508889556e-05,
+        "running_handler_seconds": 0.14029384796958766,
+        "max_psg_writes_per_handler": 16,
+        "over_budget_ticks": 0,
+        "underruns": 0,
+        "final_mpi": 255,
+        "maximum_mpi_selection_seconds": 3.0731000151718035e-05,
+        "writes_in_irq": 821,
+        "epoch_to_first_write": 9.777800005394965e-05,
+        "maximum_epoch_event_lateness": 2.726313720002217,
+        "minimum_epoch_event_error": 9.777800005394965e-05,
+        "epoch_duration": 22.81281023500196,
+        "expected_seconds": 20.08997732426304,
+        "maximum_serviced_tick_lateness": 0,
+        "minimum_serviced_tick_lateness": 0,
+        "max_occupancy": 256,
+        "final_head": 53,
+        "final_tail": 53,
+        "final_count": 0,
+        "full_ring_observed": true,
+        "envelope_writes": 1,
+        "expected_full_rate_writes_per_second": 40.8163726003648,
+        "accepted_records": 821,
+        "full_or_state_rejections": 725,
+        "producer_pids": [
+          3
+        ],
+        "tail_wraps": 3,
+        "maximum_append_masked_body_seconds": 8.604399772593752e-05,
+        "driver_calls": {
+          "setstat": 1598,
+          "getstat": 1020
+        },
+        "control_accesses": [
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ]
+        ],
+        "sampled_producer_user_seconds_whole_capture": 0.6440999999686028,
+        "clock": {
+          "video_edges": 1367,
+          "irq_acks": 1206,
+          "clock_ticks": 1206,
+          "clock_calls": 0,
+          "coalesced_edge_states": {
+            "halt_and_irq_mask": 155,
+            "irq_mask_only": 6
+          },
+          "longest_sampled_interval_seconds": {
+            "halt": 0.10689999999885913,
+            "irq_mask": 0.11599999999816646,
+            "firq_mask": 0.11599999999816646
+          }
+        },
+        "resources_equal": true,
+        "sha256": "63cde95c041dd1ce042ccc40ce91fc6c807b5cb078ba9e7ada5abe27e8d391df"
+      },
+      "park": {
+        "capture": "emulator/images/reliability/logs/park-matrix-periodic.json",
+        "pairs": 820,
+        "duration": 22.796059497999522,
+        "maximum_event_lateness": 2.712607192002178,
+        "minimum_event_error": -0.014250642000843028,
+        "p95_event_lateness": 2.494499634999375,
+        "p99_event_lateness": 2.709753511000308,
+        "handler_calls": 6234,
+        "maximum_handler_seconds": 1.0616000508889556e-05,
+        "median_handler_seconds": 1.0616000508889556e-05,
+        "running_handler_seconds": 0,
+        "max_psg_writes_per_handler": 0,
+        "over_budget_ticks": 0,
+        "underruns": 0,
+        "final_mpi": 255,
+        "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+        "writes_in_irq": 0,
+        "clock": {
+          "video_edges": 1366,
+          "irq_acks": 1205,
+          "clock_ticks": 1205,
+          "clock_calls": 599,
+          "coalesced_edge_states": {
+            "halt_and_irq_mask": 155,
+            "irq_mask_only": 6
+          },
+          "longest_sampled_interval_seconds": {
+            "halt": 0.10729999999966822,
+            "irq_mask": 0.11650000000008731,
+            "firq_mask": 0.11609999999927823
+          }
+        },
+        "sha256": "a73b593a1249e9166e9d91fcf3ed3f9b3a871357641729fa0f53955d48e938c5"
+      }
+    },
+    "sustained": {
+      "stream": {
+        "capture": "emulator/images/reliability/logs/owned-matrix-sustained.json",
+        "pairs": 820,
+        "duration": 31.0400006259988,
+        "maximum_event_lateness": 10.95381476499795,
+        "minimum_event_error": 0.0,
+        "p95_event_lateness": 10.47482988899894,
+        "p99_event_lateness": 10.886276218999118,
+        "handler_calls": 4733,
+        "maximum_handler_seconds": 0.0016398740008298773,
+        "median_handler_seconds": 1.0616000508889556e-05,
+        "running_handler_seconds": 0.14029382207081653,
+        "max_psg_writes_per_handler": 16,
+        "over_budget_ticks": 0,
+        "underruns": 0,
+        "final_mpi": 255,
+        "maximum_mpi_selection_seconds": 3.073000334552489e-05,
+        "writes_in_irq": 821,
+        "epoch_to_first_write": 9.777800005394965e-05,
+        "maximum_epoch_event_lateness": 10.953912542998005,
+        "minimum_epoch_event_error": 9.777800005394965e-05,
+        "epoch_duration": 31.040098403998854,
+        "expected_seconds": 20.08997732426304,
+        "maximum_serviced_tick_lateness": 0,
+        "minimum_serviced_tick_lateness": 0,
+        "max_occupancy": 256,
+        "final_head": 53,
+        "final_tail": 53,
+        "final_count": 0,
+        "full_ring_observed": true,
+        "envelope_writes": 1,
+        "expected_full_rate_writes_per_second": 40.8163726003648,
+        "accepted_records": 821,
+        "full_or_state_rejections": 420,
+        "producer_pids": [
+          3
+        ],
+        "tail_wraps": 3,
+        "maximum_append_masked_body_seconds": 8.604500180808827e-05,
+        "driver_calls": {
+          "setstat": 1293,
+          "getstat": 527
+        },
+        "control_accesses": [
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ]
+        ],
+        "sampled_producer_user_seconds_whole_capture": 0.495900000223628,
+        "clock": {
+          "video_edges": 1860,
+          "irq_acks": 1206,
+          "clock_ticks": 1206,
+          "clock_calls": 0,
+          "coalesced_edge_states": {
+            "halt_and_irq_mask": 628,
+            "irq_mask_only": 26
+          },
+          "longest_sampled_interval_seconds": {
+            "halt": 0.10740000000077998,
+            "irq_mask": 0.11660000000119908,
+            "firq_mask": 0.11660000000119908
+          }
+        },
+        "resources_equal": true,
+        "sha256": "8a377611517d4612b0b2ad7ec081963bc8baa8e24ef6c1492c2e6ae54d0cc85b"
+      },
+      "park": {
+        "capture": "emulator/images/reliability/logs/park-matrix-sustained.json",
+        "pairs": 820,
+        "duration": 31.184248607998597,
+        "maximum_event_lateness": 11.113031692999066,
+        "minimum_event_error": -0.007299477000924481,
+        "p95_event_lateness": 10.24168034799892,
+        "p99_event_lateness": 10.947528578996717,
+        "handler_calls": 4747,
+        "maximum_handler_seconds": 1.0616000508889556e-05,
+        "median_handler_seconds": 1.0616000508889556e-05,
+        "running_handler_seconds": 0,
+        "max_psg_writes_per_handler": 0,
+        "over_budget_ticks": 0,
+        "underruns": 0,
+        "final_mpi": 255,
+        "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+        "writes_in_irq": 0,
+        "clock": {
+          "video_edges": 1869,
+          "irq_acks": 1206,
+          "clock_ticks": 1206,
+          "clock_calls": 477,
+          "coalesced_edge_states": {
+            "halt_and_irq_mask": 612,
+            "irq_mask_only": 50,
+            "neither_or_sampling_boundary": 1
+          },
+          "longest_sampled_interval_seconds": {
+            "halt": 0.1069999999999709,
+            "irq_mask": 0.11620000000038999,
+            "firq_mask": 0.11620000000038999
+          }
+        },
+        "sha256": "261ae11131218f958c3bde0970eea226a3b9f8747f67738b43d7032c92090121"
+      }
+    }
+  },
+  "playlist": {
+    "tracks": [
+      {
+        "track": "arkanoid.vgm",
+        "writes": 266,
+        "duration": 4.4228510670000105
+      },
+      {
+        "track": "flicky.cct",
+        "writes": 820,
+        "duration": 20.125896482997632
+      },
+      {
+        "track": "ark1.cct",
+        "writes": 266,
+        "duration": 4.422851625000476
+      }
+    ],
+    "audit": {
+      "accepted_records": 1355,
+      "full_or_state_rejections": 847,
+      "producer_pids": [
+        3
+      ],
+      "tail_wraps": 5,
+      "maximum_append_masked_body_seconds": 8.604500180808827e-05,
+      "driver_calls": {
+        "setstat": 2322,
+        "getstat": 1633
+      },
+      "control_accesses": [
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-write",
+          1
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-read",
+          0
+        ],
+        [
+          "control-write",
+          1
+        ],
+        [
+          "control-write",
+          0
+        ],
+        [
+          "control-write",
+          0
+        ]
+      ],
+      "sampled_producer_user_seconds_whole_capture": 1.0743999999613152
+    },
+    "resources_equal": true,
+    "capture": "emulator/images/reliability/logs/owned-matrix-playlist.json",
+    "sha256": "959a87f54f0d78aab54113f6572cb34e989fc1cad6a9217700363fb0fae473b6"
+  },
+  "long_stream": {
+    "capture": "emulator/images/reliability/logs/owned-long-pages.json",
+    "pairs": 5269,
+    "duration": 210.27151447199867,
+    "maximum_event_lateness": 0.27140719599992735,
+    "minimum_event_error": 0.0,
+    "p95_event_lateness": 0.25760197399941376,
+    "p99_event_lateness": 0.2684898410014398,
+    "handler_calls": 16045,
+    "maximum_handler_seconds": 0.0016398730003857054,
+    "median_handler_seconds": 4.860900298808701e-05,
+    "running_handler_seconds": 1.136621869267401,
+    "max_psg_writes_per_handler": 16,
+    "over_budget_ticks": 0,
+    "underruns": 0,
+    "final_mpi": 255,
+    "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+    "writes_in_irq": 5270,
+    "epoch_to_first_write": 9.77769996097777e-05,
+    "maximum_epoch_event_lateness": 0.27150497299953713,
+    "minimum_epoch_event_error": 9.77769996097777e-05,
+    "epoch_duration": 210.27161224899828,
+    "expected_seconds": 210.0,
+    "maximum_serviced_tick_lateness": 0,
+    "minimum_serviced_tick_lateness": 0,
+    "max_occupancy": 256,
+    "final_head": 150,
+    "final_tail": 150,
+    "final_count": 0,
+    "full_ring_observed": true,
+    "envelope_writes": 1053,
+    "expected_full_rate_writes_per_second": 25.090476190476192,
+    "accepted_records": 5270,
+    "full_or_state_rejections": 12000,
+    "producer_pids": [
+      3
+    ],
+    "tail_wraps": 20,
+    "maximum_append_masked_body_seconds": 8.604500180808827e-05,
+    "driver_calls": {
+      "setstat": 17298,
+      "getstat": 12601
+    },
+    "control_accesses": [
+      [
+        "control-read",
+        0
+      ],
+      [
+        "control-read",
+        0
+      ],
+      [
+        "control-write",
+        0
+      ],
+      [
+        "control-write",
+        0
+      ],
+      [
+        "control-write",
+        0
+      ]
+    ],
+    "sampled_producer_user_seconds_whole_capture": 6.4129999998585845,
+    "clock": {
+      "video_edges": 12600,
+      "irq_acks": 12600,
+      "clock_ticks": 12600,
+      "clock_calls": 0,
+      "coalesced_edge_states": {},
+      "longest_sampled_interval_seconds": {
+        "halt": 0,
+        "irq_mask": 0.002039033999608364,
+        "firq_mask": 0.002039033999608364
+      }
+    },
+    "resources_equal": true,
+    "sha256": "651940055bed1b16ee2e911c79f731e2d65b46c2338203ad49405309635a9607"
+  },
+  "lifecycle": {
+    "owned-life-kill": {
+      "capture": "emulator/images/reliability/logs/owned-life-kill.json",
+      "resources_equal": true,
+      "final_state": 4,
+      "owner": 0,
+      "pending_records": 126,
+      "underrun_seen": false,
+      "irq_psg_writes": 141,
+      "audit": {
+        "accepted_records": 267,
+        "full_or_state_rejections": 2,
+        "producer_pids": [
+          3
+        ],
+        "tail_wraps": 1,
+        "maximum_append_masked_body_seconds": 8.604399772593752e-05,
+        "driver_calls": {
+          "setstat": 307,
+          "getstat": 116
+        },
+        "control_accesses": [
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-write",
+            1
+          ],
+          [
+            "control-write",
+            0
+          ]
+        ],
+        "sampled_producer_user_seconds_whole_capture": 0.1603000000832253
+      },
+      "sha256": "7667d7c079a7a0f165d0572769b2d63568b6fd041293bde3e3d2da2362e4c407",
+      "prefix_before_silence": 141
+    },
+    "owned-kill-load-super": {
+      "capture": "emulator/images/reliability/logs/owned-kill-load-super.json",
+      "resources_equal": true,
+      "final_state": 4,
+      "owner": 0,
+      "pending_records": 0,
+      "underrun_seen": false,
+      "irq_psg_writes": 0,
+      "audit": {
+        "accepted_records": 0,
+        "full_or_state_rejections": 0,
+        "producer_pids": [],
+        "tail_wraps": 0,
+        "maximum_append_masked_body_seconds": null,
+        "driver_calls": {
+          "setstat": 8
+        },
+        "control_accesses": [
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ]
+        ]
+      },
+      "sha256": "205bb2d484df5bf5c685d1ce09696d4ca8b223f0fce8fb9cd2bb9e1f96022555"
+    },
+    "owned-burst-stop-super": {
+      "capture": "emulator/images/reliability/logs/owned-burst-stop-super.json",
+      "resources_equal": true,
+      "final_state": 4,
+      "owner": 0,
+      "pending_records": 199,
+      "underrun_seen": false,
+      "irq_psg_writes": 176,
+      "audit": {
+        "accepted_records": 375,
+        "full_or_state_rejections": 1,
+        "producer_pids": [
+          4
+        ],
+        "tail_wraps": 1,
+        "maximum_append_masked_body_seconds": 8.492800043313764e-05,
+        "driver_calls": {
+          "setstat": 396,
+          "getstat": 1
+        },
+        "control_accesses": [
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ]
+        ],
+        "sampled_producer_user_seconds_whole_capture": 0.11689999999725842
+      },
+      "sha256": "0d5d6a26d842a97763ee415b0f030b9535a5ca466a24c98b6869f98fcb53d75a",
+      "prefix_before_silence": 176
+    },
+    "owned-playlist-stop-super": {
+      "capture": "emulator/images/reliability/logs/owned-playlist-stop-super.json",
+      "resources_equal": true,
+      "final_state": 4,
+      "owner": 0,
+      "pending_records": 0,
+      "underrun_seen": false,
+      "irq_psg_writes": 267,
+      "audit": {
+        "accepted_records": 267,
+        "full_or_state_rejections": 2,
+        "producer_pids": [
+          4
+        ],
+        "tail_wraps": 1,
+        "maximum_append_masked_body_seconds": 8.604500180808827e-05,
+        "driver_calls": {
+          "setstat": 293,
+          "getstat": 267
+        },
+        "control_accesses": [
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-write",
+            1
+          ],
+          [
+            "control-write",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ],
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ]
+        ],
+        "sampled_producer_user_seconds_whole_capture": 0.19790000000648433
+      },
+      "sha256": "18c63724e42619a3483aded02c93453352d689b4135acf4f9e4dc02604707439",
+      "prefix_before_silence": 266
+    },
+    "owned-life-loop-stop": {
+      "capture": "emulator/images/reliability/logs/owned-life-loop-stop.json",
+      "resources_equal": true,
+      "final_state": 4,
+      "owner": 0,
+      "pending_records": 256,
+      "underrun_seen": false,
+      "irq_psg_writes": 14,
+      "audit": {
+        "accepted_records": 270,
+        "full_or_state_rejections": 125,
+        "producer_pids": [
+          3
+        ],
+        "tail_wraps": 1,
+        "maximum_append_masked_body_seconds": 8.492800043313764e-05,
+        "driver_calls": {
+          "setstat": 519,
+          "getstat": 125
+        },
+        "control_accesses": [
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ]
+        ],
+        "sampled_producer_user_seconds_whole_capture": 0.22539999995933613
+      },
+      "sha256": "ed6bdba0fe9e7706c3fd348bdb31cfdfbd9087f1d109192abc48aed32014fc46",
+      "prefix_before_silence": 14
+    },
+    "owned-life-missing-file": {
+      "capture": "emulator/images/reliability/logs/owned-life-missing-file.json",
+      "resources_equal": true,
+      "final_state": 4,
+      "owner": 0,
+      "pending_records": 256,
+      "underrun_seen": false,
+      "irq_psg_writes": 0,
+      "audit": {
+        "accepted_records": 0,
+        "full_or_state_rejections": 0,
+        "producer_pids": [],
+        "tail_wraps": 0,
+        "maximum_append_masked_body_seconds": null,
+        "driver_calls": {},
+        "control_accesses": []
+      },
+      "sha256": "fa9d2c497b4cb63a2091b5a9040da89f7381c23f61dd9c9dad2034bbd5337283"
+    },
+    "owned-life-wrong-slot": {
+      "capture": "emulator/images/reliability/logs/owned-life-wrong-slot.json",
+      "resources_equal": true,
+      "final_state": 4,
+      "owner": 0,
+      "pending_records": 256,
+      "underrun_seen": false,
+      "irq_psg_writes": 0,
+      "audit": {
+        "accepted_records": 0,
+        "full_or_state_rejections": 0,
+        "producer_pids": [],
+        "tail_wraps": 0,
+        "maximum_append_masked_body_seconds": null,
+        "driver_calls": {},
+        "control_accesses": []
+      },
+      "sha256": "1880d8933c091a3e057605e88fc65240fefdf79d564e84ff35e03cf6196b86aa"
+    },
+    "owned-life-underrun": {
+      "capture": "emulator/images/reliability/logs/owned-life-underrun.json",
+      "resources_equal": true,
+      "final_state": 4,
+      "owner": 0,
+      "pending_records": 0,
+      "underrun_seen": true,
+      "irq_psg_writes": 5,
+      "audit": {
+        "accepted_records": 4,
+        "full_or_state_rejections": 0,
+        "producer_pids": [
+          3
+        ],
+        "tail_wraps": 0,
+        "maximum_append_masked_body_seconds": 8.492699998896569e-05,
+        "driver_calls": {
+          "setstat": 9,
+          "getstat": 2
+        },
+        "control_accesses": [
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ]
+        ],
+        "sampled_producer_user_seconds_whole_capture": 0.011599999990721699
+      },
+      "sha256": "0f464fe36f006498b898c05b3d206e98437b0cee179d8be8eea1b9936a14990b"
+    },
+    "owned-life-owner-reject": {
+      "capture": "emulator/images/reliability/logs/owned-life-owner-reject.json",
+      "resources_equal": true,
+      "final_state": 4,
+      "owner": 0,
+      "pending_records": 256,
+      "underrun_seen": false,
+      "irq_psg_writes": 59,
+      "audit": {
+        "accepted_records": 315,
+        "full_or_state_rejections": 562,
+        "producer_pids": [
+          3
+        ],
+        "tail_wraps": 1,
+        "maximum_append_masked_body_seconds": 8.492800043313764e-05,
+        "driver_calls": {
+          "setstat": 1019,
+          "getstat": 562
+        },
+        "control_accesses": [
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ]
+        ],
+        "sampled_producer_user_seconds_whole_capture": 0.4072000001251581
+      },
+      "sha256": "9090a3e10faf88943da7d0710914642e7ce98be7f266f1aadd2e8a73df4d9f18"
+    },
+    "owned-life-restart": {
+      "capture": "emulator/images/reliability/logs/owned-life-restart.json",
+      "resources_equal": true,
+      "final_state": 4,
+      "owner": 0,
+      "pending_records": 0,
+      "underrun_seen": false,
+      "irq_psg_writes": 821,
+      "audit": {
+        "accepted_records": 821,
+        "full_or_state_rejections": 844,
+        "producer_pids": [
+          3
+        ],
+        "tail_wraps": 3,
+        "maximum_append_masked_body_seconds": 8.604500180808827e-05,
+        "driver_calls": {
+          "setstat": 1717,
+          "getstat": 1206
+        },
+        "control_accesses": [
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-read",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ],
+          [
+            "control-write",
+            0
+          ]
+        ],
+        "sampled_producer_user_seconds_whole_capture": 0.7029000000584347
+      },
+      "sha256": "1362dff8bb63016e84750de474d9310cb4c78b3802e8c5324b0f917e1968455a"
+    },
+    "owned-life-empty": {
+      "capture": "emulator/images/reliability/logs/owned-life-empty.json",
+      "resources_equal": true,
+      "irq_psg_writes": 0,
+      "sha256": "97385d874c17510d9c1d2f5026e8681e61151af41af4796200853aeb88e73726"
+    },
+    "owned-life-truncated": {
+      "capture": "emulator/images/reliability/logs/owned-life-truncated.json",
+      "resources_equal": true,
+      "irq_psg_writes": 1,
+      "sha256": "445e40ca0026337c1acacaf00f3559d153cc942e5647adafe4a1386082cbe368"
+    }
+  },
+  "auto_close": {
+    "capture": "emulator/images/reliability/logs/owned-auto-close.json",
+    "pairs": 820,
+    "duration": 20.12590598099996,
+    "maximum_event_lateness": 0.03940890699930577,
+    "minimum_event_error": 0.0,
+    "p95_event_lateness": 0.035224441000320184,
+    "p99_event_lateness": 0.03686590199911777,
+    "handler_calls": 1635,
+    "maximum_handler_seconds": 0.0016398730003857054,
+    "median_handler_seconds": 4.860900298808701e-05,
+    "running_handler_seconds": 0.1402938490427914,
+    "max_psg_writes_per_handler": 16,
+    "over_budget_ticks": 0,
+    "underruns": 0,
+    "final_mpi": 255,
+    "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+    "writes_in_irq": 821,
+    "epoch_to_first_write": 9.777800005394965e-05,
+    "maximum_epoch_event_lateness": 0.03950668499935972,
+    "minimum_epoch_event_error": 9.777800005394965e-05,
+    "epoch_duration": 20.126003759000014,
+    "expected_seconds": 20.08997732426304,
+    "maximum_serviced_tick_lateness": 0,
+    "minimum_serviced_tick_lateness": 0,
+    "max_occupancy": 256,
+    "final_head": 53,
+    "final_tail": 53,
+    "final_count": 0,
+    "full_ring_observed": true,
+    "envelope_writes": 1,
+    "expected_full_rate_writes_per_second": 40.8163726003648,
+    "accepted_records": 821,
+    "full_or_state_rejections": 844,
+    "producer_pids": [
+      3
+    ],
+    "tail_wraps": 3,
+    "maximum_append_masked_body_seconds": 8.604399772593752e-05,
+    "driver_calls": {
+      "setstat": 1717,
+      "getstat": 1206
+    },
+    "control_accesses": [
+      [
+        "control-read",
+        0
+      ],
+      [
+        "control-read",
+        0
+      ],
+      [
+        "control-write",
+        0
+      ],
+      [
+        "control-write",
+        0
+      ],
+      [
+        "control-write",
+        0
+      ]
+    ],
+    "sampled_producer_user_seconds_whole_capture": 0.7037000000018452,
+    "clock": {
+      "video_edges": 1206,
+      "irq_acks": 1206,
+      "clock_ticks": 1206,
+      "clock_calls": 0,
+      "coalesced_edge_states": {},
+      "longest_sampled_interval_seconds": {
+        "halt": 0,
+        "irq_mask": 0.0020500339996942785,
+        "firq_mask": 0.0020500339996942785
+      }
+    },
+    "resources_equal": true,
+    "tables_after": {
+      "polls": [
+        {
+          "address": 20257,
+          "handler": 8348,
+          "storage": 20224,
+          "mask": 1
+        },
+        {
+          "address": 23736,
+          "handler": 39732,
+          "storage": 23552,
+          "mask": 1
+        }
+      ],
+      "virqs": [
+        {
+          "address": 20253,
+          "status": 128,
+          "count": 1,
+          "reset": 1
+        }
+      ]
+    },
+    "sha256": "df378157d76946068a1f9757c47d471bfceaa7e152ae5e686c7a31600fd0ba5f"
+  },
+  "final_detach": {
+    "polls": [
+      {
+        "address": 23736,
+        "handler": 39732,
+        "storage": 23552,
+        "mask": 1
+      }
+    ],
+    "virqs": []
+  }
+}

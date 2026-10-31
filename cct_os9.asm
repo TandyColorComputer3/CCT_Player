@@ -155,6 +155,10 @@ clockDeadline    RMB   4  ; whole tick deadline, wraps with clock
 clockFraction    RMB   2  ; exact VGM sample remainder, 0..tick-1
 clockTarget      RMB   4  ; ceiling-rounded deadline for current wait
 clockBurst       RMB   1  ; bounded catch-up commands before yielding
+        ifdef IRQ_STREAM
+queueStarted     RMB   1  ; producer has started the system-owned consumer
+queueLast        RMB   2  ; last published deadline, modulo 16 bits
+        endc
         endc
         endc
 
@@ -193,7 +197,11 @@ moduleName              FCS   "cctcycle"
         ifdef CLOCK_PARK_LONG
 moduleName              FCS   "cctpark"
         else
+        ifdef IRQ_STREAM
+moduleName              FCS   "cctirq"
+        else
 moduleName              FCS 	"cctplaymt"
+        endc
         endc
         endc
         else
@@ -1086,7 +1094,11 @@ VGM_LOADER_NEXT_BLOCK
 
       ldx   <vgmBlockMapPtr
       ldb   #1          ; request 1 8k block 
+        ifdef IRQ_STREAM
+      lbsr  PSG_OWN_ALLOC
+        else
       os9   F$AllRAM
+        endc
       lbcs  RAM_ERROR_EXIT
       stb   ,X+         ; store the block number in the list 
       stx   <vgmBlockMapPtr   ; update pointer 
@@ -1097,7 +1109,11 @@ VGM_LOADER_NEXT_BLOCK
       clra 
       tfr   D,X 
       ldb   #1
+        ifdef IRQ_STREAM
+      lbsr  PSG_OWN_MAP
+        else
       os9   F$MapBlk
+        endc
       lbcs  UNKNOWN_ERROR_EXIT
       ; check to see if OS9 assigned us $E000-$FFFF and if so, request another since all 8k cannot be used
       cmpu 	#$E000 
@@ -1105,7 +1121,11 @@ VGM_LOADER_NEXT_BLOCK
       ; it WAS $E000 so request another WHILE E000 IS STILL MAPPED so that it wont just give it to us again
       ldb   #1
       stb  	<reservedMMUflag
+        ifdef IRQ_STREAM
+      lbsr  PSG_OWN_MAP
+        else
       os9   F$MapBlk
+        endc
       lbcs  UNKNOWN_ERROR_EXIT     
 VGM_LOADER_NOT_E000
         ifdef EXPERIMENTAL_PSG
@@ -1133,7 +1153,11 @@ VGM_LOADER_NOT_E000
       ; now unmap the block from user space 
       ; U should already be still pointing to MMU mapped space from F$MapBlk
       ldb   #1
-      os9   F$ClrBlk  
+        ifdef IRQ_STREAM
+      lbsr  PSG_OWN_CLEAR
+        else
+      os9   F$ClrBlk
+        endc
       lbcs  UNKNOWN_ERROR_EXIT
         ifdef EXPERIMENTAL_PSG
       lbsr  PSG_CLEAR_LOAD_MAP_FLAG
@@ -1163,7 +1187,11 @@ VGM_LOADER_LAST_BLOCK
       ; allocate, save, and deallocate last block 
       ldx   <vgmBlockMapPtr
       ldb   #1          ; request 1 8k block 
+        ifdef IRQ_STREAM
+      lbsr  PSG_OWN_ALLOC
+        else
       os9   F$AllRAM
+        endc
       lbcs  RAM_ERROR_EXIT
       stb   ,X+         ; store the block number in the list 
       stx   <vgmBlockMapPtr   ; update pointer 
@@ -1181,7 +1209,11 @@ VGM_LOADER_LAST_BLOCK
       clra 
       tfr   D,X 
       ldb   #1
+        ifdef IRQ_STREAM
+      lbsr  PSG_OWN_MAP
+        else
       os9   F$MapBlk
+        endc
       lbcs  UNKNOWN_ERROR_EXIT
         ifdef EXPERIMENTAL_PSG
       lbsr  PSG_RECORD_LOAD_MAP
@@ -1220,7 +1252,11 @@ VGM_LOADER_LAST_BLOCK
 
       ; U should already be still pointing to MMU mapped space from F$MapBlk
       ldb   #1
-      os9   F$ClrBlk  
+        ifdef IRQ_STREAM
+      lbsr  PSG_OWN_CLEAR
+        else
+      os9   F$ClrBlk
+        endc
       lbcs  UNKNOWN_ERROR_EXIT
         ifdef EXPERIMENTAL_PSG
       lbsr  PSG_CLEAR_LOAD_MAP_FLAG
@@ -1241,7 +1277,11 @@ VGM_LOADER_LAST_BLOCK
       beq 	VGM_LOADER_DONE 		; nope, just skip passed deallocation of it
       ldb  	#1 
       ldu 	#$E000 
-      os9   F$ClrBlk  
+        ifdef IRQ_STREAM
+      lbsr  PSG_OWN_CLEAR
+        else
+      os9   F$ClrBlk
+        endc
       lbcs  UNKNOWN_ERROR_EXIT
       clr  	<reservedMMUflag
 
@@ -1446,7 +1486,11 @@ CCT_LOADER_REQUEST_NEXT_BLOCK
         endc
       ldx   <vgmBlockMapPtr
       ldb   #1          ; request 1 8k block 
+        ifdef IRQ_STREAM
+      lbsr  PSG_OWN_ALLOC
+        else
       os9   F$AllRAM
+        endc
       lbcs  RAM_ERROR_EXIT
       stb   ,X+         ; store the block number in the list 
       stx   <vgmBlockMapPtr   ; update pointer 
@@ -1457,7 +1501,11 @@ CCT_LOADER_REQUEST_NEXT_BLOCK
       clra 
       tfr   D,X 
       ldb   #1
+        ifdef IRQ_STREAM
+      lbsr  PSG_OWN_MAP
+        else
       os9   F$MapBlk
+        endc
       lbcs  UNKNOWN_ERROR_EXIT
       ; check to see if OS9 assigned us $E000-$FFFF and if so, request another since all 8k cannot be used
       cmpu 	#$E000 
@@ -1465,7 +1513,11 @@ CCT_LOADER_REQUEST_NEXT_BLOCK
       ; it WAS $E000 so request another WHILE E000 IS STILL MAPPED so that it wont just give it to us again
       ldb   #1
       stb  	<reservedMMUflag
+        ifdef IRQ_STREAM
+      lbsr  PSG_OWN_MAP
+        else
       os9   F$MapBlk
+        endc
       lbcs  UNKNOWN_ERROR_EXIT     
 CCT_LOADER_NOT_E000
         ifdef EXPERIMENTAL_PSG
@@ -1487,7 +1539,11 @@ CCT_LOADER_NOT_E000
       ; now unmap the block from user space 
       ; U should already be still pointing to MMU mapped space from F$MapBlk
       ldb   #1
-      os9   F$ClrBlk  
+        ifdef IRQ_STREAM
+      lbsr  PSG_OWN_CLEAR
+        else
+      os9   F$ClrBlk
+        endc
       lbcs  UNKNOWN_ERROR_EXIT
         ifdef EXPERIMENTAL_PSG
       lbsr  PSG_CLEAR_LOAD_MAP_FLAG
@@ -1506,7 +1562,11 @@ CCT_LOADER_READ_FILE_EOF
       lbeq 	CCT_LOADER_SKIP_DEALLOCATE_RESERVED 	; nope, just skip passed deallocation of it
       ldb  	#1 
       ldu 	#$E000 
-      os9   F$ClrBlk  
+        ifdef IRQ_STREAM
+      lbsr  PSG_OWN_CLEAR
+        else
+      os9   F$ClrBlk
+        endc
       lbcs  UNKNOWN_ERROR_EXIT
       clr  	<reservedMMUflag
 
@@ -1947,6 +2007,12 @@ PLAY_CHIP_YM2149_CCT
       leax  strPlayingFrozen,PCR
       lbsr  PRINT_STR_OS9
         ifdef EXPERIMENTAL_PSG
+        ifdef IRQ_STREAM
+      ; Claim the driver before hardware setup so forced I$Close can restore
+      ; the prior PSG clock/control even if user cleanup never executes.
+      lbsr  PSG_CLOCK_START
+      lbcs  EXIT_DEALLOCATE_RAM
+        endc
       ; User context: save the current MPI selection and briefly select the
       ; PSG to snapshot and set its control register. IRQ/FIRQ are masked only
       ; across the bounded hardware transaction (under 100 HD6309 cycles);
@@ -1985,8 +2051,10 @@ PSG_INIT_ABORT_BEFORE
       lbra  EXIT_DEALLOCATE_RAM
 PSG_INIT_CONTINUE
         ifdef CLOCK_SCHEDULER
+        ifndef IRQ_STREAM
       lbsr  PSG_CLOCK_START
       lbcs  VGM_YM2149_WAIT_ABORTED
+        endc
         endc
       clr   psgCommandDebt,U
       clr   psgCommandDebt+1,U
@@ -2098,6 +2166,9 @@ VGM_YM2149_CMD_CHIP
       lbcs  UNEXPECTED_END_ERROR_EXIT
       ldb   ,Y+
       lbsr  VGM_PSG_WRITE_REG
+        ifdef IRQ_STREAM
+      lbcs  VGM_YM2149_WAIT_ABORTED
+        endc
         ifdef CLOCK_SCHEDULER
       lbsr  PSG_CLOCK_BUDGET
       lbcs  VGM_YM2149_WAIT_ABORTED
@@ -2283,7 +2354,14 @@ VGM_YM2149_CHECK_FOR_LOOP
         endc
       lda   vgmLoopCount,U 
       bmi   VGM_YM2149_CHECK_FOR_LOOP_FOREVER
+        ifdef IRQ_STREAM
+      bne   PSG_QUEUE_LOOP_AGAIN
+      lbsr  PSG_QUEUE_FINISH
+      lbra  VGM_YM2149_END
+PSG_QUEUE_LOOP_AGAIN
+        else
       beq   VGM_YM2149_WAIT_ABORTED_END
+        endc
       ldx   vgmLoopBlockPtr,U 
       ldy   vgmLoopStart,U
       dec   vgmLoopCount,U
@@ -2309,7 +2387,11 @@ VGM_YM2149_CHECK_FOR_LOOP_FOREVER
 VGM_PSG_RESERVE_MAP_SLOT
       ldu   <uRegImage
       ldb   #1
+        ifdef IRQ_STREAM
+      lbsr  PSG_OWN_ALLOC
+        else
       os9   F$AllRAM
+        endc
       bcs   VGM_PSG_RESERVE_MAP_ERROR
       ldu   <uRegImage
       stb   psgGuardBlock,U
@@ -2319,7 +2401,11 @@ VGM_PSG_RESERVE_MAP_SLOT
       ldb   psgGuardBlock,U
       tfr   D,X
       ldb   #1
+        ifdef IRQ_STREAM
+      lbsr  PSG_OWN_MAP
+        else
       os9   F$MapBlk
+        endc
       bcs   VGM_PSG_RESERVE_MAP_ERROR
       tfr   U,D
       ldu   <uRegImage
@@ -2344,7 +2430,11 @@ VGM_PSG_MAP_NEXT
       beq   VGM_PSG_MAP_NEXT_READ_ID
       ldu   psgPlayMapBase,U
       ldb   #1
+        ifdef IRQ_STREAM
+      lbsr  PSG_OWN_CLEAR
+        else
       os9   F$ClrBlk
+        endc
       bcs   VGM_PSG_MAP_NEXT_ERROR
       ldu   <uRegImage
       clr   psgPlayMapActive,U
@@ -2356,7 +2446,11 @@ VGM_PSG_MAP_NEXT_READ_ID
       clra
       tfr   D,X
       ldb   #1
+        ifdef IRQ_STREAM
+      lbsr  PSG_OWN_MAP
+        else
       os9   F$MapBlk
+        endc
       bcs   VGM_PSG_MAP_NEXT_ERROR
       tfr   U,D
       ldu   <uRegImage
@@ -2542,6 +2636,9 @@ VGM_PSG_COARSE_WAIT_ERROR
 ; The bounded transaction is under 100 HD6309 cycles; it cannot sleep or do
 ; I/O. This keeps the floppy controller selected outside the PSG transaction.
 VGM_PSG_WRITE_REG
+        ifdef IRQ_STREAM
+      lbra  PSG_QUEUE_EVENT
+        endc
       pshs  CC,A,B
       orcc  #$50
       lda   >mpi_reg
@@ -2592,7 +2689,11 @@ PSG_RELEASE_LOAD_MAPS
       beq   PSG_RELEASE_LOAD_GUARD
       ldu   psgLoadMapBase,U
       ldb   #1
+        ifdef IRQ_STREAM
+      lbsr  PSG_OWN_CLEAR
+        else
       os9   F$ClrBlk
+        endc
       bcs   PSG_RELEASE_LOAD_ERROR
       ldu   <uRegImage
       clr   psgLoadMapActive,U
@@ -2601,7 +2702,11 @@ PSG_RELEASE_LOAD_GUARD
       beq   PSG_RELEASE_LOAD_DONE
       ldu   #$E000
       ldb   #1
+        ifdef IRQ_STREAM
+      lbsr  PSG_OWN_CLEAR
+        else
       os9   F$ClrBlk
+        endc
       bcs   PSG_RELEASE_LOAD_ERROR
       clr   <reservedMMUflag
 PSG_RELEASE_LOAD_DONE
@@ -2622,7 +2727,11 @@ VGM_PSG_RELEASE_MAPS
       beq   VGM_PSG_RELEASE_GUARD
       ldu   psgPlayMapBase,U
       ldb   #1
+        ifdef IRQ_STREAM
+      lbsr  PSG_OWN_CLEAR
+        else
       os9   F$ClrBlk
+        endc
       bcs   VGM_PSG_RELEASE_GUARD
       ldu   <uRegImage
       clr   psgPlayMapActive,U
@@ -2632,7 +2741,11 @@ VGM_PSG_RELEASE_GUARD
       beq   VGM_PSG_RELEASE_BLOCK
       ldu   psgGuardBase,U
       ldb   #1
+        ifdef IRQ_STREAM
+      lbsr  PSG_OWN_CLEAR
+        else
       os9   F$ClrBlk
+        endc
       bcs   VGM_PSG_RELEASE_BLOCK
       ldu   <uRegImage
       clr   psgGuardMapped,U
@@ -2644,7 +2757,11 @@ VGM_PSG_RELEASE_BLOCK
       ldb   psgGuardBlock,U
       tfr   D,X
       ldb   #1
+        ifdef IRQ_STREAM
+      lbsr  PSG_OWN_FREE
+        else
       os9   F$DelRAM
+        endc
       bcs   VGM_PSG_RELEASE_DONE
       ldu   <uRegImage
       clr   psgGuardAllocated,U
@@ -2754,6 +2871,10 @@ VGM_AY8910_END
 VGM_YM2149_END 
       ; reset the hardware 
       ldu   <uRegImage
+        ifdef IRQ_STREAM
+      ; Stop queued writes now; retain allocation ownership through cleanup.
+      lbsr  PSG_QUEUE_STOP
+        endc
 
         ifdef EXPERIMENTAL_PSG
       pshs  CC,B              ; preserve caller B and incoming interrupt state
@@ -2824,7 +2945,9 @@ EXIT_DEALLOCATE_RAM
       ; deallocate ram before exiting 
       ldu   <uRegImage
         ifdef CLOCK_SCHEDULER
+        ifndef IRQ_STREAM
       lbsr  PSG_CLOCK_CLOSE
+        endc
         endc
         ifdef EXPERIMENTAL_PSG
       lbsr  PSG_RELEASE_LOAD_MAPS
@@ -2840,10 +2963,19 @@ EXIT_DEALLOCATE_NEXT
       beq   EXIT_CHECK_PLAYLIST
       tfr   D,X 
       ldb   #1          ; deallocate a single block at a time 
-      os9   F$DelRAM 
+        ifdef IRQ_STREAM
+      lbsr  PSG_OWN_FREE
+        else
+      os9   F$DelRAM
+        endc
       cmpy  <vgmBlockMapPtr
       blo   EXIT_DEALLOCATE_NEXT
 EXIT_CHECK_PLAYLIST
+        ifdef IRQ_STREAM
+      ; All normal mappings/allocations are gone; Close handles any residual
+      ; ownership on error and tears down the path before the next track.
+      lbsr  PSG_CLOCK_CLOSE
+        endc
         ifdef EXPERIMENTAL_PSG
       ; The stop belongs to the whole playlist and remains latched.
       tst   <abortFlag
@@ -2922,7 +3054,11 @@ EXIT_TO_OS9_SKIP_KEY_CLEAR
 * Start of Sub-routine area 
 ********************************************************************
         ifdef CLOCK_SCHEDULER
+        ifdef IRQ_STREAM
+        include tools/psg-irq-scheduler.inc
+        else
         include tools/psg-clock-scheduler.inc
+        endc
         endc
 
 ; ABORT signal handler
