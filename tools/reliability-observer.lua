@@ -33,6 +33,12 @@ return function(commands, array, encode)
     dofile('tools/scheduling-workloads.lua')(commands,array,encode)
     return {loaded=true}
   end
+  commands.reliability_load_irq=function()
+    assert(not commands.irq_capture_status or not commands.irq_capture_status().active)
+    assert(not commands.irq_series_status or not commands.irq_series_status().active)
+    dofile("tools/irq-playback-observer.lua")(commands,array,encode)
+    return {loaded=true}
+  end
   commands.reliability_speed=function(p) m.video.throttled=not p.fast;return {throttled=m.video.throttled} end
   commands.reliability_audio=function(p)
     if p.path then

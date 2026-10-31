@@ -118,4 +118,17 @@ does not change any player variant. Stage `build/latpack` only on an unmounted
 private image. Host addons load through `reliability_load_scheduling` and use
 version-specific cctpark offsets documented in the report. Portable analyzer
 checks: `python3 scripts/test-scheduling-analysis.py` and
-`python3 scripts/test-clock-reliability.py`. No IRQ queue is implemented.
+`python3 scripts/test-clock-reliability.py`. That investigation did not implement
+an IRQ queue; the follow-up below is a separate opt-in prototype.
+
+## Opt-in IRQ output feasibility
+
+[IRQ-PLAYBACK-FEASIBILITY.md](IRQ-PLAYBACK-FEASIBILITY.md) describes the isolated
+PSGQueue fixed-stream experiment, its measured benefit during system-mode
+loading, and its eight-write budget. `bash scripts/build-irq-prototype.sh`
+builds an optional packed clock/queue/probe bundle and generated original test
+tones. It does not integrate a streaming decoder or alter normal player builds.
+Run `python3 scripts/test-irq-prototype.py` after building. Use only a private
+guest with exclusive PSG ownership; read the report's packing, teardown and
+hardware restrictions before loading. Speaker tests require `-sound coreaudio`
+and normal throttling; `-sound none` captures do not establish audibility.

@@ -1,0 +1,600 @@
+{
+  "checkpoint": "7bff021",
+  "date": "2026-10-31",
+  "notes": [
+    "Raw evidence stays ignored/private; generated original tones are reproducible.",
+    "Final driver is 607 bytes CRC 58B646; irq-final-* comparisons use it.",
+    "irq-idle-1 is an exploratory 596-byte driver; irq-idle-clock-1 used an incorrect clock storage address and is excluded.",
+    "Non-final park/queue comparisons use the earlier 597-byte driver; final comparisons supersede them.",
+    "User confirmed audible two-note playback after CoreAudio restart; this is not a real-music fidelity rating.",
+    "Counter progress screenshots, stop/fatal quiet tails, final poll/VIRQ tables and memory totals are retained.",
+    "Physical CoCoSDC/Mega Mini and streaming integration NOT RUN."
+  ],
+  "files": [
+    {
+      "path": "build/PSGQueue",
+      "bytes": 607,
+      "sha256": "7fb1853041ba5d64534d0fac1779a3608dd97a4740c61e214b78de99be4d8d77"
+    },
+    {
+      "path": "build/cctcycle",
+      "bytes": 9380,
+      "sha256": "bf8c684d18cd95fb480f15355f7bf4e4cbf9ed57e2cf318801ba2b335164d070"
+    },
+    {
+      "path": "build/cctpark",
+      "bytes": 9658,
+      "sha256": "34af73f92579e073c62238212dbf46649ff57a8e6bc9d290e2bac5cf72344fb5"
+    },
+    {
+      "path": "build/cctplay",
+      "bytes": 8756,
+      "sha256": "eabe6b6f3910ebd1af557f64b02c1fb1e1802a3a07a1bf134016b1a4a6792f36"
+    },
+    {
+      "path": "build/cctplaymt",
+      "bytes": 9653,
+      "sha256": "05ee55b64485c7fa128b0d7099fb9eec7cc13cea83a1396a7c807f137887e953"
+    },
+    {
+      "path": "build/cctplaymt-relative",
+      "bytes": 9381,
+      "sha256": "666f91ea6a3292e2c0b96f46547698b78bef7dd3215269cc0bc40f8c5035cb8d"
+    },
+    {
+      "path": "build/irq-build.log",
+      "bytes": 9238,
+      "sha256": "f6d23855da8f50497a4cea508873472d3f527ec80e99a778f261f171fbb2438e"
+    },
+    {
+      "path": "build/irq-burst.inc",
+      "bytes": 2715,
+      "sha256": "76e7207eb150bb1cb380241d1779580e338ac221cfb33e90789389b0f1040bc5"
+    },
+    {
+      "path": "build/irq-burst.vgm",
+      "bytes": 833,
+      "sha256": "25789a29554acbba103beb066b322d57ab6428856905d9b30fbe320375a48f27"
+    },
+    {
+      "path": "build/irq-events.inc",
+      "bytes": 4751,
+      "sha256": "e284593b5433080a6c81bc435c8fa40f6c583e665143c3165e6c433a45a0f629"
+    },
+    {
+      "path": "build/irq-layout.json",
+      "bytes": 178,
+      "sha256": "a5b0c7cc1151f0bb0ad9840b5df5f095bc4f5814a03f3fff9ef2c73a068504b4"
+    },
+    {
+      "path": "build/irq-over.inc",
+      "bytes": 5140,
+      "sha256": "a9fca9539b9141046f1c0f70fb22fea1ed9bda8ecfb7ff35a8a2b57dc77bed57"
+    },
+    {
+      "path": "build/irq-synthetic30.vgm",
+      "bytes": 2559,
+      "sha256": "b87c4bd79d2b36fa1654e88ae3454cd9de85de99ab72f0aef43ccf8c1d7e3840"
+    },
+    {
+      "path": "build/irq-under.inc",
+      "bytes": 80,
+      "sha256": "a0099d5c49d5a3a83c141bdeadd495d250429d554a5439e1f80aecb46b6c7238"
+    },
+    {
+      "path": "build/irqburst",
+      "bytes": 706,
+      "sha256": "b2c43d27ccf3a8892208df8e45357aeacc7138d761509ff7df153769700e94e1"
+    },
+    {
+      "path": "build/irqover",
+      "bytes": 1221,
+      "sha256": "34436d1b224179ff373a9102aeb2ef3ff8d7a4ba52ce42ac6d490d861c959c9a"
+    },
+    {
+      "path": "build/irqpack",
+      "bytes": 4188,
+      "sha256": "833c14054c56b9b4a57b9b4f5393d1edd8184a4cc29d9e5cf02eacf87a7077ed"
+    },
+    {
+      "path": "build/irqprobe",
+      "bytes": 1038,
+      "sha256": "75d511a7e62e67f34710849efec56e415b1a03303cc0fa2a6759c1937212057f"
+    },
+    {
+      "path": "build/irqunder",
+      "bytes": 210,
+      "sha256": "923e99a08f00ee441e73325e37f5f7c9da95b486ccfc8ac62bfe9c62f154e054"
+    },
+    {
+      "path": "build/psgq",
+      "bytes": 38,
+      "sha256": "4749dbe6c433b7b60485322c8a420166eaea85d571fbf6cdfce26ef742703724"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-audible-clock.json",
+      "bytes": 4095101,
+      "sha256": "17c653677a76cfb8a052689efa3afc5a19965abffa2a0b7d0420cee8789923ac"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-audible-command.json",
+      "bytes": 847155,
+      "sha256": "28b4b2abffc4b86c56b5477db5ef9df3fe4fe7d1352064a8729dcdb891a89bf8"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-burst-check.json",
+      "bytes": 298368,
+      "sha256": "8c035aa020f126b3c2673655ef18e2c2d498d7fa08b59e596481fcb40274fb66"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-counter.json",
+      "bytes": 1349102,
+      "sha256": "e0cf6ef1718e50f0ac328cb62a93bdd2380903d844ac74330136132b7046a176"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-errors.json",
+      "bytes": 417542,
+      "sha256": "059467837529155c0f350ab961612d74499a2ac86fc805f74c1cfb69674dad32"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-fatal-exit.json",
+      "bytes": 542288,
+      "sha256": "1abd624d4bd66742b12a4fa7aa681d66f73199bea58023cee8e2da31405036a2"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-final-park-command-clock.json",
+      "bytes": 7509239,
+      "sha256": "562c8785725ff1cc26e91b0cff8177d7236f3a8efe8226b96cd9dff3303a2368"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-final-park-command-repeat-clock.json",
+      "bytes": 7516383,
+      "sha256": "b7b5060961da83979eae4cd139c171c0fdc49bee720221bfe3504d73a1e0d30b"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-final-park-command-repeat.json",
+      "bytes": 819260,
+      "sha256": "b149bf8f54dceb5491452ab0f9e0763a698758fbcb5f3e17d9d4e9f35d12ebbb"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-final-park-command-repeat.wav",
+      "bytes": 17664044,
+      "sha256": "971528f74fbfc3e4e97dcf1ff34bd976ad06056785283e5535ec63b08ecba597"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-final-park-command.json",
+      "bytes": 819538,
+      "sha256": "f38c48970b31d30ed656a1c80fafe77abe703a14071916d1d50a92ec0a8d0b0e"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-final-park-command.wav",
+      "bytes": 17664044,
+      "sha256": "844a96614fb1f3f7c7402f3a20b008953fbd5ba1aeac807fd6281479f094cbf6"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-final-park-idle-clock.json",
+      "bytes": 7502000,
+      "sha256": "53af1c121ae349ea0dd11021fe4d4dfd5659ad76a50c62d6d8ca077543e56b99"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-final-park-idle.json",
+      "bytes": 802223,
+      "sha256": "8d06f6f88565d07144e79a6cde7bae9c40c71dd17db2d44df8d4db9dbfabe3f3"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-final-park-idle.wav",
+      "bytes": 17664044,
+      "sha256": "e44978aac639c1f28a21373b256525ae340cb614785001c3aaf1dd2383ceb34b"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-final-queue-command-clock.json",
+      "bytes": 4082933,
+      "sha256": "11df00453b275f74b4255f9e0079fa1eca8e87e8f1e3382fb10f5110ad46d7e5"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-final-queue-command-repeat-clock.json",
+      "bytes": 4084352,
+      "sha256": "c0b1ee4ea2ce8081d4caaea02c3e68aa7a2e2c0632bba30ed37c209e34e5158f"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-final-queue-command-repeat.json",
+      "bytes": 847440,
+      "sha256": "28ced15679d0ac475f1ca07ebe8206c4cb7af500637b6a6d0c3eb663a4034572"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-final-queue-command-repeat.wav",
+      "bytes": 17664044,
+      "sha256": "9ec2183507713cc03730199390adec9b5ec22f33b924b0adbb6f2f2d706f5ae7"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-final-queue-command.json",
+      "bytes": 847169,
+      "sha256": "47fb84e12dbd3cf7b602180156712abc22bf6a72bdd1d3a9e4e6b0b19203cfc2"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-final-queue-command.wav",
+      "bytes": 17664044,
+      "sha256": "387191afa1f3415796fd81630c3316bf59cf3aea033986c584e3ea7a3310f41d"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-final-queue-idle-clock.json",
+      "bytes": 3741715,
+      "sha256": "fc72732482fb407d379100fcd74fe5fb2fa14ad6462ec74736fd19ece399c782"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-final-queue-idle.json",
+      "bytes": 847093,
+      "sha256": "379b1419ff61c94128bdad7c1482a0567f6e99570c6d993118acffed4f70d492"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-final-queue-idle.wav",
+      "bytes": 17664044,
+      "sha256": "24231d317bb2add3368ea49d2e75b72fbc76f006677394ad1fb3a63e36954757"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-floppy-clock.json",
+      "bytes": 4324579,
+      "sha256": "eabe6e20f7039bc3a69979c5caa3e5dc49cfd42ff767e8784083175644b135ab"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-floppy-dir.json",
+      "bytes": 911094,
+      "sha256": "3b5878eaaabc70cba3f26a45b26d799476d8266c6089b54a1c7fedd6e9441737"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-idle-1.json",
+      "bytes": 820032,
+      "sha256": "a43b1b3c1f957109a81a0933e5eff24f1b04669427451f8345d737e14b0a3ca8"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-idle-clock-1.json",
+      "bytes": 3555635,
+      "sha256": "9278c82711e4d5752147815fdf065086ead500b6b87bc6c51f48ad7c8b8b281f"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-park-command-clock.json",
+      "bytes": 7451666,
+      "sha256": "6e733555868805ec583c43e19d7fe839c99a0dfe2b5c5ccf7975109d461d4454"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-park-command-repeat-clock.json",
+      "bytes": 7441344,
+      "sha256": "ecb81f6cccf123c41dc195c1e387e315cf9532ffde935ad0395378f89434ee27"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-park-command-repeat.json",
+      "bytes": 795992,
+      "sha256": "4f97adb21db0a62ee2d4c0d29b91da85d11fc2f559b663d6a00456cdb9493d6e"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-park-command-repeat.wav",
+      "bytes": 17664044,
+      "sha256": "128d893cc1ad50b93ae8582f8a02a9054b8185b2ffc040cab8ae8a5b306140d5"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-park-command.json",
+      "bytes": 795199,
+      "sha256": "29139d8ad85493ce17a0f1aa2c5ca8f0c4a8461ae1c60a50b0d79560a81081c0"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-park-command.wav",
+      "bytes": 17664044,
+      "sha256": "21a54dc948fc60aa68876ee3ad0d6d7a0db71e448b3760e85c42407f2c8c0335"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-park-idle-clock.json",
+      "bytes": 7444147,
+      "sha256": "647ff4e87bb49b912b7964012c4f83300789e7d412c2a39adfb32b9b4e5120a1"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-park-idle.json",
+      "bytes": 778721,
+      "sha256": "f4cfbed923a1c6150fee60006fa5c29455a74d096f64e6703d60f26a00a86ead"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-park-idle.wav",
+      "bytes": 17664044,
+      "sha256": "d472b055c54f136909ad4407912304629df3ae624d690fd613783a11d6b0cd43"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-queue-command-clock.json",
+      "bytes": 4051347,
+      "sha256": "9afab2133335b65fa980e612b9f54973f4cfa3c53e3944752dcdba296a6c3861"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-queue-command-repeat-clock.json",
+      "bytes": 4057755,
+      "sha256": "42318a0c227e1360cbd7fbec402cbdeb7e501238faea1c4feee26a2d0049f3b8"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-queue-command-repeat.json",
+      "bytes": 823233,
+      "sha256": "952e6de2d2928f148f745b26282add742b91958ba50e614476f944b43956aced"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-queue-command-repeat.wav",
+      "bytes": 17664044,
+      "sha256": "a530631cbbfc1d79d3d9f9e6a77d11e46928cedf24363b4479cc60cbfb57585f"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-queue-command.json",
+      "bytes": 822986,
+      "sha256": "c68a37137cb6dbb0342cb0243fa3bfa978996eac6ae99582e7b5eca29587e86e"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-queue-command.wav",
+      "bytes": 17664044,
+      "sha256": "f48cb056e6d4322707ca28bb2e46617c9ef63e5ce4bab7792e2b9248b2ca8cb0"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-queue-idle-clock.json",
+      "bytes": 3735101,
+      "sha256": "59406afea36faf05e46749037c18bb68f3de701200e62addab61a20f812919a0"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-queue-idle.json",
+      "bytes": 822903,
+      "sha256": "bfd4eebeab3dc43f22a242b4f0b499bfaf46e9ad18d0f27d8480d7169a672d0c"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-queue-idle.wav",
+      "bytes": 17664044,
+      "sha256": "3c786cf74253c443eb11c6edacf7d386611fc176a5017d39087529db96331652"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-stop-owner.json",
+      "bytes": 640874,
+      "sha256": "091a4a19575ddba86060ef30e1f26bd7f9a1335a01b5d6e4a8aba68f8fd810d7"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-tables-after-queue-detach.json",
+      "bytes": 189,
+      "sha256": "ea4a097ae9279506c6834063b5b884f7cad50b7cca388cfc3e6a62bf08d5e80d"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-tables-before-detach.json",
+      "bytes": 298,
+      "sha256": "48ec83c51763eba1053ac06c7b18870514b9de6ed1352bb148709659a6b0c5c2"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-tables-detached.json",
+      "bytes": 81,
+      "sha256": "25c069555cdda11ea1cab45bf1a8c528702516292f631333fec9b7c3fde71808"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-tables-final.json",
+      "bytes": 81,
+      "sha256": "4afe0a001e5937a3de8e25d68ed0df958b3f6e544365150b168b47aa79c5ae20"
+    },
+    {
+      "path": "emulator/images/reliability/logs/irq-tables-reattached.json",
+      "bytes": 298,
+      "sha256": "48ec83c51763eba1053ac06c7b18870514b9de6ed1352bb148709659a6b0c5c2"
+    },
+    {
+      "path": "emulator/images/reliability/logs/lat-p128-1-calls.json",
+      "bytes": 5179844,
+      "sha256": "67851c150f12c28d367feecac7e066fb8d5b449551713e59e5ce5805ce46d6dd"
+    },
+    {
+      "path": "emulator/images/reliability/logs/lat-p128-1.json",
+      "bytes": 7559812,
+      "sha256": "3dcac00239e7641ae0395e5b45a8fdb2e0f8aab98278c13cff9a2961cdcb7861"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-audible.png",
+      "bytes": 3806,
+      "sha256": "02b98238b04c9e628466d30d56f285b9300b63eed42c9f28571894e0835aecfe"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-burst.png",
+      "bytes": 4017,
+      "sha256": "0f90c249525e4ce321e47319910ba804831650c4549c8ada3783451f7c852019"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-counter-end.png",
+      "bytes": 2107,
+      "sha256": "cb0a2ec2448e0f04a1ca6274ae08a2f4a866fb06a5f557aac0e4315ea9ac3787"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-counter-progress1.png",
+      "bytes": 2553,
+      "sha256": "0d7cbce19c5fa077e876dd0536332596e4201a731965486bdce8681fd10c9773"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-counter-progress2.png",
+      "bytes": 1922,
+      "sha256": "29041456f326b9e808510d4fc244ab7f50a9849289b2952eb4ea1ec83226d8dd"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-errors-final.png",
+      "bytes": 3818,
+      "sha256": "e1e9e548accf88217d00064f3530e9443e218a5402c34bb5a84549b5c54e324a"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-errors.png",
+      "bytes": 3818,
+      "sha256": "e1e9e548accf88217d00064f3530e9443e218a5402c34bb5a84549b5c54e324a"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-fatal.png",
+      "bytes": 3721,
+      "sha256": "555bb5d95bc14ed926875532e6ba8c6dce4c84e19c9aeb49da999aec37d2eaf3"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-final-park-command-repeat.png",
+      "bytes": 4250,
+      "sha256": "7eaebaff68c895d7ad440cc48b605d92fdfc90a91d60ec4b9b09419b5de450a4"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-final-park-command.png",
+      "bytes": 4250,
+      "sha256": "7eaebaff68c895d7ad440cc48b605d92fdfc90a91d60ec4b9b09419b5de450a4"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-final-park-idle.png",
+      "bytes": 4321,
+      "sha256": "833de9809c252ddd839cb2a3221eb26aea71d6db8abe642d8210dd59be16ad8f"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-final-queue-command-repeat.png",
+      "bytes": 3995,
+      "sha256": "4fd592d4e1f99cb8114a1e0fa49122ccc1ca02d03e05560e2d4e84544ddc9efa"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-final-queue-command.png",
+      "bytes": 3995,
+      "sha256": "4fd592d4e1f99cb8114a1e0fa49122ccc1ca02d03e05560e2d4e84544ddc9efa"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-final-queue-idle.png",
+      "bytes": 4106,
+      "sha256": "8fbc032dc566d6dbc6545fdc904bf251ecd6ff55cbcd4840fb02dfb77c175393"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-floppy-dir.png",
+      "bytes": 5799,
+      "sha256": "fd3680668873b0cbb3c7d347e0f41d7a9cae9822c89b6702deb3e537412949cd"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-idle1.png",
+      "bytes": 4444,
+      "sha256": "1b59929e453e5500eac01821aded97011342264652ce575d99785aa8ac12f225"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-iniz.png",
+      "bytes": 4144,
+      "sha256": "61518825a0cd7d9a1ced36183ce32e78c924b9922dad31ea5e895c0d6722ad38"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-iniz2.png",
+      "bytes": 4247,
+      "sha256": "4227f3bb73d26aa03ed47b8113884f8759a6a130082bd383ee16a39e0dd76602"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-loaded.png",
+      "bytes": 4001,
+      "sha256": "8cd25179ea3c5b516e718cb75ca31b0c6e175c40861d57b5af12f57a07e7c658"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-memory-before.png",
+      "bytes": 2968,
+      "sha256": "974caeb5cc5000598d91a8de474c8fafd111f75786133da6dfbc629d9c0c7b88"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-memory-final.png",
+      "bytes": 3979,
+      "sha256": "21e8e4d49392c9e0abe25e2c044254ccfd039e64f5895736f72ef872274d9c4c"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-overrun-final.png",
+      "bytes": 5975,
+      "sha256": "da33fba1245249d3a539c3f3a72f0da1e035b711234d1702865fa85c91159b5b"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-overrun.png",
+      "bytes": 5671,
+      "sha256": "0209256da97aba60c1d8321602edcce6b1e1ddc5b54bba229c0f23008dbf3375"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-packed.png",
+      "bytes": 4456,
+      "sha256": "ba8db5c75afea49a8636e7f3c041f65b1bc42ae568cbc6844eab0304ef2bfb4a"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-park-command-repeat.png",
+      "bytes": 4250,
+      "sha256": "7eaebaff68c895d7ad440cc48b605d92fdfc90a91d60ec4b9b09419b5de450a4"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-park-command.png",
+      "bytes": 4250,
+      "sha256": "7eaebaff68c895d7ad440cc48b605d92fdfc90a91d60ec4b9b09419b5de450a4"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-park-idle.png",
+      "bytes": 3973,
+      "sha256": "0a76bfc7d47b3305181b0dc8a6e52d75a30eee260122417ef5e623bed1a19b39"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-queue-command-repeat.png",
+      "bytes": 3995,
+      "sha256": "4fd592d4e1f99cb8114a1e0fa49122ccc1ca02d03e05560e2d4e84544ddc9efa"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-queue-command.png",
+      "bytes": 3995,
+      "sha256": "4fd592d4e1f99cb8114a1e0fa49122ccc1ca02d03e05560e2d4e84544ddc9efa"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-queue-idle.png",
+      "bytes": 4108,
+      "sha256": "8e4169022ad1e870bd304bb7d675c9255abbc119667754ba81ce0b4eff6f46bc"
+    },
+    {
+      "path": "emulator/images/reliability/snapshots/irq-stop-owner.png",
+      "bytes": 3604,
+      "sha256": "248043d3aead3f89acbf24d9d916786584e4b31337ff3b081fdb2f65cf6f6189"
+    },
+    {
+      "path": "scripts/analyze-irq-availability.py",
+      "bytes": 2474,
+      "sha256": "b2dcda6986b17dd70fdae7bfecb37e7bd5f2a49ed9eaff56324d4e43bb8a57dc"
+    },
+    {
+      "path": "scripts/analyze-irq-playback.py",
+      "bytes": 3300,
+      "sha256": "6295b21e3a2d10b87583f328c1aa72311a3f0a11a601055479b7a2bd572fa62b"
+    },
+    {
+      "path": "scripts/analyze-irq-resolution.py",
+      "bytes": 1277,
+      "sha256": "98320a089b7aa4a86b18a755f55a0f11f3e50a5d913f5452a591ec20b3d07684"
+    },
+    {
+      "path": "scripts/build-irq-prototype.sh",
+      "bytes": 1506,
+      "sha256": "f1e8ef449e08e8079251b687d6e46c85b041de9af9aa1fba7ad81a317eb6bdf8"
+    },
+    {
+      "path": "scripts/prepare-irq-fixture.py",
+      "bytes": 2292,
+      "sha256": "d41d48d1b070e231ab1e0f13b2276b2a2887f624f338eaca4211c3bb489fba9f"
+    },
+    {
+      "path": "scripts/test-irq-prototype.py",
+      "bytes": 2002,
+      "sha256": "3c41d49512375ce93af22b3e873f8bd56e33cf2f1c11550912768834a37b53eb"
+    },
+    {
+      "path": "tools/irq-playback-observer.lua",
+      "bytes": 3825,
+      "sha256": "bcc0230494b06c17b7636370d21a3672c41134627b8e0370d09c0a2ebf1335a5"
+    },
+    {
+      "path": "tools/irq-workloads.lua",
+      "bytes": 2199,
+      "sha256": "0ff42af4a26b334d6c44fe6b8bd5a6510b789974530e4e4d7e9f1c8453b0e855"
+    },
+    {
+      "path": "tools/irqprobe.asm",
+      "bytes": 2608,
+      "sha256": "2656e3edb6e9a776be689fb9093be3887e08e3af0bc5227485d83c790baf0064"
+    },
+    {
+      "path": "tools/psgq.asm",
+      "bytes": 329,
+      "sha256": "ee613706fe0444c014435ed0ae64320c2dd5dd9d3047218452d2a5dfb833f3e7"
+    },
+    {
+      "path": "tools/psgqueue.asm",
+      "bytes": 6719,
+      "sha256": "517563caa4393b127804b9f279f101ea98b5e522139afd2d1561a79a0070f46b"
+    },
+    {
+      "path": "tools/reliability-observer.lua",
+      "bytes": 8420,
+      "sha256": "229b9a402225464453f0c36b33191eedf6def92755a29990c01c1b01cab44670"
+    }
+  ]
+}

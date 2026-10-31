@@ -1,0 +1,730 @@
+{
+  "phase1": {
+    "capture": "emulator/images/reliability/logs/lat-p128-1.json",
+    "calls": "emulator/images/reliability/logs/lat-p128-1-calls.json",
+    "sleep": {
+      "label": "Sleep",
+      "pid": 4,
+      "start": 5878.6586151671,
+      "end": 5880.1634079563,
+      "duration": 1.5047927892001098,
+      "request_x": 2,
+      "result_x": 0,
+      "result_y": 2846,
+      "carry": 0,
+      "sampled_queue_seconds": {
+        "current-system": 0.0003047305999643868,
+        "sleep": 0.009000000000014552,
+        "ready": 1.4754880586033323,
+        "unknown": 0.01999999999679858
+      }
+    },
+    "longest_sampled_intervals": {
+      "halt": 0.0,
+      "irq_mask": 0.000699999999596912
+    },
+    "edge_halt_count": 0,
+    "edge_irq_mask_count": 80,
+    "generated_border_edges": 90,
+    "video_acknowledgements": 90,
+    "clock_irq_callbacks": 90,
+    "maximum_ack_gap": 0.016693746400051168,
+    "maximum_ack_to_clock": 0.00014526989980367944,
+    "psg_data_writes": 0
+  },
+  "comparison": [
+    {
+      "capture": "emulator/images/reliability/logs/irq-final-park-idle.json",
+      "pairs": 210,
+      "duration": 30.02125186900048,
+      "maximum_event_lateness": 0.021106041000166442,
+      "minimum_event_error": -0.01691053399918019,
+      "p95_event_lateness": 0.019172275000528316,
+      "p99_event_lateness": 0.02052105000075244,
+      "handler_calls": 2653,
+      "maximum_handler_seconds": 1.0616000508889556e-05,
+      "median_handler_seconds": 1.0616000508889556e-05,
+      "running_handler_seconds": 0,
+      "max_psg_writes_per_handler": 0,
+      "over_budget_ticks": 0,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+      "writes_in_irq": 0
+    },
+    {
+      "capture": "emulator/images/reliability/logs/irq-final-queue-idle.json",
+      "pairs": 210,
+      "duration": 30.038781475999713,
+      "maximum_event_lateness": 0.038674759000059566,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.03648062399952323,
+      "p99_event_lateness": 0.038029983999877004,
+      "handler_calls": 2696,
+      "maximum_handler_seconds": 0.0005291180004860507,
+      "median_handler_seconds": 4.8608999350108206e-05,
+      "running_handler_seconds": 0.10779640499640664,
+      "max_psg_writes_per_handler": 5,
+      "over_budget_ticks": 0,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 1.5645000530639663e-05,
+      "writes_in_irq": 211
+    },
+    {
+      "capture": "emulator/images/reliability/logs/irq-final-park-command.json",
+      "pairs": 210,
+      "duration": 30.035754832999373,
+      "maximum_event_lateness": 1.4612459010004386,
+      "minimum_event_error": -0.002407568999842624,
+      "p95_event_lateness": 1.1532413059994724,
+      "p99_event_lateness": 1.1730198029999883,
+      "handler_calls": 2658,
+      "maximum_handler_seconds": 1.0616000508889556e-05,
+      "median_handler_seconds": 1.0616000508889556e-05,
+      "running_handler_seconds": 0,
+      "max_psg_writes_per_handler": 0,
+      "over_budget_ticks": 0,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 3.0729999707546085e-05,
+      "writes_in_irq": 0
+    },
+    {
+      "capture": "emulator/images/reliability/logs/irq-final-queue-command.json",
+      "pairs": 210,
+      "duration": 30.038781475999713,
+      "maximum_event_lateness": 0.038674759000059566,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.03648118300043279,
+      "p99_event_lateness": 0.038030543000786565,
+      "handler_calls": 2696,
+      "maximum_handler_seconds": 0.0005291180004860507,
+      "median_handler_seconds": 4.8608999350108206e-05,
+      "running_handler_seconds": 0.10779641398767126,
+      "max_psg_writes_per_handler": 5,
+      "over_budget_ticks": 0,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 1.5645000530639663e-05,
+      "writes_in_irq": 211
+    },
+    {
+      "capture": "emulator/images/reliability/logs/irq-final-park-command-repeat.json",
+      "pairs": 210,
+      "duration": 30.036906375999024,
+      "maximum_event_lateness": 1.4624287339993316,
+      "minimum_event_error": -0.0012560260001919232,
+      "p95_event_lateness": 1.0802828510004474,
+      "p99_event_lateness": 1.1370515349990455,
+      "handler_calls": 2657,
+      "maximum_handler_seconds": 1.0616000508889556e-05,
+      "median_handler_seconds": 1.0616000508889556e-05,
+      "running_handler_seconds": 0,
+      "max_psg_writes_per_handler": 0,
+      "over_budget_ticks": 0,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 3.073000152653549e-05,
+      "writes_in_irq": 0
+    },
+    {
+      "capture": "emulator/images/reliability/logs/irq-final-queue-command-repeat.json",
+      "pairs": 210,
+      "duration": 30.038628383001196,
+      "maximum_event_lateness": 0.038521665999724064,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.03632809000009729,
+      "p99_event_lateness": 0.03787745000045106,
+      "handler_calls": 2697,
+      "maximum_handler_seconds": 0.0005291180004860507,
+      "median_handler_seconds": 4.8608999350108206e-05,
+      "running_handler_seconds": 0.10779640897999343,
+      "max_psg_writes_per_handler": 5,
+      "over_budget_ticks": 0,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 1.5645000530639663e-05,
+      "writes_in_irq": 211
+    }
+  ],
+  "clock_comparison": [
+    {
+      "capture": "emulator/images/reliability/logs/irq-final-park-command-clock.json",
+      "interval_us": 100,
+      "max_sample_gap": 0.00010000000111177,
+      "first_write": 15352.486235655,
+      "mute": 15382.521990488,
+      "pairs": 210,
+      "duration": 30.035754832999373,
+      "duration_error_percent": 0.11918277666458366,
+      "video_edges": 1800,
+      "irq_acks": 1800,
+      "clock_ticks": 1800,
+      "clock_calls": 3388,
+      "fdc_commands": 0,
+      "clock_deficit_seconds": 0.03575483299937332,
+      "serviced_lateness_epoch": "initial clock snapshot",
+      "epoch_to_first_write_seconds": 0.0033395320006093243,
+      "max_ack_to_tick_seconds": 0.0002927750010712771,
+      "max_local_lateness_seconds": 1.4547618349988625,
+      "max_accumulated_lateness_seconds": 1.4612459010004386,
+      "max_serviced_clock_lateness_seconds": 1.4500000000000002,
+      "min_serviced_clock_error_seconds": 0.0,
+      "max_player_user_entry_gap_seconds": 1.4948999999996886,
+      "ticks_with_other_process_current": 1788,
+      "sampled_seconds": {
+        "neither": 25.9875548332966,
+        "player_user": 1.0509548328900564,
+        "irq_mask_only": 4.048199999702774,
+        "firq_mask": 4.039099999696191,
+        "player_system": 3.708100000047125
+      },
+      "player_pid": 3,
+      "longest_sampled_interval_seconds": {
+        "halt": 0,
+        "irq_mask": 0.00120000000060827,
+        "firq_mask": 0.00120000000060827
+      },
+      "complete_ack_groups": 1799,
+      "edges_in_complete_ack_groups": 1799,
+      "coalesced_edge_states": {},
+      "post_ack_edge_samples_corrected": 1959,
+      "final_mpi": 255
+    },
+    {
+      "capture": "emulator/images/reliability/logs/irq-final-park-command-repeat-clock.json",
+      "interval_us": 100,
+      "max_sample_gap": 0.00010000000111177,
+      "first_write": 15452.480495259,
+      "mute": 15482.517401635,
+      "pairs": 210,
+      "duration": 30.036906375999024,
+      "duration_error_percent": 0.12302125333008007,
+      "video_edges": 1800,
+      "irq_acks": 1800,
+      "clock_ticks": 1800,
+      "clock_calls": 3387,
+      "fdc_commands": 0,
+      "clock_deficit_seconds": 0.03690637599902402,
+      "serviced_lateness_epoch": "initial clock snapshot",
+      "epoch_to_first_write_seconds": 0.0033395320006093243,
+      "max_ack_to_tick_seconds": 0.0002927750010712771,
+      "max_local_lateness_seconds": 1.4547931239994796,
+      "max_accumulated_lateness_seconds": 1.4624287339993316,
+      "max_serviced_clock_lateness_seconds": 1.4500000000000002,
+      "min_serviced_clock_error_seconds": 0.0,
+      "max_player_user_entry_gap_seconds": 1.4859999999989668,
+      "ticks_with_other_process_current": 1783,
+      "sampled_seconds": {
+        "neither": 25.99150637623643,
+        "player_user": 1.0543063757977507,
+        "irq_mask_only": 4.045399999762594,
+        "firq_mask": 4.036799999763389,
+        "player_system": 3.711400000111098
+      },
+      "player_pid": 3,
+      "longest_sampled_interval_seconds": {
+        "halt": 0,
+        "irq_mask": 0.0010000000002037268,
+        "firq_mask": 0.0010000000002037268
+      },
+      "complete_ack_groups": 1799,
+      "edges_in_complete_ack_groups": 1799,
+      "coalesced_edge_states": {},
+      "post_ack_edge_samples_corrected": 1966,
+      "final_mpi": 255
+    },
+    {
+      "capture": "emulator/images/reliability/logs/irq-final-park-idle-clock.json",
+      "interval_us": 100,
+      "max_sample_gap": 0.00010000000111177,
+      "first_write": 15252.688896664,
+      "mute": 15282.710148533,
+      "pairs": 210,
+      "duration": 30.02125186900048,
+      "duration_error_percent": 0.07083956333493457,
+      "video_edges": 1799,
+      "irq_acks": 1799,
+      "clock_ticks": 1799,
+      "clock_calls": 3599,
+      "fdc_commands": 0,
+      "clock_deficit_seconds": 0.03791853566714565,
+      "serviced_lateness_epoch": "initial clock snapshot",
+      "epoch_to_first_write_seconds": 0.00433071900079085,
+      "max_ack_to_tick_seconds": 0.0002927739988081157,
+      "max_local_lateness_seconds": 0.0004687750006269198,
+      "max_accumulated_lateness_seconds": 0.021106041000166442,
+      "max_serviced_clock_lateness_seconds": 0.016666666666666666,
+      "min_serviced_clock_error_seconds": 0.0,
+      "max_player_user_entry_gap_seconds": 0.016700000000128057,
+      "ticks_with_other_process_current": 1799,
+      "sampled_seconds": {
+        "neither": 25.89805158303716,
+        "player_user": 1.115351869018923,
+        "irq_mask_only": 4.123200285963321,
+        "firq_mask": 4.115200285961691,
+        "player_system": 4.00669999994534
+      },
+      "player_pid": 3,
+      "longest_sampled_interval_seconds": {
+        "halt": 0,
+        "irq_mask": 0.0009000000009109499,
+        "firq_mask": 0.0009000000009109499
+      },
+      "complete_ack_groups": 1798,
+      "edges_in_complete_ack_groups": 1798,
+      "coalesced_edge_states": {},
+      "post_ack_edge_samples_corrected": 1987,
+      "final_mpi": 255
+    },
+    {
+      "capture": "emulator/images/reliability/logs/irq-final-queue-command-clock.json",
+      "interval_us": 100,
+      "max_sample_gap": 0.00010000000111177,
+      "first_write": 15398.089196255,
+      "mute": 15428.127977731,
+      "pairs": 210,
+      "duration": 30.038781475999713,
+      "duration_error_percent": 0.12927158666571348,
+      "video_edges": 1800,
+      "irq_acks": 1800,
+      "clock_ticks": 1800,
+      "clock_calls": 0,
+      "fdc_commands": 0,
+      "clock_deficit_seconds": 0.03878147599971271,
+      "serviced_lateness_epoch": "first PSG write; startup phase excluded",
+      "epoch_to_first_write_seconds": 0.0,
+      "max_ack_to_tick_seconds": 0.0007554040003014961,
+      "max_local_lateness_seconds": 0.0005587300001934636,
+      "max_accumulated_lateness_seconds": 0.038674759000059566,
+      "max_serviced_clock_lateness_seconds": 0.0,
+      "min_serviced_clock_error_seconds": 0.0,
+      "longest_sampled_interval_seconds": {
+        "halt": 0,
+        "irq_mask": 0.001299999999901047,
+        "firq_mask": 0.001299999999901047
+      },
+      "complete_ack_groups": 1799,
+      "edges_in_complete_ack_groups": 1799,
+      "coalesced_edge_states": {},
+      "post_ack_edge_samples_corrected": 2013,
+      "final_mpi": 255
+    },
+    {
+      "capture": "emulator/images/reliability/logs/irq-final-queue-command-repeat-clock.json",
+      "interval_us": 100,
+      "max_sample_gap": 0.00010000000111177,
+      "first_write": 15498.084760495,
+      "mute": 15528.123388878,
+      "pairs": 210,
+      "duration": 30.038628383001196,
+      "duration_error_percent": 0.1287612766706525,
+      "video_edges": 1800,
+      "irq_acks": 1800,
+      "clock_ticks": 1800,
+      "clock_calls": 0,
+      "fdc_commands": 0,
+      "clock_deficit_seconds": 0.0386283830011962,
+      "serviced_lateness_epoch": "first PSG write; startup phase excluded",
+      "epoch_to_first_write_seconds": 0.0,
+      "max_ack_to_tick_seconds": 0.0007554040003014961,
+      "max_local_lateness_seconds": 0.0005576130006375024,
+      "max_accumulated_lateness_seconds": 0.038521665999724064,
+      "max_serviced_clock_lateness_seconds": 0.0,
+      "min_serviced_clock_error_seconds": 0.0,
+      "longest_sampled_interval_seconds": {
+        "halt": 0,
+        "irq_mask": 0.00120000000060827,
+        "firq_mask": 0.00120000000060827
+      },
+      "complete_ack_groups": 1799,
+      "edges_in_complete_ack_groups": 1799,
+      "coalesced_edge_states": {},
+      "post_ack_edge_samples_corrected": 2016,
+      "final_mpi": 255
+    },
+    {
+      "capture": "emulator/images/reliability/logs/irq-final-queue-idle-clock.json",
+      "interval_us": 100,
+      "max_sample_gap": 0.00010000000111177,
+      "first_write": 15298.093785108,
+      "mute": 15328.132566584,
+      "pairs": 210,
+      "duration": 30.038781475999713,
+      "duration_error_percent": 0.12927158666571348,
+      "video_edges": 1800,
+      "irq_acks": 1800,
+      "clock_ticks": 1800,
+      "clock_calls": 0,
+      "fdc_commands": 0,
+      "clock_deficit_seconds": 0.03878147599971271,
+      "serviced_lateness_epoch": "first PSG write; startup phase excluded",
+      "epoch_to_first_write_seconds": 0.0,
+      "max_ack_to_tick_seconds": 0.0007554040003014961,
+      "max_local_lateness_seconds": 0.0005486740010383073,
+      "max_accumulated_lateness_seconds": 0.038674759000059566,
+      "max_serviced_clock_lateness_seconds": 0.0,
+      "min_serviced_clock_error_seconds": 0.0,
+      "longest_sampled_interval_seconds": {
+        "halt": 0,
+        "irq_mask": 0.00120000000060827,
+        "firq_mask": 0.00120000000060827
+      },
+      "complete_ack_groups": 1799,
+      "edges_in_complete_ack_groups": 1799,
+      "coalesced_edge_states": {},
+      "post_ack_edge_samples_corrected": 2039,
+      "final_mpi": 255
+    }
+  ],
+  "resolution": [
+    {
+      "track": "irq-synthetic30.vgm",
+      "writes": 210,
+      "samples": 1323000,
+      "maximum_quantization_seconds": 0.0,
+      "p95_quantization_seconds": 0.0,
+      "maximum_writes_per_tick": 5,
+      "ticks_above_eight_writes": 0,
+      "maximum_writes_in_inclusive_two_seconds": 19,
+      "four_byte_lookahead_storage": 76,
+      "envelope_shape_writes": 0
+    },
+    {
+      "track": "irq-burst.vgm",
+      "writes": 127,
+      "samples": 132320,
+      "maximum_quantization_seconds": 0.016643990929705144,
+      "p95_quantization_seconds": 0.01650793650793636,
+      "maximum_writes_per_tick": 20,
+      "ticks_above_eight_writes": 1,
+      "maximum_writes_in_inclusive_two_seconds": 120,
+      "four_byte_lookahead_storage": 480,
+      "envelope_shape_writes": 120
+    },
+    {
+      "track": "arkanoid.vgm",
+      "writes": 266,
+      "samples": 195372,
+      "maximum_quantization_seconds": 0.010408163265306122,
+      "p95_quantization_seconds": 0.010249433106575964,
+      "maximum_writes_per_tick": 14,
+      "ticks_above_eight_writes": 2,
+      "maximum_writes_in_inclusive_two_seconds": 141,
+      "four_byte_lookahead_storage": 564,
+      "envelope_shape_writes": 2
+    },
+    {
+      "track": "ark1.cct",
+      "writes": 266,
+      "samples": 195372,
+      "maximum_quantization_seconds": 0.010408163265306122,
+      "p95_quantization_seconds": 0.010249433106575964,
+      "maximum_writes_per_tick": 14,
+      "ticks_above_eight_writes": 2,
+      "maximum_writes_in_inclusive_two_seconds": 141,
+      "four_byte_lookahead_storage": 564,
+      "envelope_shape_writes": 2
+    },
+    {
+      "track": "flicky.cct",
+      "writes": 820,
+      "samples": 885968,
+      "maximum_quantization_seconds": 0.013333333333335418,
+      "p95_quantization_seconds": 0.013333333333333641,
+      "maximum_writes_per_tick": 16,
+      "ticks_above_eight_writes": 5,
+      "maximum_writes_in_inclusive_two_seconds": 102,
+      "four_byte_lookahead_storage": 408,
+      "envelope_shape_writes": 1
+    }
+  ],
+  "burst": [
+    {
+      "capture": "emulator/images/reliability/logs/irq-burst-check.json",
+      "pairs": 127,
+      "duration": 3.0206624080001347,
+      "maximum_event_lateness": 0.052477808260710024,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.036117906683643675,
+      "p99_event_lateness": 0.05240438199808306,
+      "handler_calls": 898,
+      "maximum_handler_seconds": 0.0008386549998249393,
+      "median_handler_seconds": 1.0616000508889556e-05,
+      "running_handler_seconds": 0.021163598994462518,
+      "max_psg_writes_per_handler": 8,
+      "over_budget_ticks": 2,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 1.5645000530639663e-05,
+      "writes_in_irq": 128
+    }
+  ],
+  "audible": [
+    {
+      "capture": "emulator/images/reliability/logs/irq-audible-command.json",
+      "pairs": 210,
+      "duration": 30.038770859999204,
+      "maximum_event_lateness": 0.03866414299955068,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.036470008999458514,
+      "p99_event_lateness": 0.038019367999368114,
+      "handler_calls": 2696,
+      "maximum_handler_seconds": 0.0005291180004860507,
+      "median_handler_seconds": 4.8608999350108206e-05,
+      "running_handler_seconds": 0.1077964200067072,
+      "max_psg_writes_per_handler": 5,
+      "over_budget_ticks": 0,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 1.5645000530639663e-05,
+      "writes_in_irq": 211
+    }
+  ],
+  "counter": [
+    {
+      "capture": "emulator/images/reliability/logs/irq-counter.json",
+      "pairs": 210,
+      "duration": 30.038781475999713,
+      "maximum_event_lateness": 0.038674759000059566,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 0.03648062399952323,
+      "p99_event_lateness": 0.038029983999877004,
+      "handler_calls": 4494,
+      "maximum_handler_seconds": 0.0005291180004860507,
+      "median_handler_seconds": 1.0616000508889556e-05,
+      "running_handler_seconds": 0.10779641299632203,
+      "max_psg_writes_per_handler": 5,
+      "over_budget_ticks": 0,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 1.5645000530639663e-05,
+      "writes_in_irq": 211
+    }
+  ],
+  "floppy": [
+    {
+      "capture": "emulator/images/reliability/logs/irq-floppy-dir.json",
+      "pairs": 210,
+      "duration": 31.290393412999038,
+      "maximum_event_lateness": 1.2902866949989402,
+      "minimum_event_error": 0.0,
+      "p95_event_lateness": 1.288092560998848,
+      "p99_event_lateness": 1.2896419199987577,
+      "handler_calls": 2921,
+      "maximum_handler_seconds": 0.0005291180004860507,
+      "median_handler_seconds": 4.8608999350108206e-05,
+      "running_handler_seconds": 0.10779641002773133,
+      "max_psg_writes_per_handler": 5,
+      "over_budget_ticks": 0,
+      "underruns": 0,
+      "final_mpi": 255,
+      "maximum_mpi_selection_seconds": 1.5645000530639663e-05,
+      "writes_in_irq": 211
+    }
+  ],
+  "floppy_clock": {
+    "capture": "emulator/images/reliability/logs/irq-floppy-clock.json",
+    "interval_us": 100,
+    "max_sample_gap": 0.00010000000111177,
+    "first_write": 16073.642307489,
+    "mute": 16104.932700902,
+    "pairs": 210,
+    "duration": 31.290393412999038,
+    "duration_error_percent": 4.3013113766634525,
+    "video_edges": 1875,
+    "irq_acks": 1800,
+    "clock_ticks": 1800,
+    "clock_calls": 0,
+    "fdc_commands": 10,
+    "clock_deficit_seconds": 1.2903934129990375,
+    "serviced_lateness_epoch": "first PSG write; startup phase excluded",
+    "epoch_to_first_write_seconds": 0.0,
+    "max_ack_to_tick_seconds": 0.0007693719999224413,
+    "max_local_lateness_seconds": 0.8680368230016029,
+    "max_accumulated_lateness_seconds": 1.2902866949989402,
+    "max_serviced_clock_lateness_seconds": 0.0,
+    "min_serviced_clock_error_seconds": 0.0,
+    "longest_sampled_interval_seconds": {
+      "halt": 0.19950000000062573,
+      "irq_mask": 0.2084999999988213,
+      "firq_mask": 0.2084999999988213
+    },
+    "complete_ack_groups": 1799,
+    "edges_in_complete_ack_groups": 1874,
+    "coalesced_edge_states": {
+      "halt_and_irq_mask": 75
+    },
+    "post_ack_edge_samples_corrected": 2191,
+    "final_mpi": 255
+  },
+  "stop": [
+    {
+      "capture": "emulator/images/reliability/logs/irq-stop-owner.json",
+      "prefix_writes": 118,
+      "final_pair": [
+        7,
+        63
+      ],
+      "quiet_seconds": 12.99991411299925,
+      "final_state": {
+        "count": 93,
+        "owner": 0,
+        "underruns": 0,
+        "state": 4,
+        "ticks": 1017,
+        "budgets": 0,
+        "kind": "handler-exit",
+        "u": 18176,
+        "seconds": 15984.877939178
+      },
+      "drops": 0
+    },
+    {
+      "capture": "emulator/images/reliability/logs/irq-fatal-exit.json",
+      "prefix_writes": 83,
+      "final_pair": [
+        7,
+        63
+      ],
+      "quiet_seconds": 13.139919444998668,
+      "final_state": {
+        "count": 128,
+        "owner": 0,
+        "underruns": 0,
+        "state": 4,
+        "ticks": 707,
+        "budgets": 0,
+        "kind": "handler-exit",
+        "u": 18176,
+        "seconds": 16033.27358231
+      },
+      "drops": 0
+    }
+  ],
+  "lifecycle": {
+    "irq-tables-after-queue-detach": {
+      "virqs": [
+        {
+          "count": 1,
+          "status": 128,
+          "reset": 1,
+          "address": 20253
+        }
+      ],
+      "polls": [
+        {
+          "storage": 20224,
+          "mask": 1,
+          "handler": 8348,
+          "address": 20257
+        },
+        {
+          "storage": 23552,
+          "mask": 1,
+          "handler": 39732,
+          "address": 23736
+        }
+      ]
+    },
+    "irq-tables-reattached": {
+      "virqs": [
+        {
+          "count": 1,
+          "status": 128,
+          "reset": 1,
+          "address": 20253
+        },
+        {
+          "count": 1,
+          "status": 128,
+          "reset": 1,
+          "address": 18205
+        }
+      ],
+      "polls": [
+        {
+          "storage": 18176,
+          "mask": 1,
+          "handler": 8839,
+          "address": 18209
+        },
+        {
+          "storage": 20224,
+          "mask": 1,
+          "handler": 8348,
+          "address": 20257
+        },
+        {
+          "storage": 23552,
+          "mask": 1,
+          "handler": 39732,
+          "address": 23736
+        }
+      ]
+    },
+    "irq-tables-final": {
+      "virqs": [],
+      "polls": [
+        {
+          "storage": 23552,
+          "mask": 1,
+          "handler": 39732,
+          "address": 23736
+        }
+      ]
+    },
+    "irq-tables-before-detach": {
+      "virqs": [
+        {
+          "count": 1,
+          "status": 128,
+          "reset": 1,
+          "address": 20253
+        },
+        {
+          "count": 1,
+          "status": 128,
+          "reset": 1,
+          "address": 18205
+        }
+      ],
+      "polls": [
+        {
+          "storage": 18176,
+          "mask": 1,
+          "handler": 8839,
+          "address": 18209
+        },
+        {
+          "storage": 20224,
+          "mask": 1,
+          "handler": 8348,
+          "address": 20257
+        },
+        {
+          "storage": 23552,
+          "mask": 1,
+          "handler": 39732,
+          "address": 23736
+        }
+      ]
+    },
+    "irq-tables-detached": {
+      "polls": [
+        {
+          "storage": 23552,
+          "mask": 1,
+          "handler": 39732,
+          "address": 23736
+        }
+      ],
+      "virqs": []
+    }
+  },
+  "free_process_kib": {
+    "before_stop_sequence": 1800,
+    "after_final_detach": 1800
+  }
+}
