@@ -199,7 +199,11 @@ moduleName              FCS   "cctcycle"
 moduleName              FCS   "cctpark"
         else
         ifdef IRQ_STREAM
+        ifdef GMC_IRQ
+moduleName              FCS   "cctgmc"
+        else
 moduleName              FCS   "cctirq"
+        endc
         else
 moduleName              FCS 	"cctplaymt"
         endc
@@ -221,13 +225,21 @@ strThanksMsg            FCN   "\r\nSpecial thanks to Ed Snider, L. Curtis Boyle,
         endc
 ; Error messages 
         ifdef IRQ_STREAM
+        ifdef GMC_IRQ
+strIRQError FCN "cctgmc: queue or driver operation failed; OS-9 error returned.\r\n"
+        else
 strIRQError FCN "cctirq: queue or driver operation failed; OS-9 error returned.\r\n"
+        endc
         endc
 strErrorFile            FCN 	"Error: File not found. Exiting.\r\n"
 strErrorRam             FCN   "\r\nError: Not enough free RAM for that file. Aborted.\r\n"
 strErrorRead            FCN   "\r\nError accessing the file. Aborted.\r\n"
         ifdef IRQ_STREAM
+        ifdef GMC_IRQ
+strErrorParams FCN "Error: Invalid parameter. Type cctgmc for usage.\r\n"
+        else
 strErrorParams FCN "Error: Invalid parameter. Type cctirq for usage.\r\n"
+        endc
         else
         ifdef EXPERIMENTAL_PSG
 strErrorParams          FCN   "Error: Invalid parameter. Type \x22cctplaymt\x22 for usage/syntax information.\r\n"
@@ -238,7 +250,11 @@ strErrorParams          FCN   "Error: Invalid parameter. Type \x22cctplay\x22 fo
 strErrorSuddenEnd       FCN   "\r\nError: Song data ended unexpectedly. Incomplete file? Exiting.\r\n"
 strErrorUnknown         FCN   "\r\nError: Something weird has happened, probably a bug. Sorry about that. Aborting.\r\n"
         ifdef IRQ_STREAM
+        ifdef GMC_IRQ
+strErrorNoFilename FCN "Error: No filename specified. Type cctgmc for usage.\r\n"
+        else
 strErrorNoFilename FCN "Error: No filename specified. Type cctirq for usage.\r\n"
+        endc
         else
         ifdef EXPERIMENTAL_PSG
 strErrorNoFilename      FCN   "Error: No filename specified. Type \x22cctplaymt\x22 for usage/syntax information.\r\n"
@@ -247,7 +263,11 @@ strErrorNoFilename      FCN   "Error: No filename specified. Type \x22cctplay\x2
         endc
         endc
 strErrorFileInvalid     FCN   "Error: Unrecognized file format. File must be a VGM, CCT, or M3U playlist.\r\n"
+        ifdef GMC_IRQ
+strErrorVGMchips        FCN   "Error: Unsupported chip or format for cctgmc.\r\n"
+        else
 strErrorVGMchips        FCN   "Error: This VGM file requires an unsupported sound chip. Skipped.\r\n"
+        endc
 strErrorOPLmissing      FCN   "\r\n\nError: OPL sound chip could not be detected. Do you have a MEGA-mini MPI?\r\nAborted.\r\n"
 strErrorPlaylistFull 	FCN 	"Error: Playlist is too large. It must be under 1 KB in size. Aborted.\r\n"
 
@@ -355,9 +375,15 @@ strTraceGD3OK           FCN   " gd3"
 
         ifdef EXPERIMENTAL_PSG
         ifdef IRQ_STREAM
+        ifdef GMC_IRQ
+strUsageMsg FCC "Experimental GMC IRQ player (MPI slot 1).\r\n"
+           FCC "Syntax: cctgmc [-gmc <slot>] [-l <0-9 | F>] <file.vgm|list.m3u> &\r\n"
+           FCC "Stop: cctstop <process-id>. Default VGM extra loops: 1.\r\n"
+        else
 strUsageMsg FCC "Experimental CoCoPSG IRQ player (MPI slot 2).\r\n"
            FCC "Syntax: cctirq [-l <0-9 | F>] <file.vgm|file.cct|list.m3u> &\r\n"
            FCC "Stop: cctstop <process-id>. Default VGM extra loops: 1.\r\n"
+        endc
         else
 strUsageMsg             FCC   "Syntax: cctplaymt [-i] [-psg <slot>] [-l <0-9 | 'f'>] <filename>\r\n\n"
                         FCC   "    -i = Display format and supported hardware information.\r\n"
@@ -380,8 +406,12 @@ strUsageMsg             FCC   "Syntax: cctplay [-i] [-psg <slot>] [-gmc <slot>] 
 strUsageMsgSz 		EQU 	*-strUsageMsg
 
         ifdef IRQ_STREAM
+        ifdef GMC_IRQ
+strFileTypeInfo FCC "Experimental: SN76489 VGM on GMC; 4 MHz hardware clock.\r\n"
+        else
 strFileTypeInfo FCC "Experimental: single CoCoPSG, slot 2; VGM/CCT/M3U.\r\n"
                FCC "PSG clock is 1 or 2 MHz. Other source clocks alter pitch.\r\n"
+        endc
         else
 strFileTypeInfo  		FCB 	$0C
 				FCC   "CoCo ChipTunes Player 1.6 supports the .VGM, .CCT, and .M3U file formats.\r\n\n"
@@ -1702,9 +1732,24 @@ PLAY_VGM_DATA
       ; the baseline build but cannot be reached from this module.
       lda   <vgmChipType
       cmpa  #'P'
+        ifdef GMC_IRQ
+      lbeq  VGM_UNSUPPORTED_CHIPS
+        else
       lbeq  PLAY_CHIP_YM2149
+        endc
       cmpa  #3               ; CCT format's code for YM2149/AY-3-8910
+        ifdef GMC_IRQ
+      lbeq  VGM_UNSUPPORTED_CHIPS
+      lda   <vgmChipType
+      cmpa  #'G'
+      lbne  VGM_UNSUPPORTED_CHIPS
+      lda   vgmDataBuffer+$0F,U
+      bita  #$40             ; dual SN clock needs a second cartridge
+      lbne  VGM_UNSUPPORTED_CHIPS
+      lbra  PLAY_CHIP_YM2149
+        else
       lbeq  PLAY_CHIP_YM2149_CCT
+        endc
         ifdef IRQ_STREAM
       lbra  VGM_UNSUPPORTED_CHIPS
         else
@@ -2106,6 +2151,12 @@ PLAY_CHIP_YM2149_CCT
       lbsr  PSG_CLOCK_START
       lbcs  EXIT_DEALLOCATE_RAM
         endc
+        ifdef GMC_IRQ
+      ; The GMC driver owns its hardware; no process-context PSG control.
+      lda #1
+      sta psgActiveFlag,U
+      bra PSG_INIT_CONTINUE
+        else
       ; User context: save the current MPI selection and briefly select the
       ; PSG to snapshot and set its control register. IRQ/FIRQ are masked only
       ; across the bounded hardware transaction (under 100 HD6309 cycles);
@@ -2142,6 +2193,7 @@ PLAY_CHIP_YM2149_CCT
 PSG_INIT_ABORT_BEFORE
       puls  CC,B               ; no hardware was touched; restore incoming CC
       lbra  EXIT_DEALLOCATE_RAM
+        endc
 PSG_INIT_CONTINUE
         ifdef CLOCK_SCHEDULER
         ifndef IRQ_STREAM
@@ -2233,7 +2285,20 @@ VGM_YM2149_NEXT_COMMAND
         endc
 VGM_YM2149_NEXT_COMMAND_SKIP
       lda   ,Y+                     	; 6/5 cycles 
-      cmpa  #$A0   				; 2 cycles
+        ifdef GMC_IRQ
+      ; $4f is a stereo-control command in VGM. GMC is mono, but its
+      ; operand must be consumed so a data byte resembling $50 is harmless.
+      cmpa  #$4f
+      bne   GMC_NOT_STEREO
+      lbsr  VGM_PSG_ENSURE_BYTE
+      lbcs  UNEXPECTED_END_ERROR_EXIT
+      leay  1,Y
+      lbra  VGM_YM2149_NEXT_COMMAND
+GMC_NOT_STEREO
+      cmpa  #$50
+        else
+      cmpa  #$A0
+        endc
       beq   VGM_YM2149_CMD_CHIP 		; 3 cycles
       cmpa  #$61                    	; 2 cycles
       beq  	VGM_YM2149_CMD_WAIT_MANUAL    ; 3 cycles 
@@ -2251,6 +2316,18 @@ VGM_YM2149_NEXT_COMMAND_SKIP
 
         ifdef EXPERIMENTAL_PSG
 VGM_YM2149_CMD_CHIP
+        ifdef GMC_IRQ
+      ; One raw SN76489 byte per $50; never merge latch/data or repeats.
+      lbsr  VGM_PSG_ENSURE_BYTE
+      lbcs  UNEXPECTED_END_ERROR_EXIT
+      ldb   ,Y+
+      clra
+      lbsr  VGM_PSG_WRITE_REG
+      lbcs  VGM_YM2149_WAIT_ABORTED
+      lbsr  PSG_CLOCK_BUDGET
+      lbcs  VGM_YM2149_WAIT_ABORTED
+      lbra  VGM_YM2149_NEXT_COMMAND
+        else
       ; Decode one YM2149 event, then hand register/value to the PSG backend.
       lbsr  VGM_PSG_ENSURE_BYTE
       lbcs  UNEXPECTED_END_ERROR_EXIT
@@ -2279,6 +2356,7 @@ VGM_PSG_STORE_DEBT
       std   psgCommandDebt,U
         endc
       lbra  VGM_YM2149_NEXT_COMMAND
+        endc
         else
 VGM_YM2149_CMD_CHIP
       cmpy  #vgm_block_end                ; 5/4 cycles 
@@ -2987,6 +3065,10 @@ VGM_YM2149_END
         ifdef IRQ_STREAM
       ; Stop queued writes now; retain allocation ownership through cleanup.
       lbsr  PSG_QUEUE_STOP
+        endc
+        ifdef GMC_IRQ
+      clr   psgActiveFlag,U
+      lbra  PLAY_DONE_RESTORE_PIA
         endc
 
         ifdef EXPERIMENTAL_PSG

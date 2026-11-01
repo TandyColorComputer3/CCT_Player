@@ -14,7 +14,7 @@ return function(commands,array,encode)
   local n=sb(sw(0x24)+12);assert(n<=64);for i=0,n-1 do local a=p+i*11;if sw(a)~=0 then polls[#polls+1]={address=sw(a),handler=sw(a+4),storage=sw(a+6),mask=sb(a+3)} end end
   return {virqs=array(virqs),polls=array(polls)}
  end
- commands.irq_resources=function()
+ commands.irq_resources=function(p)
   local lo,hi=sw(0x40),sw(0x42);assert(hi>=lo and hi-lo<=512)
   local blocks={};for a=lo,hi-1 do blocks[#blocks+1]=sb(a) end
   local pages={};local b=sw(0x4e);for a=b,b+31 do pages[#pages+1]=sb(a) end
@@ -23,7 +23,12 @@ return function(commands,array,encode)
    local paths={};for a=p+48,p+63 do paths[#paths+1]=sb(a) end
    procs[#procs+1]={id=id,module=sw(p+17),paths=array(paths)}
   end end
-  return {blocks=array(blocks),system_pages=array(pages),processes=array(procs)}
+  local result={blocks=array(blocks),system_pages=array(pages),processes=array(procs)}
+  if p and p.path then
+   assert(p.path:match('^emulator/images/reliability/logs/[%w_-]+%.json$'))
+   local f=assert(io.open(p.path,'w'));f:write(encode(result));f:close()
+  end
+  return result
  end
  commands.irq_process_info=function(p)
   assert(p.pid>=1 and p.pid<=255)
@@ -84,9 +89,16 @@ return function(commands,array,encode)
    hook(p.locked,function() emit('append-locked') end)
    for _,off in ipairs({p.unlock,p.unlockbusy,p.unlockinvalid}) do hook(off,function() emit('append-unlock') end) end
   end
-  taps[#taps+1]=mem:install_read_tap(0xff5d,0xff5d,'irq-control-read',function(a,d) emit('control-read',{data=d}) end)
-  taps[#taps+1]=mem:install_write_tap(0xff5d,0xff5d,'irq-control-write',function(a,d) emit('control-write',{data=d}) end)
-  taps[#taps+1]=mem:install_write_tap(0xff5e,0xff5f,'irq-probe-psg',function(a,d) if inside and a==0xff5f and not first_write then first_write=m.time:as_double() end;emit('psg-write',{address=a,data=d,in_handler=inside~=nil,task=regs:read(1)&1}) end)
+  if p.gmc then
+   taps[#taps+1]=mem:install_write_tap(0xff41,0xff41,'irq-probe-gmc',function(a,d)
+    if inside and not first_write then first_write=m.time:as_double() end
+    emit('gmc-write',{address=a,data=d,in_handler=inside~=nil,task=regs:read(1)&1})
+   end)
+  else
+   taps[#taps+1]=mem:install_read_tap(0xff5d,0xff5d,'irq-control-read',function(a,d) emit('control-read',{data=d}) end)
+   taps[#taps+1]=mem:install_write_tap(0xff5d,0xff5d,'irq-control-write',function(a,d) emit('control-write',{data=d}) end)
+   taps[#taps+1]=mem:install_write_tap(0xff5e,0xff5f,'irq-probe-psg',function(a,d) if inside and a==0xff5f and not first_write then first_write=m.time:as_double() end;emit('psg-write',{address=a,data=d,in_handler=inside~=nil,task=regs:read(1)&1}) end)
+  end
   taps[#taps+1]=mem:install_write_tap(0xff7f,0xff7f,'irq-probe-mpi',function(a,d) emit('mpi-write',{data=d,in_handler=inside~=nil}) end)
   active=true;first_write=nil;producer=nil;first_allocation=nil
   local thread=coroutine.create(function()

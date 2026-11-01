@@ -2,6 +2,10 @@
 
 ## Opt-in IRQ streaming experiment
 
+The same build also produces `build/cctgmc-standalone` for SN76489 VGM files
+on a Game Master Cartridge in MPI slot 1. Install it as `cctgmc` and see
+[GMC-IRQ-INTEGRATION.md](GMC-IRQ-INTEGRATION.md) for tested usage and limits.
+
 `bash scripts/build-irq-stream.sh` (after the normal build) produces `cctirq`,
 `PSGStream`/`psgs`, and test helpers. It preserves every normal comparison build.
 Install `build/cctirq-standalone` as `cctirq` for automatic driver loading;

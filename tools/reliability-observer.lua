@@ -73,6 +73,10 @@ return function(commands, array, encode)
       local e=fields or {};e.kind=kind;e.seconds=m.time:as_double();events[#events+1]=e
     end
     local mem=cpu.spaces.program
+    taps[#taps+1]=mem:install_write_tap(0xff41,0xff41,'reliability-gmc',function(a,d)
+      emit('gmc-write',{address=a,data=d,pid=owner()})
+      if p.input_anchor=='gmc' and not input_epoch then input_epoch=m.time:as_double() end
+    end)
     taps[#taps+1]=mem:install_write_tap(0xff7f,0xff7f,'reliability-mpi',function(a,d)
       emit('mpi-write',{data=d})
     end)

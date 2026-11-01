@@ -2,16 +2,29 @@
 ; never reads the process map. X/Y stream cursors and U survive these calls.
 ; D/CC scratch. No interrupt masking. The system ring holds 256 complete
 ; four-byte events. Full => start once, then park and retry without dropping.
+        ifdef GMC_IRQ
+PSG_CLOCK_NAME fcc "/gmcs"
+        else
 PSG_CLOCK_NAME fcc "/psgs"
+        endc
       fcb 13
 PSG_QUEUE_OPEN
       pshs x,y
       lda clockPath,u
       bpl PSG_QUEUE_OPENED
-      ; This experimental descriptor owns only CoCoPSG in MPI slot 2.
+      ; Each build owns one fixed cartridge slot; 0=GMC slot 1,
+      ; 1=CoCoPSG slot 2. Other requested slots fail before hardware access.
+        ifdef GMC_IRQ
+      lda mpiGMC,u
+        else
       lda mpiPSG,u
+        endc
       anda #3
+        ifdef GMC_IRQ
+      cmpa #0
+        else
       cmpa #1
+        endc
       beq PSG_QUEUE_SLOT_OK
       ldb #E$BMode
       lbra PSG_CLOCK_ERROR

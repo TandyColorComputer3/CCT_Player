@@ -24,5 +24,9 @@ class PackageTests(unittest.TestCase):
     self.assertEqual([v[3] for v in m],[0x11,0xe1,0xf1])
  def test_original_unchanged(self):
   self.assertEqual(Path('cctplay').read_bytes(),Path('build/cctplay').read_bytes())
+ def test_gmc_standalone(self):
+  b=Path('build/cctgmc-standalone').read_bytes()
+  self.assertLessEqual(len(b),8192)
+  self.assertEqual([v[0] for v in modules(b)],['cctgmc','GMCStream','gmcs'])
 
 if __name__=='__main__':unittest.main()

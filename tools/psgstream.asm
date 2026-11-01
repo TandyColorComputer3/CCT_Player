@@ -1,7 +1,9 @@
-; Experimental streaming CoCoPSG driver. HD6309 EOU SCF system context.
+; Experimental streaming CoCoPSG/GMC driver. HD6309 EOU SCF system context.
 ; Queue storage belongs to IOMan, never to the producer's logical map.
 ; One owner path; one producer. Atomic Append may refill while Running.
-; SetStat $80: append X=modulo tick, Y=register:value (0..13, FE=no-op, FF=end).
+; SetStat $80: append X=modulo tick, Y=register:value. CoCoPSG uses
+; registers 0..13; GMC uses register 0 and one raw command byte in value.
+; FE=no-op and FF=end in either build.
 ; $81 starts preloaded stream; $82 stops/mutes. GetStat $80: X=state,
 ; Y=remaining records; $81: X=over-budget ticks,Y=underruns.
 ; Resource SetStat $84/$85/$86/$87: allocate/map/clear/free one owned block.
@@ -19,7 +21,11 @@ H6309 equ 1
         include scf.d
         mod End,Name,Drivr+Objct,ReEnt,Entry,MemSize
         fcb UPDAT.+SHARE.
+        ifdef GMC_DRIVER
+Name    fcs "GMCStream"
+        else
 Name    fcs "PSGStream"
+        endc
         fcb 1
         org V.SCF
 Packet  rmb 5
@@ -169,7 +175,9 @@ OK      clrb
         rts
 Open    ldd Owner,u
         lbne Busy
+        ifndef GMC_DRIVER
         lbsr ClaimControl
+        endc
         sty Owner,u
         clra
         clrb
@@ -183,7 +191,9 @@ Open    ldd Owner,u
         sta Sealed,u
         lbra OK
 Close   lbsr Stop
+        ifndef GMC_DRIVER
         lbsr ReleaseControl
+        endc
         lbsr ReleaseMemory
         lbcs Return
         clra
@@ -196,8 +206,12 @@ Stop    pshs cc
         orcc #$50
         lda #4
         sta State,u
+        ifdef GMC_DRIVER
+        lbsr MuteChip
+        else
         ldd #$073f
         lbsr WritePSG
+        endc
         puls cc
         lbra OK
 ; Append via caller register image supplied by SCF. No user-pointer copying.
@@ -225,8 +239,13 @@ AppendLocked
         lda R$Y,y
         cmpa #$fe
         bhs Valid
+        ifdef GMC_DRIVER
+        tsta
+        bne AppendInvalid
+        else
         cmpa #13
         bhi AppendInvalid
+        endc
 Valid   ldd R$X,y
         std Last,u
         clra
@@ -341,8 +360,12 @@ Complete
         std Count,u
         lda #2
 EndPlay sta State,u
+        ifdef GMC_DRIVER
+        lbsr MuteChip
+        else
         ldd #$073f
         lbsr WritePSG
+        endc
         lbra OK
 ; Scalar resource services, system process context only. Each successful OS
 ; call is recorded before returning to user state, so a fatal signal cannot
@@ -526,6 +549,7 @@ MemoryReturn rts
 ; System ownership transaction, bounded and saved-CC. Open captures control
 ; before user setup; Close restores it even after forced process termination.
 ; No OS calls; preserve X/Y/U, live MPI selection and incoming interrupt masks.
+        ifndef GMC_DRIVER
 ClaimControl
         pshs cc
         orcc #$50
@@ -554,6 +578,35 @@ ControlReturn
 ; D=register/value; preserve X/Y/U and live MPI. IRQ already masks IRQ; save
 ; and restore CC to also bound FIRQ during selection. Same select/data spacing
 ; as the existing player. Changes only SCS bits, never CART/audio routing.
+        endc
+        ifdef GMC_DRIVER
+; System/IRQ context: D=00:raw command. Select GMC SCS slot 1 only for
+; one write, then restore live MPI and CC. Preserve D/X/Y/U. No OS call.
+WritePSG
+        pshs cc,d
+        orcc #$50
+        lda >$ff7f
+        pshs a
+        anda #$fc
+        sta >$ff7f
+        ldb 3,s
+        stb >$ff41
+        lbrn WritePSG
+        lbrn WritePSG
+        puls a
+        sta >$ff7f
+        puls cc,d,pc
+; Four individual attenuation latches; preserve ordering and live MPI.
+MuteChip
+        ldd #$009f
+        bsr WritePSG
+        ldd #$00bf
+        bsr WritePSG
+        ldd #$00df
+        bsr WritePSG
+        ldd #$00ff
+        lbra WritePSG
+        else
 WritePSG
         pshs cc,d
         orcc #$50
@@ -569,5 +622,6 @@ WritePSG
         puls a
         sta >$ff7f
         puls cc,d,pc
+        endc
         emod
 End     equ *
